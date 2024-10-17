@@ -1,6 +1,6 @@
-# cornhub
+# Cornhub
 
-This template should help get you started developing with Vue 3 in Vite.
+Final Project for IT 109 (under dev)
 
 ## Recommended IDE Setup
 
