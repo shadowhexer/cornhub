@@ -1,6 +1,6 @@
 # Cornhub
 
-Final Project for IT 109 (under dev)
+Final Project for IT 109 (under dev). Preview changes here: https://cornhub-git-main-shadowhexers-projects.vercel.app/
 
 ## Recommended IDE Setup
 
