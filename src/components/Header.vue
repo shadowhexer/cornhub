@@ -1,19 +1,33 @@
 <script setup lang="ts">
-    import { RouterLink } from 'vue-router'
 </script>
 
 <template>
     <nav>
-        <ul>
-            <li><RouterLink to="/">Home</RouterLink></li>
-            <li><RouterLink to="/notification">Notifications</RouterLink></li>
-            <li><RouterLink to="/messages">Messages</RouterLink></li>
-            <li><RouterLink to="/bookmarks">Bookmarks</RouterLink></li>
-            <li><RouterLink to="/products">Store</RouterLink></li>
-            <li><RouterLink to="/cart">Cart</RouterLink></li>
-            <li><RouterLink to="/payment-method">Payment Methods</RouterLink></li>
-            <li><RouterLink to="/profile">My Profile</RouterLink></li>
-            <li><RouterLink to="/setting">Setting</RouterLink></li>
-        </ul>
+        <v-content>
+            <router-view /> <!-- This line is equivalent to <RouterLink to="/"> </RouterLink> -->
+            <v-list lines="one">
+                <v-list-item v-for="(list, l) in lists" :key="l" :value="list" :to="list.link">
+                    <v-list-item-title v-text="list.text"></v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-content>
     </nav>
 </template>
+
+<script lang="ts">
+export default {
+    data: () => ({
+        lists: [
+            { text: 'Home', link: '/' },
+            { text: 'Notifications', link: '/notification' },
+            { text: 'Messages', link: '/messages' },
+            { text: 'Bookmarks', link: '/bookmarks' },
+            { text: 'Store', link: '/products' },
+            { text: 'Cart', link: '/cart' },
+            { text: 'Payment Methods', link: '/payment-method' },
+            { text: 'Profile', link: '/profile' },
+            { text: 'Setting', link: '/setting' }
+        ]
+    }),
+}
+</script>

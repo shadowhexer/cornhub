@@ -8,6 +8,7 @@ import Header from '../components/Header.vue'
     <Header />
   </nav>
   <main>
-    <p>This is Homepage</p>
+    <nav><p>This is Homepage</p></nav>
+    
   </main>
 </template>
