@@ -4,11 +4,21 @@ import Header from '../components/Header.vue'
 </script>
 
 <template>
-  <nav>
-    <Header />
-  </nav>
+  <div>
+    <nav>
+      <Header />
+    </nav>
+  </div>
+
   <main>
-    <nav><p>This is Homepage</p></nav>
+    <nav>
+      <p>This is Homepage</p>
+    </nav>
     
   </main>
+  <div>
+      <nav>
+        <p>This is Suggestions</p>
+      </nav>
+    </div>
 </template>
