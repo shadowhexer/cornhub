@@ -1,6 +1,8 @@
-# Cornhub
+# OnlyCorn
 
 Final Project for IT 109 (under dev). Preview changes here: https://cornhub-git-main-shadowhexers-projects.vercel.app/
+
+Logo Font Style: https://fontmeme.com/onlyfans-logo-font/
 
 ## Recommended IDE Setup
 
