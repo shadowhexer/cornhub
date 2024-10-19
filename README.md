@@ -4,6 +4,10 @@ Final Project for IT 109 (under dev). Preview changes here: https://cornhub-git-
 
 Logo Font Style: https://fontmeme.com/onlyfans-logo-font/
 
+## Plans
+
+1. https://www.npmjs.com/package/llm-gatekeeper
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
