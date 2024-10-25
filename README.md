@@ -7,6 +7,7 @@ Logo Font Style: https://fontmeme.com/onlyfans-logo-font/
 ## Plans
 
 1. https://www.npmjs.com/package/llm-gatekeeper
+2. https://github.com/shadowhexer/login (Login Page)
 
 ## Recommended IDE Setup
 
