@@ -7,6 +7,8 @@ Logo Font Style: https://fontmeme.com/onlyfans-logo-font/
 ## Plans
 
 1. https://www.npmjs.com/package/llm-gatekeeper
+2. https://github.com/shadowhexer/login (Login Page)
+3. Feedback Form API: https://www.emailjs.com/
 
 ## Recommended IDE Setup
 
