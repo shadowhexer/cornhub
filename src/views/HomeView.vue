@@ -1,24 +1,15 @@
 <script setup lang="ts">
-import Header from '../components/Header.vue'
 
 </script>
 
 <template>
-  <div>
-    <nav>
-      <Header />
-    </nav>
-  </div>
+  <v-spacer></v-spacer>
+    <v-card variant="flat">
+    <v-img src="https://pbs.twimg.com/media/Fz3IKCDakAcjjPq?format=jpg&name=4096x4096" height="900" width="900" cover />
 
-  <main>
-    <nav>
-      <p>This is Homepage</p>
-    </nav>
-    
-  </main>
-  <div>
-      <nav>
-        <p>This is Suggestions</p>
-      </nav>
-    </div>
+    <v-card-text class="text-center font-weight-bold">This is Homepage</v-card-text>
+  </v-card>
+  
+  
+  
 </template>
