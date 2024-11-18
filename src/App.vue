@@ -8,7 +8,7 @@ import { RouterView } from 'vue-router'
   <v-responsive>
     <v-app>
       <Header />
-      <v-main>
+      <v-main >
         <RouterView />
       </v-main>
       <Footer />

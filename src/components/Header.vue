@@ -13,7 +13,7 @@ export default {
     data: () => ({
         carts: [{ product: 'Hi', link: '/cart' }, { product: 'Hi', link: '' }],
         notifications: [{ item: 'Hi', link: '' },
-        { item: 'Hello', link: '/notifications' }
+        { item: 'Hello', link: '/notification' }
         ],
         messages: [{ message: 'Hi' }],
         lists: [
