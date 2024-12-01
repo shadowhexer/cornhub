@@ -33,13 +33,13 @@ export default {
             return window.location.pathname === link; // Use pathname for route matching
         },
         mergeProps,
-    }
+    },
 }
 </script>
 
 <template>
     <section id="header">
-        <v-app-bar :flat="true" color="#242424" app>
+        <v-app-bar :flat="true" color="amber-accent-4 " absolute app>
             <v-row class="d-flex align-center">
                 <v-col col="1">
                     <v-btn icon variant="text" color="white" size="x-large" href="/">
@@ -48,9 +48,9 @@ export default {
                 </v-col>
 
                 <v-col cols="8">
-                    <v-card class="mx-auto w-50" variant="text">
+                    <v-card class="mx-auto w-75" variant="text">
                         <v-card-text>
-                            <v-text-field placeholder="Search product..." variant="outlined" hide-details single-line>
+                            <v-text-field density="compact" placeholder="Search product..." variant="solo-filled" bg-color="white" flat hide-details single-line>
                                 <template v-slot:prepend-inner>
                                     <svg-icon type="mdi" :path="path[0]" />
                                 </template>
@@ -62,7 +62,7 @@ export default {
                 <v-col col="1" class="ma-n12">
                     <v-menu location="bottom">
                         <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="tonal" color="yellow" size="large">
+                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="green" size="large">
                                 <svg-icon type="mdi" :path="path[1]" />
                             </v-btn>
                         </template>
@@ -88,7 +88,7 @@ export default {
                 <v-col col="1" class="ma-n12">
                     <v-menu location="bottom">
                         <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="tonal" color="yellow" size="large">
+                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="blue" size="large">
                                 <svg-icon type="mdi" :path="path[2]" />
                             </v-btn>
                         </template>
@@ -112,7 +112,7 @@ export default {
                 <v-col col="1" class="ma-n12">
                     <v-menu location="bottom">
                         <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="tonal" color="yellow" size="large">
+                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="red" size="large">
                                 <svg-icon type="mdi" :path="path[3]" />
                             </v-btn>
                         </template>
