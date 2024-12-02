@@ -1,8 +1,15 @@
-<script lang="ts">
-import { mergeProps } from 'vue';
+<script setup lang="ts">
+import { mergeProps, ref } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import { mdiCart, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
+
+const profile = ProfilePic;
+
+</script>
+
+<script lang="ts">
+
 
 export default {
     name: "Header",
@@ -19,12 +26,10 @@ export default {
         lists: [
             { text: 'Profile', link: '/profile' },
             { text: 'Bookmarks', link: '/bookmarks' },
-            { text: 'Store', link: '/products' },
             { text: 'Setting', link: '/setting' },
             { text: 'Logout', link: '/' }
         ],
         path: [mdiMagnify, mdiCart, mdiChat, mdiBell],
-        profile: ProfilePic,
     }),
 
     methods: {
@@ -139,13 +144,14 @@ export default {
                     <v-menu location="bottom">
                         <template v-slot:activator="{ props: menu }">
                             <v-btn icon v-bind="menu" variant="text" color="white" size="large">
-                                <img width="100%" class="rounded-circle" :src="profile" />
+                                <v-avatar size="x-large">
+                                    <v-img :src="profile" aspect-ratio="1/1" cover/>
+                                </v-avatar>
                             </v-btn>
                         </template>
 
                         <v-list lines="one">
-                            <v-list-item v-for="(list, l) in lists" :key="l" :value="list" :to="list.link"
-                                :class="{ active: isActive(list.link) }">
+                            <v-list-item v-for="(list, l) in lists" :key="l" :value="list" :to="list.link">
                                 <v-list-item-title v-text="list.text"></v-list-item-title>
                             </v-list-item>
                         </v-list>
@@ -193,7 +199,6 @@ nav a:focus {
     font-weight: bold;
 }
 
-nav .active a,
 nav li a:hover {
     background-color: #29292900;
     color: rgb(47, 255, 47) !important;
@@ -280,7 +285,6 @@ nav li a:hover {
         margin: 0px;
     }
 
-    nav .active a,
     nav li a:hover {
         background-color: #4a4a4a;
         color: #FFF !important;
