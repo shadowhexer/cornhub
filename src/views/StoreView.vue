@@ -3,13 +3,11 @@ import NavDrawer from '@/components/NavDrawer.vue';
 </script>
 
 <template>
+    <NavDrawer />
+    <v-spacer />
     <v-card variant="flat" class="custom-card">
         <v-layout min-height="1000">
-            <NavDrawer />
-            <v-spacer />
-
             <v-main class="d-flex flex-column ma-3 pa-2" width="1000">
-                
             </v-main>
         </v-layout>
     </v-card>
