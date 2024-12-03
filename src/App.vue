@@ -16,7 +16,7 @@ export default {
       <div>
         <Header />
       </div>
-      
+
       <div class="mt-5 mb-n15 pb-15">
         <v-main>
           <RouterView />
@@ -31,3 +31,8 @@ export default {
     </v-app>
   </v-responsive>
 </template>
+<style>
+a:hover {
+  background-color: transparent;
+}
+</style>

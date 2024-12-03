@@ -2,16 +2,16 @@
 import { reactive } from 'vue';
 
 const items = reactive({
-    icon: ['mdi-folder', 'mdi-account-multiple', 'mdi-star'],
-    title: ['Home', 'Store', 'Videos'],
-    value: ['myfiles', 'shared', 'starred'],
-    link: ['/', '/products', '']
+    icon: ['mdi-folder', 'mdi-account-multiple', 'mdi-star', 'mdi'],
+    title: ['Home', 'Store', 'Videos', 'About us'],
+    value: ['myfiles', 'shared', 'starred', 'about'],
+    link: ['/', '/products', '/', '/']
 });
 
 </script>
 
 <template>
-    <v-card variant="flat" class="custom-card">
+    <v-card variant="flat">
         <v-navigation-drawer location="left" width="225" fixed permanent>
             <v-list class="my-10" nav>
                 <v-list-item v-for="(i, index) in items.title" :key="index" :prepend-icon="items.icon[index]"

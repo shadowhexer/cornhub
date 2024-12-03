@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
+import VSheets from './VSheets.vue';
 
 const carousel = reactive({
     images: [
@@ -10,8 +11,15 @@ const carousel = reactive({
     ]
 });
 
+const products = reactive({
+    names: ['Yellow', 'Blue', 'Green', 'Red', 'Orange', 'Green',],
+    images: ['https://project-imas.wiki/images/d/df/HaruSR10%2B.jpg',
+
+    ]
+});
+
 const stores = reactive({
-    name: [
+    names: [
         'Arisu',
         'Haru',
         'Chelsea',
@@ -28,55 +36,46 @@ const stores = reactive({
 <template>
     <v-main class="d-flex flex-column ma-4 pa-3" width="1000">
 
-        <v-carousel show-arrows="hover" height="200" class="carousel" hide-delimiters cycle>
-            <v-carousel-item v-for="(image, index) in carousel.images" :key="index" :src="image" cover />
+        <v-carousel show-arrows="hover" height="250" class="carousel" @contextmenu.prevent hide-delimiters cycle>
+            <v-carousel-item v-for="(image, index) in carousel.images" :key="index" :src="image" draggable="false"
+                cover />
         </v-carousel>
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <v-card variant="flat">
-            <div>
-                <p class="text-h5 font-weight-bold">Featured Products</p>
-                <v-container>
-                    <v-row justify="start">
-                        <v-col v-for="i in 10" :key="i" cols="12" md="3">
-                            <v-sheet class="mx-auto text-center d-flex flex-column border-sm border-opacity-50"
-                                justify="center" height="300" width="250" elevation="1">
-                                <v-sheet class="mx-auto my-5" height="200" width="200">
-                                    <v-img
-                                        src="https://preview.redd.it/i-got-bored-so-i-decided-to-draw-a-random-image-on-the-v0-4ig97vv85vjb1.png?width=1080&crop=smart&auto=webp&s=28c3ad73cff636f7ba478a0c19d734cd538949d4">
-                                    </v-img>
-                                </v-sheet>
+        <VSheets :items="products" :header="{title: 'Huge Discounts!', link: '/products'}">
+            <template #default="{ item, index }">
+                <v-sheet class="mx-auto" height="200" width="200">
+                    <v-img :src="products.images[index]" aspect-ratio="5/7" draggable="false" cover />
+                </v-sheet>
 
-                                Yellow Corn
-                            </v-sheet>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </div>
-
-        </v-card>
+                <p class="text-subtitle-1">{{ item }} Corn</p>
+            </template>
+        </VSheets>
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <v-card variant="flat" class="custom-card">
-            <div>
-                <p class="text-h5 font-weight-bold">Featured Stores</p>
-                <v-container>
-                    <v-row justify="start">
-                        <v-col v-for="(name, index) in stores.name" :key="index" cols="12" md="3">
-                            <v-sheet class="mx-auto text-center d-flex flex-column border-sm border-opacity-50"
-                                justify="center" height="250" elevation="1" width="200">
-                                <v-avatar class="mx-auto my-5" size="150">
-                                    <v-img :src="stores.images[index]" cover>
-                                    </v-img>
-                                </v-avatar>
-                                <p class="text-subtitle-1 font-weight-bold">{{ name }}</p>
-                            </v-sheet>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </div>
-        </v-card>
+        <VSheets :items="products" :header="{title: 'Featured Videos', link: '/'}">
+            <template #default="{ item, index }">
+                <v-sheet class="mx-auto" height="200" width="200">
+                    <v-img :src="products.images[index]" aspect-ratio="5/7" draggable="false" cover />
+                </v-sheet>
+
+                <p class="text-subtitle-1">{{ item }} Corn</p>
+            </template>
+        </VSheets>
+
+        <v-divider class="my-10 mx-10" opacity="0.3" inset />
+
+        <VSheets :items="stores" :header="{title: 'Featured Stores', link: '/store'}" :customClass="'border-sm border-opacity-25'">
+            <template #default="{ item, index }">
+                <v-avatar class="mx-auto my-5" size="170">
+                    <v-img :src="stores.images[index]" draggable="false" cover />
+                </v-avatar>
+                <v-divider class="my-2 mx-5" opacity="0.3" />
+                <p class="text-subtitle-1 font-weight-bold">{{ item }}</p>
+            </template>
+        </VSheets>
+
     </v-main>
 </template>
