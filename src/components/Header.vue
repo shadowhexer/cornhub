@@ -2,29 +2,40 @@
 import { reactive } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
-import { mdiCart, mdiBell, mdiChat, mdiMagnify, mdiBookmarkBoxMultiple, mdiCog, mdiLogout } from '@mdi/js';
-
-const icons = reactive({
-    path: [mdiMagnify, mdiCart, mdiChat, mdiBell,],
-});
+import { mdiCart, mdiBell, mdiChat, mdiMagnify, mdiBookmarkBoxMultiple, mdiCog, mdiLogout, mdiDotsHorizontal } from '@mdi/js';
+import VMenus from './VMenus.vue';
+import ProfileMenu from './ProfileMenu.vue';
 
 const carts = reactive({
+    title: 'Cart',
+    color: 'green',
+    images: [],
     product: ['Hi', 'Hello'],
+    store: ['Chelsea', 'Haru'],
     link: ['/', ''],
 })
 
 const messages = reactive({
+    title: 'Messages',
+    color: 'blue',
     avatar: [ProfilePic, ProfilePic],
     author: ['Haru', 'System'],
-    item: ['Hi', 'Okay ra ka?']
+    item: ['Hi', 'Okay ra ka?'],
+    link: ['/messages', ''],
 });
 
-const notifications = reactive({
-    item: ['Hi', 'Hello'],
+const notif = reactive({
+    title: 'Notifications',
+    color: 'red',
+    avatar: [ProfilePic, ProfilePic],
+    item: ['Pahibalo si Zilong nag lulu sa kilid', 'Hello'],
     link: ['', '/notification']
 })
 
 const menu = reactive({
+    profilePic: ProfilePic,
+    name: 'Hexer',
+    type: 'admin',
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiLogout],
     text: ['Bookmarks', 'Setting', 'Logout'],
     link: ['/bookmarks', '/setting', '/']
@@ -38,7 +49,7 @@ const menu = reactive({
             <v-row class="d-flex align-center">
 
                 <!-- Logo -->
-                 
+
                 <v-col col="1">
                     <v-btn icon variant="text" color="white" size="x-large" href="/">
                         <img width="100%" class="rounded-circle" :src="ProfilePic" />
@@ -46,14 +57,14 @@ const menu = reactive({
                 </v-col>
 
                 <!-- Search bar -->
-                 
+
                 <v-col cols="8">
                     <v-card class="mx-auto w-75" variant="text">
                         <v-card-text>
                             <v-text-field density="compact" placeholder="Search product..." variant="solo-filled"
                                 bg-color="white" flat hide-details single-line>
                                 <template v-slot:prepend-inner>
-                                    <svg-icon type="mdi" :path="icons.path[0]" />
+                                    <svg-icon type="mdi" :path="mdiMagnify" />
                                 </template>
                             </v-text-field>
                         </v-card-text>
@@ -63,151 +74,49 @@ const menu = reactive({
                 <!-- Cart -->
 
                 <v-col col="1" class="ma-n12">
-                    <v-menu location="bottom">
-                        <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="green" size="large">
-                                <svg-icon type="mdi" :path="icons.path[1]" />
-                            </v-btn>
+                    <VMenus :offset="[5, 0]"
+                        :items="{ header: carts.title, btnColor: carts.color, icon: carts.images, title: carts.product, author: carts.store, link: carts.link }">
+
+                        <template #default="{ icons }">
+                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiCart : mdiDotsHorizontal" />
                         </template>
-
-                        <v-list lines="one">
-                            <!-- Show "Empty..." if all products/links are empty -->
-                            <v-list-item
-                                v-if="carts.product.length === 0 || carts.product.every((item, index) => !item || !carts.link[index])"
-                                disabled>
-                                <v-list-item-title>Empty...</v-list-item-title>
-                            </v-list-item>
-
-                            <!-- Show the valid products -->
-                            <template v-for="(item, c) in carts.product" :key="c">
-                                <v-list-item v-if="carts.link[c]" :value="item" :href="carts.link[c]">
-                                    <v-list-item-title v-text="item"></v-list-item-title>
-                                </v-list-item>
-                            </template>
-                        </v-list>
-
-                    </v-menu>
+                    </VMenus>
                 </v-col>
 
                 <!-- Messages -->
-                 
+
                 <v-col col="1" class="ma-n12">
-                    <v-menu :offset="[5, 0]">
-                        <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="blue" size="large">
-                                <svg-icon type="mdi" :path="icons.path[2]" />
-                            </v-btn>
+                    <VMenus :offset="[5, 0]"
+                        :items="{ header: messages.title, btnColor: messages.color, icon: messages.avatar, title: messages.item, author: messages.author, link: messages.link }">
+
+                        <template #default="{ icons }">
+                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiChat : mdiDotsHorizontal" />
                         </template>
 
-                        <v-card min-width="400">
-
-                            <v-list class="mx-1">
-                                <v-list-item>
-                                    <template #title>
-                                        <span class="text-h6 font-weight-bold">Messages</span>
-                                    </template>
-
-                                </v-list-item>
-                            </v-list>
-
-                            <v-divider class="mx-7" opacity="0.3" />
-
-                            <v-list lines="two" class="mx-1">
-                                <!-- Show "Empty..." if all products/links are empty -->
-                                <v-list-item v-if="messages.item.length === 0 ||
-                                    messages.item.every((item, index) =>
-                                        !messages.item[index])" disabled>
-                                    <v-list-item-title>Empty...</v-list-item-title>
-                                </v-list-item>
-
-                                <!-- Show the valid products -->
-                                <template v-for="(item, m) in messages.item">
-                                    <v-list-item v-if="messages.item[m]" :key="m" :value="item"
-                                        :prepend-avatar="messages.avatar[m]">
-
-                                        <template #title>
-                                            <span class="font-weight-bold">{{ messages.author[m] }}</span>
-                                        </template>
-
-                                        <template #subtitle>
-                                            <span>{{ item }}</span>
-                                        </template>
-
-                                    </v-list-item>
-                                </template>
-                            </v-list>
-                        </v-card>
-
-                    </v-menu>
+                    </VMenus>
                 </v-col>
 
                 <!-- Notification -->
 
                 <v-col col="1" class="ma-n12">
-                    <v-menu location="bottom">
-                        <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="elevated" :elevation="0" color="red" size="large">
-                                <svg-icon type="mdi" :path="icons.path[3]" />
-                            </v-btn>
+                    <VMenus :offset="[5, 0]"
+                        :items="{ header: notif.title, btnColor: notif.color, icon: notif.avatar, title: notif.item, author: [], link: notif.link }">
+                        
+                        <template #default="{ icons }">
+                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiBell : mdiDotsHorizontal" />
                         </template>
 
-                        <v-list lines="one">
-                            <!-- Show "Empty..." if all products/links are empty -->
-                            <v-list-item
-                                v-if="notifications.item.length === 0 || notifications.item.every((item, index) => !item || !notifications.link[index])"
-                                disabled>
-                                <v-list-item-title>Empty...</v-list-item-title>
-                            </v-list-item>
-
-                            <!-- Show the valid products -->
-                            <template v-for="(notif, n) in notifications.item">
-                                <v-list-item v-if="notifications.link[n]" :key="n" :value="notif"
-                                    :href="notifications.link[n]">
-                                    <v-list-item-title v-text="notif"></v-list-item-title>
-                                </v-list-item>
-                            </template>
-                        </v-list>
-                    </v-menu>
+                    </VMenus>
                 </v-col>
 
                 <!-- Profile Menu -->
 
                 <v-col col="1" class="ma-n12">
-                    <v-menu :offset="[5, 0]">
-                        <template v-slot:activator="{ props: menu }">
-                            <v-btn icon v-bind="menu" variant="text" color="white" size="large">
-                                <v-avatar size="x-large">
-                                    <v-img :src="ProfilePic" aspect-ratio="1/1" cover />
-                                </v-avatar>
-                            </v-btn>
+                    <ProfileMenu :menu="menu">
+                        <template #default="{ icon, index }">
+                            <svg-icon type="mdi" :path="menu.icon[index]" class="mx-2" />
                         </template>
-
-                        <v-card min-width="300">
-                            <v-list>
-                                <v-list-item :prepend-avatar="ProfilePic" href="/profile">
-                                    <template #title>
-                                        <span class="text-h6 font-weight-bold">Hexer</span>
-                                    </template>
-
-                                    <template #subtitle>
-                                        admin
-                                    </template>
-                                </v-list-item>
-                            </v-list>
-
-                            <v-divider class="mx-5" opacity="0.3" />
-
-                            <v-list lines="one">
-                                <v-list-item v-for="(list, l) in menu.text" :key="l" :value="list" :href="menu.link[l]">
-                                    <template #prepend>
-                                        <svg-icon type="mdi" :path="menu.icon[l]" class="mx-2" />
-                                    </template>
-                                    <v-list-item-title v-text="list"></v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-card>
-
-                    </v-menu>
+                    </ProfileMenu>
                 </v-col>
 
             </v-row>

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiChevronRightCircle } from '@mdi/js';
 
 defineProps<{
     items: {
         names: string[],
-        image: [],
+        images: string[],
     },
     header: {
         title: string,
