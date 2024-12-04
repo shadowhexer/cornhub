@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-
-
 defineProps<{
     items: {
         header: string,
         btnColor: string,
         icon: string[],
         title: string[],
-        author: string[],
+        subtitle: string[],
         link: string[],
     },
 }>();
+
 </script>
 
 <template>
-    <v-menu close-on-content-click>
+    <v-menu :close-on-content-click="false">
         <template v-slot:activator="{ props }">
-            <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="large">
+            <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="default">
                 <slot :name="'icons'" :icon="'head'" />
             </v-btn>
         </template>
@@ -57,18 +56,25 @@ defineProps<{
                     <v-list-item-title>Empty...</v-list-item-title>
                 </v-list-item>
 
-                <!-- Show the valid products -->
+                <!-- Show the valid items -->
                 <template v-for="(item, i) in items.title">
-                    <v-list-item v-if="items.title[i] && items.author[i]" :key="i" :value="item"
-                        :prepend-avatar="items.icon[i]">
+                    <v-list-item v-if="items.title[i] && items.subtitle[i]" :key="i" :value="item">
+
+                        <template #prepend>
+                            <v-img icon :src="items.icon[i]"></v-img>
+                        </template>
 
                         <template v-slot:title>
-                            <span class="font-weight-bold">{{ items.author[i] }}</span>
+                            <span class="font-weight-bold">{{ items.subtitle[i] }}</span>
                         </template>
 
                         <template v-slot:subtitle>
                             <span>{{ item }}</span>
                         </template>
+
+
+
+
 
                     </v-list-item>
 

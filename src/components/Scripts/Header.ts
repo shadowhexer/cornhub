@@ -38,7 +38,7 @@ type Menu = {
 const carts = reactive<Cart>({
     title: 'Cart',
     images: [],
-    product: ['Hi', 'Hello'],
+    product: ['Yellow Corn', 'Green Corn'],
     store: ['Chelsea', 'Haru'],
     link: ['/', ''],
 });

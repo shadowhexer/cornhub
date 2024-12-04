@@ -15,8 +15,8 @@ defineProps<{
 <template>
     <v-menu :offset="[5, 0]">
         <template v-slot:activator="{ props }">
-            <v-btn icon v-bind="props" variant="text" color="white" size="large">
-                <v-avatar size="x-large">
+            <v-btn icon v-bind="props" variant="text" color="white" size="default">
+                <v-avatar size="large">
                     <v-img :src="menu.profilePic" aspect-ratio="1/1" cover />
                 </v-avatar>
             </v-btn>

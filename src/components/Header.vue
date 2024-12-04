@@ -8,28 +8,31 @@ import { mdiCart, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
 const isRead = ref(false);
 
-const markAsRead = async() => {
+const markAsRead = async () => {
     try {
         // await new Promise(resolve => setTimeout(resolve, 1000));
         // isRead.value = true;
         alert("Success");
-    } catch(error) {
+    } catch (error) {
         console.error("Failed ", error);
     }
 };
+
 
 </script>
 
 <template>
     <section id="header">
-        <v-app-bar :flat="true" color="amber-accent-4" sticky app>
+        <v-app-bar :flat="true" color="amber-accent-4" density="compact" sticky app>
             <v-row class="d-flex align-center">
 
                 <!-- Logo -->
 
                 <v-col col="1">
-                    <v-btn icon variant="text" color="white" size="x-large" href="/">
-                        <img width="100%" class="rounded-circle" :src="Header.ProfilePic" />
+                    <v-btn icon variant="text" color="white" size="default" href="/">
+                        <v-avatar size="large">
+                            <v-img :src="Header.ProfilePic" aspect-ratio="1/1" cover />
+                        </v-avatar>
                     </v-btn>
                 </v-col>
 
@@ -52,15 +55,21 @@ const markAsRead = async() => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.product, author: Header.carts.store, link: Header.carts.link }">
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link }">
 
                         <template #icons>
-                            <svg-icon type="mdi" :path=" mdiCart" />
+                            <svg-icon type="mdi" :path="mdiCart" />
                         </template>
 
                         <template #mark>
                             <a class="text-subtitle-2" type="button" text="Select all" @click.stop="markAsRead" />
                         </template>
+
+                        <!-- <template #check>
+                            <v-container fluid>
+                                <v-checkbox color="success" @click.stop hide-details></v-checkbox>
+                            </v-container>
+                        </template> -->
                     </VMenus>
                 </v-col>
 
@@ -68,7 +77,7 @@ const markAsRead = async() => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, author: Header.messages.author, link: Header.messages.link }">
+                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link }">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiChat" />
@@ -85,8 +94,8 @@ const markAsRead = async() => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, author: [], link: Header.notif.link }">
-                        
+                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, subtitle: [], link: Header.notif.link }">
+
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiBell" />
                         </template>
