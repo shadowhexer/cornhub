@@ -5,18 +5,9 @@ defineProps<{
         profilePic: string,
         name: string,
         type: string,
-        icon: {
-            type: Array<string>,
-            required: true,
-        }
-        text: {
-            type: Array<string>,
-            required: true,
-        }
-        link: {
-            type: Array<string>,
-            required: undefined,
-        }
+        icon: string[],
+        text: string[],
+        link: string[],
     }
 }>()
 </script>
@@ -47,7 +38,8 @@ defineProps<{
             <v-divider class="mx-5" opacity="0.3" />
 
             <v-list lines="one">
-                <v-list-item v-for="(list, l) in menu.text" :key="l" :value="list" :href="menu.link[l] as string | undefined">
+                <v-list-item v-for="(list, l) in menu.text" :key="l" :value="list"
+                    :href="menu.link[l] as string | undefined">
                     <template #prepend>
                         <slot :icon="menu.icon" :index="l" />
                     </template>

@@ -1,45 +1,22 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-import ProfilePic from '@/assets/profile.jpg';
+import { ref } from 'vue';
+import Header from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
-import { mdiCart, mdiBell, mdiChat, mdiMagnify, mdiBookmarkBoxMultiple, mdiCog, mdiLogout, mdiDotsHorizontal } from '@mdi/js';
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
+import { mdiCart, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
-const carts = reactive({
-    title: 'Cart',
-    color: 'green',
-    images: [],
-    product: ['Hi', 'Hello'],
-    store: ['Chelsea', 'Haru'],
-    link: ['/', ''],
-})
+const isRead = ref(false);
 
-const messages = reactive({
-    title: 'Messages',
-    color: 'blue',
-    avatar: [ProfilePic, ProfilePic],
-    author: ['Haru', 'System'],
-    item: ['Hi', 'Okay ra ka?'],
-    link: ['/messages', ''],
-});
-
-const notif = reactive({
-    title: 'Notifications',
-    color: 'red',
-    avatar: [ProfilePic, ProfilePic],
-    item: ['Pahibalo si Zilong nag lulu sa kilid', 'Hello'],
-    link: ['', '/notification']
-})
-
-const menu = reactive({
-    profilePic: ProfilePic,
-    name: 'Hexer',
-    type: 'admin',
-    icon: [mdiBookmarkBoxMultiple, mdiCog, mdiLogout],
-    text: ['Bookmarks', 'Setting', 'Logout'],
-    link: ['/bookmarks', '/setting', '/']
-})
+const markAsRead = async() => {
+    try {
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        // isRead.value = true;
+        alert("Success");
+    } catch(error) {
+        console.error("Failed ", error);
+    }
+};
 
 </script>
 
@@ -52,7 +29,7 @@ const menu = reactive({
 
                 <v-col col="1">
                     <v-btn icon variant="text" color="white" size="x-large" href="/">
-                        <img width="100%" class="rounded-circle" :src="ProfilePic" />
+                        <img width="100%" class="rounded-circle" :src="Header.ProfilePic" />
                     </v-btn>
                 </v-col>
 
@@ -75,10 +52,14 @@ const menu = reactive({
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: carts.title, btnColor: carts.color, icon: carts.images, title: carts.product, author: carts.store, link: carts.link }">
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.product, author: Header.carts.store, link: Header.carts.link }">
 
-                        <template #default="{ icons }">
-                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiCart : mdiDotsHorizontal" />
+                        <template #icons>
+                            <svg-icon type="mdi" :path=" mdiCart" />
+                        </template>
+
+                        <template #mark>
+                            <a class="text-subtitle-2" type="button" text="Select all" @click.stop="markAsRead" />
                         </template>
                     </VMenus>
                 </v-col>
@@ -87,10 +68,14 @@ const menu = reactive({
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: messages.title, btnColor: messages.color, icon: messages.avatar, title: messages.item, author: messages.author, link: messages.link }">
+                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, author: Header.messages.author, link: Header.messages.link }">
 
-                        <template #default="{ icons }">
-                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiChat : mdiDotsHorizontal" />
+                        <template #icons>
+                            <svg-icon type="mdi" :path="mdiChat" />
+                        </template>
+
+                        <template #mark>
+                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAsRead" />
                         </template>
 
                     </VMenus>
@@ -100,10 +85,14 @@ const menu = reactive({
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: notif.title, btnColor: notif.color, icon: notif.avatar, title: notif.item, author: [], link: notif.link }">
+                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, author: [], link: Header.notif.link }">
                         
-                        <template #default="{ icons }">
-                            <svg-icon type="mdi" :path="icons === 'icon' ? mdiBell : mdiDotsHorizontal" />
+                        <template #icons>
+                            <svg-icon type="mdi" :path="mdiBell" />
+                        </template>
+
+                        <template #mark>
+                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAsRead" />
                         </template>
 
                     </VMenus>
@@ -112,9 +101,9 @@ const menu = reactive({
                 <!-- Profile Menu -->
 
                 <v-col col="1" class="ma-n12">
-                    <ProfileMenu :menu="menu">
-                        <template #default="{ icon, index }">
-                            <svg-icon type="mdi" :path="menu.icon[index]" class="mx-2" />
+                    <ProfileMenu :menu="Header.menu">
+                        <template #default="{ index }">
+                            <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
                         </template>
                     </ProfileMenu>
                 </v-col>

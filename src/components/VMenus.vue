@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const isRead = ref(false);
 
-const markAsRead = async() => {
-    try {
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        // isRead.value = true;
-        alert("Success");
-    } catch(error) {
-        console.error("Failed ", error);
-    }
-};
 
 defineProps<{
     items: {
@@ -29,7 +19,7 @@ defineProps<{
     <v-menu close-on-content-click>
         <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="large">
-                <slot :icons="'icon'" />
+                <slot :name="'icons'" :icon="'head'" />
             </v-btn>
         </template>
 
@@ -42,13 +32,12 @@ defineProps<{
                         <div class="d-flex flex-row justify-space-between align-center pa-0">
 
                             <div class="d-flex align-center">
-                                <slot :icons="'icon'" />
+                                <slot :name="'icons'" />
                                 <span class="mx-1 text-h6 font-weight-bold">{{ items.header }}</span>
                             </div>
 
                             <div>
-                                <!-- <slot class="mx-2" size="20" type="mdi" href="/" :icons="'menu'"  /> -->
-                                <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAsRead" />
+                                <slot :name="'mark'" />
                             </div>
 
                         </div>
