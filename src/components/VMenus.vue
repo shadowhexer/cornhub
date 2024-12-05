@@ -58,7 +58,7 @@ const timeAgo = computed(() => {
 
         <div class="position-absolute right-0">
 
-            <v-card min-width="350">
+            <v-card min-width="350" max-height="50vh" :class="type === 'notif' || 'messages' ? 'overflow-y-auto' : ''">
 
                 <v-list class="mx-1">
                     <v-list-item>
@@ -94,7 +94,7 @@ const timeAgo = computed(() => {
 
                     <!-- Show the valid items -->
                     <template v-for="(item, i) in items.title">
-                        <v-list-item v-if="(item && items.subtitle?.[i]) " :key="i" :value="item"
+                        <v-list-item v-if="item && items.subtitle?.[i]" :key="i" :value="item"
                             @click.stop="markIndividual(i, 'messages')">
 
                             <template #prepend>
@@ -121,9 +121,9 @@ const timeAgo = computed(() => {
 
                         </v-list-item>
 
-                        <!-- Notif --> 
-                        <v-list-item v-else :href="items.link[i]" :prepend-avatar="items.icon[i]"
-                            @click.stop="markIndividual(i, 'notif')">
+                        <!-- Notif -->
+                        <v-list-item v-else-if="!items.subtitle?.[i]" :href="items.link[i]"
+                            :prepend-avatar="items.icon[i]" @click.stop="markIndividual(i, 'notif')">
                             <span class="d-inline-block text-truncate"
                                 :class="type === 'notif' && isRead?.[i] === false ? 'text-black font-weight-bold' : ''"
                                 style="max-width: 250px;">

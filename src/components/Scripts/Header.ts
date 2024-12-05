@@ -54,21 +54,21 @@ const carts = reactive<Cart>({
 
 const messages = reactive<Message>({
     title: 'Messages',
-    avatar: [ProfilePic, ProfilePic],
-    author: ['Haru', 'System'],
-    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan', 'Okay ra ka?'],
-    date: [dates, date2],
-    link: ['/messages', ''],
-    read: [false, false],
+    avatar: [ProfilePic, ProfilePic, ProfilePic, ProfilePic],
+    author: ['Haru', 'System', 'Alice', 'Chelsea'],
+    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan', 'Okay ra ka?', 'Hehehhee', 'palit na'],
+    date: [dates, date2, date2, dates],
+    link: ['/messages', '/', '/'],
+    read: [false, false, false, false],
 });
 
 const notif = reactive<Notification>({
     title: 'Notifications',
-    avatar: [ProfilePic, ProfilePic],
-    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan', 'Hello'],
-    date: [date2, dates],
-    link: ['', '/notification'],
-    read: [false, false],
+    avatar: [ProfilePic, ProfilePic, ProfilePic],
+    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan', 'Hello', 'Di makita'],
+    date: [date2, dates, dates],
+    link: ['', '/notification', ''],
+    read: [false, false, false],
 });
 
 const menu = reactive<Menu>({
