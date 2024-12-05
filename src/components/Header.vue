@@ -1,22 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Header from './Scripts/Header';
+import Header, { markAsRead } from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiCart, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
-const isRead = ref(false);
-
-const markAsRead = async () => {
-    try {
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        // isRead.value = true;
-        alert("Success");
-    } catch (error) {
-        console.error("Failed ", error);
-    }
-};
+const { markIndividual, markAll } = markAsRead();
 
 
 </script>
@@ -55,14 +45,10 @@ const markAsRead = async () => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link }">
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link, extra: Header.carts.price }" :type="'cart'" >
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiCart" />
-                        </template>
-
-                        <template #mark>
-                            <a class="text-subtitle-2" type="button" text="Select all" @click.stop="markAsRead" />
                         </template>
 
                         <!-- <template #check>
@@ -77,14 +63,14 @@ const markAsRead = async () => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link }">
+                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }" :type="'messages'" :mark-individual="markIndividual":is-read="Header.messages.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiChat" />
                         </template>
 
                         <template #mark>
-                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAsRead" />
+                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAll('messages')" />
                         </template>
 
                     </VMenus>
@@ -94,14 +80,14 @@ const markAsRead = async () => {
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, subtitle: [], link: Header.notif.link }">
+                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }" :type="'notif'" :mark-individual="markIndividual" :is-read="Header.notif.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiBell" />
                         </template>
 
                         <template #mark>
-                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAsRead" />
+                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAll('notif')" />
                         </template>
 
                     </VMenus>
