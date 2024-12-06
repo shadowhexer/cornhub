@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+
+const profile = ref<string>('Hexer')
+
+onMounted(() => {
+    document.title = profile.value + ' - Profile';
+});
     
 </script>
 

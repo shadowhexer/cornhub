@@ -38,6 +38,11 @@ const vuetify = createVuetify
                 mdi,
             },
         },
-    })
+    });
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title as string || '404 Not Found';
+    next();
+});
 
 app.use(vuetify).use(router).mount('#app')
