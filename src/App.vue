@@ -32,6 +32,12 @@ export default {
   </v-responsive>
 </template>
 <style>
+* {
+  font-family: 'Josefin Sans', sans-serif !important;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
 a:hover {
   background-color: transparent;
 }

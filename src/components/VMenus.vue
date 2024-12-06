@@ -122,14 +122,21 @@ const timeAgo = computed(() => {
                         </v-list-item>
 
                         <!-- Notif -->
-                        <v-list-item v-else-if="!items.subtitle?.[i]" :href="items.link[i]"
-                            :prepend-avatar="items.icon[i]" @click.stop="markIndividual(i, 'notif')">
-                            <span class="d-inline-block text-truncate"
-                                :class="type === 'notif' && isRead?.[i] === false ? 'text-black font-weight-bold' : ''"
-                                style="max-width: 250px;">
+                        <v-list-item 
+                        v-else-if="!items.subtitle?.[i]" 
+                        :href="items.link[i]"    
+                        :prepend-avatar="items.icon[i]" 
+                        @click.stop="markIndividual(i, 'notif')"
+                        >
+                            <span 
+                            class="truncate  text-body-2"
+                            :class="type === 'notif' && isRead?.[i] === false ? 'font-weight-bold' : ''"
+                            style="max-width: 250px;"
+                                >
                                 {{ items.title[i] }}
                             </span>
-                            <p class="text-caption">{{ timeAgo?.[i] }}</p>
+
+                            <p class="text-caption ">{{ timeAgo?.[i] }}</p>
 
                         </v-list-item>
                     </template>
@@ -140,3 +147,13 @@ const timeAgo = computed(() => {
 
     </v-menu>
 </template>
+<style scoped>
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    /* Change this to the desired number of lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+</style>

@@ -45,7 +45,8 @@ const { markIndividual, markAll } = markAsRead();
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link, extra: Header.carts.price }" :type="'cart'" >
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link, extra: Header.carts.price }"
+                        :type="'cart'">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiCart" />
@@ -63,14 +64,16 @@ const { markIndividual, markAll } = markAsRead();
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }" :type="'messages'" :mark-individual="markIndividual":is-read="Header.messages.read">
+                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }"
+                        :type="'messages'" :mark-individual="markIndividual" :is-read="Header.messages.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiChat" />
                         </template>
 
                         <template #mark>
-                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAll('messages')" />
+                            <a class="text-subtitle-2" type="button" text="Mark all as read"
+                                @click.stop="markAll('messages')" />
                         </template>
 
                     </VMenus>
@@ -80,14 +83,16 @@ const { markIndividual, markAll } = markAsRead();
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }" :type="'notif'" :mark-individual="markIndividual" :is-read="Header.notif.read">
+                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }"
+                        :type="'notif'" :mark-individual="markIndividual" :is-read="Header.notif.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiBell" />
                         </template>
 
                         <template #mark>
-                            <a class="text-subtitle-2" type="button" text="Mark all as read" @click.stop="markAll('notif')" />
+                            <a class="text-subtitle-2" type="button" text="Mark all as read"
+                                @click.stop="markAll('notif')" />
                         </template>
 
                     </VMenus>
