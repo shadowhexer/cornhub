@@ -65,7 +65,7 @@ const messages = reactive<Message>({
 const notif = reactive<Notification>({
     title: 'Notifications',
     avatar: [ProfilePic, ProfilePic, ProfilePic],
-    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan', 'Hello', 'Di makita'],
+    item: ['Pahibalo si Zilong nag lulu sa kilid. Tu ara oh nasakpan na navideohan nakita sa camera! Kalood nimo oy. Alangan kadtong mga seksi seksi nako ba mag Tiktok unta ko.', 'Hello', 'Di makita'],
     date: [date2, dates, dates],
     link: ['', '/notification', ''],
     read: [false, false, false],

@@ -6,7 +6,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: HomeView,
-    meta: { title: 'OnlyCorn - Home' },
+    meta: { title: 'OnlyCorn' },
   },
   {
     path: '/notification',

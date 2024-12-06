@@ -41,7 +41,7 @@ const vuetify = createVuetify
     });
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title as string || '404 Not Found';
+    document.title = to.meta.title as string || 'Page Not Found -  OnlyCorn';
     next();
 });
 

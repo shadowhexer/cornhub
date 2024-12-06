@@ -45,6 +45,15 @@ const timeAgo = computed(() => {
     });
 });
 
+const badgeVisible = computed(() => {
+    return (props.type === 'cart' && props.items.title.length > 0) || 
+            (props.isRead?.filter(read => read === false).length ?? 0) > 0;
+})
+
+const badgeContent = computed(() => {
+    return props.type === 'cart' ? props.items.subtitle?.length : props.isRead?.filter(read => read === false).length;
+})
+
 
 </script>
 
@@ -52,7 +61,9 @@ const timeAgo = computed(() => {
     <v-menu :close-on-content-click="true">
         <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="default">
-                <slot :name="'icons'" :icon="'head'" />
+                <v-badge :model-value="badgeVisible" :content="badgeContent">
+                    <slot :name="'icons'" :icon="'head'" />
+                </v-badge>
             </v-btn>
         </template>
 
@@ -129,7 +140,7 @@ const timeAgo = computed(() => {
                         @click.stop="markIndividual(i, 'notif')"
                         >
                             <span 
-                            class="truncate  text-body-2"
+                            class="truncate overflow-hidden text-body-2"
                             :class="type === 'notif' && isRead?.[i] === false ? 'font-weight-bold' : ''"
                             style="max-width: 250px;"
                                 >
