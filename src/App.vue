@@ -33,7 +33,7 @@ export default {
 </template>
 <style>
 * {
-  font-family: 'Josefin Sans', sans-serif !important;
+  font-family: Arial !important;
   font-optical-sizing: auto;
   font-weight: 400;
 }

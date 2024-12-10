@@ -4,7 +4,7 @@ import Header, { markAsRead } from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
-import { mdiCart, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
+import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
 const { markIndividual, markAll } = markAsRead();
 
@@ -49,7 +49,7 @@ const { markIndividual, markAll } = markAsRead();
                         :type="'cart'">
 
                         <template #icons>
-                            <svg-icon type="mdi" :path="mdiCart" />
+                            <svg-icon type="mdi" :path="mdiBasket" />
                         </template>
 
                         <!-- <template #check>

@@ -13,9 +13,12 @@ const carousel = reactive({
 
 const products = reactive({
     names: ['Yellow', 'Blue', 'Green', 'Red', 'Orange', 'Green',],
-    images: ['https://project-imas.wiki/images/d/df/HaruSR10%2B.jpg',
-
-    ]
+    images: ['https://project-imas.wiki/images/d/df/HaruSR10%2B.jpg'],
+    store: ['Arisu', 'Haru', 'Haru', 'Chelsea', 'Arisu', 'Chelsea'],
+    price: [1500, 200, 300, 350, 100, 50],
+    discount_price: [500, 50, 0, 0, 25, 0],
+    bookmarked: [false, false, false, false, false, false],
+    link: ['/', '', '/', '', '', '/'],
 });
 
 const stores = reactive({
@@ -28,7 +31,7 @@ const stores = reactive({
         'https://project-imas.wiki/images/5/53/Arisu_SR16.jpg',
         'https://project-imas.wiki/images/1/12/Haru_SS_SSR%2B.png',
         'https://scontent.fmnl9-3.fna.fbcdn.net/v/t39.30808-6/459456357_1967072953794201_5954716566750958856_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHsfKf5kt8HpTeryxI1xAZCxX1yQWgCew_FfXJBaAJ7D7iaoVDs2-F-IV7WQR93hxVvyM7Zv_IxBuudQujVLKh3&_nc_ohc=a8j6y_OYNlAQ7kNvgEuZ9dA&_nc_zt=23&_nc_ht=scontent.fmnl9-3.fna&_nc_gid=AuXzedLurj8n-Tm8KaY40Uh&oh=00_AYBnoo_ql9lInCVhwOiEfz7meCLX2yE9oxD2wmsiawv_Iw&oe=6752E27D',
-    ]
+    ],
 });
 
 </script>
@@ -43,31 +46,15 @@ const stores = reactive({
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <VSheets :items="products" :header="{title: 'Huge Discounts!', link: '/products'}">
-            <template #default="{ item, index }">
-                <v-sheet class="mx-auto" height="200" width="200">
-                    <v-img :src="products.images[index]" aspect-ratio="5/7" draggable="false" cover />
-                </v-sheet>
-
-                <p class="text-subtitle-1">{{ item }} Corn</p>
-            </template>
-        </VSheets>
+        <VSheets :items="products" :header="{title: 'Huge Discounts!', link: '/products'}" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <VSheets :items="products" :header="{title: 'Featured Videos', link: '/'}">
-            <template #default="{ item, index }">
-                <v-sheet class="mx-auto" height="200" width="200">
-                    <v-img :src="products.images[index]" aspect-ratio="5/7" draggable="false" cover />
-                </v-sheet>
-
-                <p class="text-subtitle-1">{{ item }} Corn</p>
-            </template>
-        </VSheets>
+        <VSheets :items="products" :header="{title: 'Featured Videos', link: '/'}" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <VSheets :items="stores" :header="{title: 'Featured Stores', link: '/store'}" :customClass="'border-sm border-opacity-25'">
+        <!-- <VSheets :stores="stores" :header="{title: 'Featured Stores', link: '/store'}" :customClass="'border-sm border-opacity-25'">
             <template #default="{ item, index }">
                 <v-avatar class="mx-auto my-5" size="170">
                     <v-img :src="stores.images[index]" draggable="false" cover />
@@ -75,7 +62,7 @@ const stores = reactive({
                 <v-divider class="my-2 mx-5" opacity="0.3" />
                 <p class="text-subtitle-1 font-weight-bold">{{ item }}</p>
             </template>
-        </VSheets>
+        </VSheets> -->
 
     </v-main>
 </template>

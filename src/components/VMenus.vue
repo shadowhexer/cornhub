@@ -16,13 +16,13 @@ const props = defineProps<{
     isRead?: boolean[];
 }>();
 
-const avatarProps = computed(() => {
-    return {
-        size: props.type === 'cart' ? '85' : 'default',
-        rounded: props.type === 'cart' ? '0' : '50',
-    }
+// const avatarProps = computed(() => {
+//     return {
+//         size: props.type === 'cart' ? '85' : 'default',
+//         rounded: props.type === 'cart' ? '0' : '50',
+//     }
 
-});
+// });
 
 const timeAgo = computed(() => {
     const now = new Date();
@@ -46,8 +46,8 @@ const timeAgo = computed(() => {
 });
 
 const badgeVisible = computed(() => {
-    return (props.type === 'cart' && props.items.title.length > 0) || 
-            (props.isRead?.filter(read => read === false).length ?? 0) > 0;
+    return (props.type === 'cart' && props.items.title.length > 0) ||
+        (props.isRead?.filter(read => read === false).length ?? 0) > 0;
 })
 
 const badgeContent = computed(() => {
@@ -58,7 +58,14 @@ const badgeContent = computed(() => {
 </script>
 
 <template>
-    <v-menu :close-on-content-click="true">
+    <v-btn v-if="type == 'cart'" icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor"
+        size="default" href="/cart">
+        <v-badge :model-value="badgeVisible" :content="badgeContent" color="brown-darken-3" bordered>
+            <slot :name="'icons'" :icon="'head'" />
+        </v-badge>
+    </v-btn>
+
+    <v-menu v-else :close-on-content-click="true">
         <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="default">
                 <v-badge :model-value="badgeVisible" :content="badgeContent" color="brown-darken-3" bordered>
@@ -69,7 +76,7 @@ const badgeContent = computed(() => {
 
         <div class="position-absolute right-0">
 
-            <v-card min-width="350" max-height="50vh" :class="type === 'notif' || 'messages' ? 'overflow-y-auto' : ''">
+            <v-card min-width="400" max-height="50vh" :class="type === 'notif' || 'messages' ? 'overflow-y-auto' : ''">
 
                 <v-list class="mx-1">
                     <v-list-item>
@@ -95,7 +102,7 @@ const badgeContent = computed(() => {
 
                 <v-divider class="mx-7" opacity="0.3" />
 
-                <v-list lines="two" class="mx-1">
+                <v-list lines="two" class="mx-1" density="comfortable">
                     <!-- Show "Empty..." if all products/links are empty -->
                     <v-list-item
                         v-if="items.title.length === 0 || items.title.every((item, index) => !item || !items.link[index])"
@@ -109,51 +116,54 @@ const badgeContent = computed(() => {
                             @click.stop="markIndividual(i, 'messages')">
 
                             <template #prepend>
-                                <v-avatar v-bind="avatarProps">
-                                    <v-img :src="items.icon[i]" />
-                                </v-avatar>
+                                <v-avatar :image="items.icon[i]" size="70" />
                             </template>
 
                             <template #title>
-                                <span class="font-weight-bold">{{ items.subtitle?.[i] }}</span>
+                                <span class="font-weight-bold text-black">{{ items.subtitle?.[i] }}</span>
                             </template>
 
-                            <template #subtitle>
-                                <span
-                                    :class="type === 'messages' && isRead?.[i] === false ? 'text-black font-weight-bold' : ''"
-                                    class="d-inline-block text-truncate" style="max-width: 250px;">
-                                    {{ item }}
-                                </span>
+
+                            <p :class="type === 'messages' && isRead?.[i] === false ? 'font-weight-bold' : ''"
+                                class="d-block text-truncate text-subtitle-2" style="max-width: 250px; ">
+                                {{ item }}
+                            </p>
+
+                            <template #append>
+                                <v-badge v-if="isRead?.[i] === false" color="success" dot />
                             </template>
 
-                            <p :class="type === 'cart' ? '' : 'text-caption'">
-                                {{ type === 'cart' ? items.extra?.[i] : timeAgo?.[i] }}
+
+                            <p class="text-caption">
+                                {{ timeAgo?.[i] }}
                             </p>
 
                         </v-list-item>
 
                         <!-- Notif -->
-                        <v-list-item 
-                        v-else-if="!items.subtitle?.[i]" 
-                        :href="items.link[i]"    
-                        :prepend-avatar="items.icon[i]" 
-                        @click.stop="markIndividual(i, 'notif')"
-                        >
-                            <span 
-                            class="truncate overflow-hidden text-body-2"
-                            :class="type === 'notif' && isRead?.[i] === false ? 'font-weight-bold' : ''"
-                            style="max-width: 250px;"
-                                >
+                        <v-list-item v-else-if="!items.subtitle?.[i]" :href="items.link[i]"
+                            @click.stop="markIndividual(i, 'notif')">
+                            <template #prepend>
+                                <v-avatar :image="items.icon[i]" size="70" />
+                            </template>
+                            <span class="truncate overflow-hidden text-body-2"
+                                :class="type === 'notif' && isRead?.[i] === false ? 'font-weight-bold' : 'text-grey'"
+                                style="max-width: 250px;">
                                 {{ items.title[i] }}
                             </span>
+
+                            <template #append>
+                                <v-badge v-if="isRead?.[i] === false" color="success" dot />
+                            </template>
 
                             <p class="text-caption ">{{ timeAgo?.[i] }}</p>
 
                         </v-list-item>
                     </template>
                 </v-list>
-
             </v-card>
+
+
         </div>
 
     </v-menu>

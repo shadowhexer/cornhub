@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
-import { mdiBookmarkBoxMultiple, mdiCog, mdiLogout } from '@mdi/js';
+import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi/js';
 
 // Define types for the reactive objects
 type Cart = {
@@ -45,11 +45,11 @@ const date2 = new Date('2024-11-03T10:00:00')
 
 const carts = reactive<Cart>({
     title: 'Cart',
-    images: ['https://img.lazcdn.com/g/p/8db515d9b54515ccd3f35f25cbf09abb.jpg_2200x2200q75.jpg_.webp', 'https://img.lazcdn.com/g/p/2244617eccd8f5fc97304fd1ba2f6f65.png_2200x2200q75.png_.webp'],
-    product: ['Yellow Corn', 'Green Corn'],
-    store: ['Chelsea', 'Haru'],
-    price: [100, 5000],
-    link: ['/', ''],
+    images: [],
+    product: [],
+    store: [],
+    price: [],
+    link: [],
 });
 
 const messages = reactive<Message>({
@@ -75,8 +75,8 @@ const menu = reactive<Menu>({
     profilePic: ProfilePic,
     name: 'Hexer',
     type: 'admin',
-    icon: [mdiBookmarkBoxMultiple, mdiCog, mdiLogout],
-    text: ['Bookmarks', 'Setting', 'Logout'],
+    icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],
+    text: ['Bookmarks', 'Setting', 'Give Feedback', 'Logout'],
     link: ['/bookmarks', '/setting', '/']
 });
 

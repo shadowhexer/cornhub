@@ -22,20 +22,27 @@ defineProps<{
             </v-btn>
         </template>
 
+
+
         <v-card min-width="300">
-            <v-list>
-                <v-list-item :prepend-avatar="menu.profilePic" href="/profile">
-                    <template #title>
-                        <span class="text-h6 font-weight-bold">{{ menu.name }}</span>
-                    </template>
+            <v-card max-width="275" min-height="90" location="bottom center" class="my-3" elevation="3">
+                <v-list>
+                    <v-list-item href="/profile">
+                        <template #prepend>
+                            <v-avatar :image="menu.profilePic" size="x-large" />
+                        </template>
+                        <template #title>
+                            <span class="text-h6 font-weight-bold">{{ menu.name }}</span>
+                        </template>
 
-                    <template #subtitle>
-                        {{ menu.type }}
-                    </template>
-                </v-list-item>
-            </v-list>
-
-            <v-divider class="mx-5" opacity="0.3" />
+                        <template #subtitle>
+                            {{ menu.type }}
+                        </template>
+                    </v-list-item>
+                </v-list>
+                <v-divider class="mx-5" opacity="0.3" />
+                <v-spacer />
+            </v-card>
 
             <v-list lines="one">
                 <v-list-item v-for="(list, l) in menu.text" :key="l" :value="list"
