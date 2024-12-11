@@ -12,7 +12,7 @@ export default {
 
 <template>
   <v-responsive>
-    <v-app full-height>
+    <v-app>
       <div>
         <Header />
       </div>
@@ -23,10 +23,9 @@ export default {
         </v-main>
       </div>
 
-      <div class="position-static d-flex flex-wrap justify-end flex-end">
-        <v-footer class="bg-grey-lighten-1">
+      <div class="">
+        
           <Footer />
-        </v-footer>
       </div>
     </v-app>
   </v-responsive>

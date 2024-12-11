@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiChevronRightCircle } from '@mdi/js';
+import Products from './Scripts/Products';
 import VSheets from './VSheets.vue';
 
 const carousel = reactive({
@@ -9,16 +12,6 @@ const carousel = reactive({
         'https://project-imas.wiki/images/d/df/Miria_SS_SSR5.png',
         'https://project-imas.wiki/images/0/0d/Nina_SS_SSR6.png',
     ]
-});
-
-const products = reactive({
-    names: ['Yellow', 'Blue', 'Green', 'Red', 'Orange', 'Green',],
-    images: ['https://project-imas.wiki/images/d/df/HaruSR10%2B.jpg'],
-    store: ['Arisu', 'Haru', 'Haru', 'Chelsea', 'Arisu', 'Chelsea'],
-    price: [1500, 200, 300, 350, 100, 50],
-    discount_price: [500, 50, 0, 0, 25, 0],
-    bookmarked: [false, false, false, false, false, false],
-    link: ['/', '', '/', '', '', '/'],
 });
 
 const stores = reactive({
@@ -46,11 +39,45 @@ const stores = reactive({
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <VSheets :items="products" :header="{title: 'Huge Discounts!', link: '/products'}" />
+        <v-card variant="flat" height="65">
+            <v-list class="d-flex flex-row justify-space-between align-center">
+                <v-list-item>
+                    <p class="text-h5 text-uppercase font-weight-bold my-1">Huge Discounts!</p>
+                </v-list-item>
+
+                <v-list-item>
+                    <a href="/products" class="d-flex align-center">
+                        <span class="text-subtitle-2 text-right">See all</span>
+                        <svg-icon class="mx-2" size="20" type="mdi" href="/" :path="mdiChevronRightCircle" />
+                    </a>
+                </v-list-item>
+
+            </v-list>
+
+        </v-card>
+
+        <VSheets :items="Products.products" :custom-class="'mx-3'" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <VSheets :items="products" :header="{title: 'Featured Videos', link: '/'}" />
+        <v-card variant="flat" height="65">
+            <v-list class="d-flex flex-row justify-space-between align-center">
+                <v-list-item>
+                    <p class="text-h5 text-uppercase font-weight-bold my-1">Featured Videos!</p>
+                </v-list-item>
+
+                <v-list-item>
+                    <a href="/" class="d-flex align-center">
+                        <span class="text-subtitle-2 text-right">See all</span>
+                        <svg-icon class="mx-2" size="20" type="mdi" href="/" :path="mdiChevronRightCircle" />
+                    </a>
+                </v-list-item>
+
+            </v-list>
+
+        </v-card>
+
+        <VSheets :items="Products.products" :custom-class="'mx-3'" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
@@ -62,7 +89,7 @@ const stores = reactive({
                 <v-divider class="my-2 mx-5" opacity="0.3" />
                 <p class="text-subtitle-1 font-weight-bold">{{ item }}</p>
             </template>
-        </VSheets> -->
+</VSheets> -->
 
     </v-main>
 </template>

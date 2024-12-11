@@ -13,20 +13,24 @@ const items = reactive({
 </script>
 
 <template>
-    <v-card variant="flat">
-        <v-navigation-drawer location="left" width="220" fixed permanent>
-            <v-list class="my-10" nav>
+    <v-navigation-drawer location="top" width="50" sticky permanent>
+        <v-card variant="flat" >
+            <v-list class="mt-3 mb-n3 d-flex flex-row justify-center" nav>
                 <v-list-item v-for="(i, index) in items.title" :key="index" :value="items.value[index]"
-                    :href="items.link[index]">
+                    :href="items.link[index]" class="mx-8">
                     <template #prepend>
-                        <svg-icon class="mx-5" type="mdi" :path="items.icon[index]" />
+                        <svg-icon class="mr-2" type="mdi" :path="items.icon[index]" />
                     </template>
                     <template #title>
                         <span class="text-subtitle-1 font-weight-bold">{{ i }}</span>
                     </template>
                 </v-list-item>
             </v-list>
-        </v-navigation-drawer>
-    </v-card>
+        </v-card>
+    </v-navigation-drawer>
+
 
 </template>
+<style scoped>
+
+</style>

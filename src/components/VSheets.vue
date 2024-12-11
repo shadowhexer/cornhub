@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Header from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiChevronRightCircle, mdiHeart, mdiHeartOutline } from '@mdi/js';
+import { mdiHeart, mdiHeartOutline } from '@mdi/js';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
@@ -14,10 +14,6 @@ const props = defineProps<{
         bookmarked: boolean[],
         link: string[],
     },
-    header: {
-        title: string,
-        link: string,
-    }
     customClass?: string,
 }>();
 
@@ -47,29 +43,10 @@ const itemExists = computed(() => {
 
 <template>
     <div>
-        <v-card variant="flat" height="65">
-
-            <v-list class="d-flex flex-row justify-space-between align-center">
-
-                <v-list-item>
-                    <p class="text-h5 text-uppercase font-weight-bold my-1">{{ header.title }}</p>
-                </v-list-item>
-
-                <v-list-item>
-                    <a :href="header.link" class="d-flex align-center">
-                        <span class="text-subtitle-2 text-right">See all</span>
-                        <svg-icon class="mx-2" size="20" type="mdi" href="/" :path="mdiChevronRightCircle" />
-                    </a>
-                </v-list-item>
-
-            </v-list>
-
-        </v-card>
-
         <v-container>
             <v-row justify="start">
-                <v-col v-for="(name, i) in items.names" :key="i" class="mx-3" cols="12" md="2">
-                    <v-card class="mx-auto d-flex flex-column" :class="customClass" justify="center" height="350"
+                <v-col v-for="(name, i) in items.names" :key="i" :class="customClass" cols="12" md="2">
+                    <v-card class="mx-auto d-flex flex-column" justify="center" height="350"
                         width="200" href="/" hover>
 
                         <v-img :src="items.images[i]" aspect-ratio="5/7" height="200" width="200" cover />
