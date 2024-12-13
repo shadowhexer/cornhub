@@ -4,9 +4,27 @@ import { mdiMagnify, mdiChevronUp, mdiChevronDown } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import Products from '@/components/Scripts/Products';
-import { ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
-const isExpanded = ref([false, false, false])
+const isExpanded = ref([false, false, false]);
+// Reactive state for search term
+const searchItem = ref('');
+
+const sideBarItems = reactive([
+    {
+        name: 'Sort By',
+        items: ['Alphabetically', 'Highest Discount', 'Most Likes', 'Recently Added']
+    },
+    {
+        name: 'Price Range',
+        items: ['Min Price', 'Max Price'],
+    },
+    {
+        name: 'Category',
+        items: ['Staple Products', 'Snacks', 'Cooking Essentials', 'Canned and Preserved', 'Specialty and Organic', 'Agricultural Products', 'Farming Tools', 'Miscellaneous']
+    },
+])
+
 </script>
 
 <template>
@@ -18,31 +36,32 @@ const isExpanded = ref([false, false, false])
 
 
         <div class="position-relative">
-            <v-card variant="flat" class="custom-card">
-                <v-layout min-height="3000">
+            <v-card variant="flat" class="custom-card overflow-hidden">
+                <v-layout min-height="500">
 
-                    <v-card class=" mt-15 mb-15 custom-card" width="350">
-                        <v-card elevation="4" class="bottom-0 mx-auto" position="sticky" location="left bottom"
-                            width="250" height="90">
+                    <v-card class="mt-10 mb-15 custom-card" width="350">
+                        <v-card elevation="4" class="mx-auto" location="left bottom" width="270" height="75">
                             <v-card-text class="my-auto">
-                                <v-text-field density="compact" placeholder="Search product..." variant="outlined"
-                                    bg-color="white" flat hide-details single-line>
-                                    <template v-slot:prepend-inner>
+                                <v-text-field v-model="searchItem" density="compact" placeholder="Search product..."
+                                    variant="outlined" bg-color="white" flat hide-details single-line>
+                                    <template v-slot:append-inner>
                                         <svg-icon type="mdi" :path="mdiMagnify" />
                                     </template>
                                 </v-text-field>
                             </v-card-text>
                         </v-card>
 
-                        <v-card elevation="5" class="mx-auto my-10" width="250"
-                            v-for="(item, i) in ['Categories', 'Price', 'Rating']" :key="i">
+                        <v-spacer style="height: 50px;" />
+
+                        <v-card elevation="5" class="mx-auto my-5" width="270" v-for="(items, i) in sideBarItems"
+                            :key="i">
                             <v-card-text>
 
                                 <div type="button" class="d-flex justify-space-between align-center"
                                     @click.prevent="isExpanded[i] = !isExpanded[i]" :aria-expanded="isExpanded[i]"
                                     :aria-label="isExpanded[i] ? 'Collapse' : 'Expand'">
 
-                                    <span class="font-weight-bold">{{ item }}</span>
+                                    <span class="font-weight-bold">{{ items.name }}</span>
                                     <svg-icon type="mdi" :path="isExpanded[i] ? mdiChevronUp : mdiChevronDown" />
                                 </div>
 
@@ -51,12 +70,32 @@ const isExpanded = ref([false, false, false])
                             <v-expand-transition>
                                 <div v-show="isExpanded[i]">
                                     <v-divider />
-                                    <v-list >
-                                        <v-list-item v-for="(item, index) in ['Item 1', 'Item 2', 'Item 3']"
-                                            :key="index"
-                                            :class="{'last-sticky' : index === item.length - 1}">
-                                            <v-list-item-title>{{ item }}</v-list-item-title>
+                                    <v-list nav>
+
+                                        <v-radio-group v-model="searchItem" v-if="items.name === 'Sort By'">
+                                            <v-radio v-for="(item, index) in items.items" :key="index"
+                                                :class="{ '': index === item.length - 1 }" :value="item">
+                                                <template #label>
+                                                    <span class="text-subtitle-2 font-weight-bold">{{ item }}</span>
+                                                </template>
+                                            </v-radio>
+                                        </v-radio-group>
+                                        <!-- <v-list-item-title>{{ item }}</v-list-item-title> -->
+
+                                        <v-list-item v-else-if="items.name === 'Price Range'"
+                                            v-for="(item, i) in items.items" :key="i">
+                                            <v-list-item-title class="font-weight-bold">{{ item }}
+                                                <v-text-field density="compact" />
+                                            </v-list-item-title>
                                         </v-list-item>
+
+                                        <v-checkbox v-else-if="items.name === 'Category'"
+                                            v-for="(item, index) in items.items" :key="index" class="" hide-details>
+                                            <template #label>
+                                                <span class="text-subtitle-2 font-weight-bold">{{ item }}</span>
+                                            </template>
+                                        </v-checkbox>
+
                                     </v-list>
                                 </div>
                             </v-expand-transition>
@@ -65,7 +104,7 @@ const isExpanded = ref([false, false, false])
                     </v-card>
 
                     <v-main class="d-flex flex-column my-5" width="1000">
-                        <VSheets :items="Products.products" :custom-class="'mx-3'" />
+                        <VSheets :items="Products.products" :search-item="searchItem" :custom-class="'mx-3'" />
                     </v-main>
 
                 </v-layout>
@@ -91,9 +130,7 @@ const isExpanded = ref([false, false, false])
     /* Prevents hover effect */
 }
 
-.last-sticky {
-    position: sticky !important;
-    top: 0 !important;
-    
+::v-deep(.v-label) {
+    opacity: 1 !important;
 }
 </style>

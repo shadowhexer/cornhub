@@ -17,7 +17,7 @@ const items = reactive({
         <v-card variant="flat" >
             <v-list class="mt-3 mb-n3 d-flex flex-row justify-center" nav>
                 <v-list-item v-for="(i, index) in items.title" :key="index" :value="items.value[index]"
-                    :href="items.link[index]" class="mx-8">
+                    :href="items.link[index]" :ripple="false" class="mx-8">
                     <template #prepend>
                         <svg-icon class="mr-2" type="mdi" :path="items.icon[index]" />
                     </template>

@@ -18,7 +18,7 @@
       
 </template>
 <style scoped>
-.v-app-bar {
-  width: 100px !important;
+div {
+  height: 100px;
 }
 </style>

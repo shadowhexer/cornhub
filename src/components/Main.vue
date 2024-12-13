@@ -56,7 +56,7 @@ const stores = reactive({
 
         </v-card>
 
-        <VSheets :items="Products.products" :custom-class="'mx-3'" />
+        <VSheets :items="Products.products" :search-item="''" :custom-class="'mx-3'" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
@@ -77,7 +77,7 @@ const stores = reactive({
 
         </v-card>
 
-        <VSheets :items="Products.products" :custom-class="'mx-3'" />
+        <VSheets :items="Products.products" :search-item="''" :custom-class="'mx-3'" />
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
