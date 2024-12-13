@@ -9,6 +9,7 @@ import { computed, reactive, ref } from 'vue';
 const isExpanded = ref([false, false, false]);
 // Reactive state for search term
 const searchItem = ref('');
+const page = ref(1)
 
 const sideBarItems = reactive([
     {
@@ -105,6 +106,7 @@ const sideBarItems = reactive([
 
                     <v-main class="d-flex flex-column my-5" width="1000">
                         <VSheets :items="Products.products" :search-item="searchItem" :custom-class="'mx-3'" />
+                        <v-pagination v-model="page" length="1" rounded="circle" />
                     </v-main>
 
                 </v-layout>
