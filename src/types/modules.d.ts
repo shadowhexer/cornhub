@@ -1,5 +1,7 @@
 // src/shims-vue.d.ts
 declare module '@jamescoyle/vue-icon';
+declare module 'md5';
+declare module ''
 
 declare module '@mdi/js';
 
