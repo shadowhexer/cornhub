@@ -75,14 +75,19 @@ const itemExists = computed(() => {
 
                         <div style="height: 50px;">
                             <v-card-actions class="mx-n2 mt-n3">
-                                <v-card-text class=" truncate overflow-hidden" style="line-height: 1.1;">{{ item.names }}</v-card-text>
+                                <v-card-text class=" truncate overflow-hidden" style="line-height: 1.1;">{{ item.names
+                                    }}</v-card-text>
                                 <div class="d-flex flex-column align-center">
-                                    <v-btn icon @click.prevent="items.bookmarked[item.originalIndex] = !items.bookmarked[item.originalIndex]">
-                                        <svg-icon type="mdi"
-                                            :path="items.bookmarked[item.originalIndex] == false ? mdiHeartOutline : mdiHeart" />
+                                    <slot name="userProfile">
+                                        <v-btn icon
+                                            @click.prevent="items.bookmarked[item.originalIndex] = !items.bookmarked[item.originalIndex]">
+                                            <svg-icon type="mdi"
+                                                :path="items.bookmarked[item.originalIndex] == false ? mdiHeartOutline : mdiHeart" />
 
-                                    </v-btn>
-                                    <span class="mt-n3" style="font-size: 0.55rem;">{{ i }}</span>
+                                        </v-btn>
+                                        <span class="mt-n3" style="font-size: 0.55rem;">{{ i }}</span>
+                                    </slot>
+
                                 </div>
                             </v-card-actions>
                         </div>
@@ -112,11 +117,15 @@ const itemExists = computed(() => {
                         </div>
 
                         <div>
-                            <v-btn v-if="!itemExists[i]" text="Add to Basket" variant="flat" base-color="green"
-                                rounded="0" @click.prevent="addToBasket(i)" flat block />
-                            <v-btn v-else text="Added to Basket" variant="outlined" base-color="green" rounded="0"
-                                @click.prevent flat block />
+                            <slot name="edit">
+                                <v-btn v-if="!itemExists[i]" text="Add to Basket" variant="flat" base-color="green"
+                                    rounded="0" @click.prevent="addToBasket(i)" flat block />
+                                <v-btn v-else text="Added to Basket" variant="outlined" base-color="green" rounded="0"
+                                    @click.prevent flat block />
+                            </slot>
                         </div>
+
+                        <slot name="dialog" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -128,6 +137,7 @@ const itemExists = computed(() => {
     text-decoration: line-through;
     text-decoration-thickness: 1.5px;
 }
+
 .truncate {
     display: -webkit-box;
     -webkit-line-clamp: 2;
