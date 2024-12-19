@@ -14,31 +14,18 @@ const fileSelect = UserForms.fileSelection();
 const products = UserForms.Products;
 const images = UserForms.profile;
 
-const profile = ref<string>('Hexer')
 const name = ref<string>('Chairman of the Presidium of the Supreme Soviet')
 const userType = ref<string>('Chairman')
 
 onMounted(() => {
-    document.title = profile.value + ' - Profile';
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const image = localStorage.getItem(`Image_${i}`);
-
-        if (i === 0 || key as string === image) {
-            images.profile.coverPhoto = image as string;
-        }
-        else if (i === 1 || key as string === image) {
-            images.profile.profilePhoto = image as string;
-        }
-    }
+    document.title = name.value + ' - Profile';
 });
 
 </script>
 
 <template>
     <NavDrawer />
-    <v-main class="d-flex flex-column justify-center mx-16 pa-16">
+    <v-main class="d-flex flex-column justify-center mx-16 py-5 px-16">
         <v-card class="d-flex flex-column" min-height="500">
             <v-hover v-slot="{ isHovering, props }">
                 <v-img v-bind="props" :src="images.profile.coverPhoto" height="300" cover aspect-ratio="16/9">

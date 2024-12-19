@@ -140,6 +140,7 @@ function addForm() {
     const discount = reactive<{ discount: string }>({ discount: '' });
     const dialog = reactive<{ dialog: boolean }>({ dialog: false });
     const index = Products.products.images.length + 1;
+    const date = new Date();
 
     const formPush = reactive({
         imageUrl: '' as string,
@@ -164,6 +165,8 @@ function addForm() {
 
         if (formPush.description) Products.products.description.push(formPush.description);
 
+        Products.products.dateAdded.push(date.getDate());
+
         (document.getElementById('form') as HTMLFormElement).reset();
 
         fileSelection().fileOuput.value = '';
@@ -177,5 +180,17 @@ function addForm() {
 
     return { price, discount, index, formPush, dialog, submit, toggle };
 };
+
+for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const image = localStorage.getItem(`Image_${i}`);
+
+    if (i === 0 || key as string === image) {
+        profile.profile.coverPhoto = image as string;
+    }
+    else if (i === 1 || key as string === image) {
+        profile.profile.profilePhoto = image as string;
+    }
+}
 
 export default { fileSelection, editForms, addForm, Products, profile }

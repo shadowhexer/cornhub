@@ -4,10 +4,11 @@ import Header, { markAsRead } from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
+import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
 const { markIndividual, markAll } = markAsRead();
-
+const images = UserForms.profile;
 
 </script>
 
@@ -21,7 +22,7 @@ const { markIndividual, markAll } = markAsRead();
                 <v-col col="1">
                     <v-btn icon variant="text" color="white" size="default" href="/">
                         <v-avatar size="large">
-                            <v-img :src="Header.ProfilePic" aspect-ratio="1/1" cover />
+                            <v-img :src="images.profile.profilePhoto" aspect-ratio="1/1" cover />
                         </v-avatar>
                     </v-btn>
                 </v-col>

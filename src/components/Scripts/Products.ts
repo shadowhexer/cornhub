@@ -8,6 +8,7 @@ type Products = {
     discount: number[],
     finalPrice: number[],
     bookmarked: boolean[],
+    dateAdded: number[],
     link: string[],
     description: string[],
 }
@@ -20,6 +21,7 @@ const products = reactive<Products>({
     discount: [50, 100, 0, 47, 25, 0],
     finalPrice: [],
     bookmarked: [false, false, false, false, false, false],
+    dateAdded: [],
     link: ['/', '', '/', '', '', '/'],
     description: ['', '', '', '', '', '',],
 });

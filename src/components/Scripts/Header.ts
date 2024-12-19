@@ -1,5 +1,6 @@
 import { reactive, ref } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
+import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi/js';
 
 // Define types for the reactive objects
@@ -40,6 +41,8 @@ type Menu = {
     link: string[];
 };
 
+const images = UserForms.profile;
+
 const dates = new Date('2024-12-03T10:00:00');
 const date2 = new Date('2024-11-03T10:00:00')
 
@@ -72,7 +75,7 @@ const notif = reactive<Notification>({
 });
 
 const menu = reactive<Menu>({
-    profilePic: ProfilePic,
+    profilePic: images.profile.profilePhoto,
     name: 'Hexer',
     type: 'admin',
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],

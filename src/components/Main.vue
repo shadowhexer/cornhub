@@ -30,7 +30,7 @@ const stores = reactive({
 </script>
 
 <template>
-    <v-main class="d-flex flex-column ma-4 pa-3" width="1000">
+    <v-main class="d-flex flex-column my-5 mx-15 px-15">
 
         <v-carousel show-arrows="hover" height="250" class="carousel" @contextmenu.prevent hide-delimiters cycle>
             <v-carousel-item v-for="(image, index) in carousel.images" :key="index" :src="image" draggable="false"
@@ -60,7 +60,7 @@ const stores = reactive({
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <v-card variant="flat" height="65">
+        <!-- <v-card variant="flat" height="65">
             <v-list class="d-flex flex-row justify-space-between align-center">
                 <v-list-item>
                     <p class="text-h5 text-uppercase font-weight-bold my-1">Featured Videos!</p>
@@ -81,7 +81,7 @@ const stores = reactive({
 
         <v-divider class="my-10 mx-10" opacity="0.3" inset />
 
-        <!-- <VSheets :stores="stores" :header="{title: 'Featured Stores', link: '/store'}" :customClass="'border-sm border-opacity-25'">
+         <VSheets :stores="stores" :header="{title: 'Featured Stores', link: '/store'}" :customClass="'border-sm border-opacity-25'">
             <template #default="{ item, index }">
                 <v-avatar class="mx-auto my-5" size="170">
                     <v-img :src="stores.images[index]" draggable="false" cover />
