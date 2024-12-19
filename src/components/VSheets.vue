@@ -10,7 +10,8 @@ const props = defineProps<{
         images: string[],
         store: string[],
         price: Number[],
-        discount_price: Number[],
+        discount: Number[],
+        finalPrice: Number[],
         bookmarked: boolean[],
         link: string[],
     },
@@ -31,7 +32,8 @@ const filteredItems = computed(() => {
         images: props.items.images[i],
         store: props.items.store[i],
         price: props.items.price[i],
-        discount_price: props.items.discount_price[i],
+        discount: props.items.discount[i],
+        finalPrice: props.items.finalPrice[i],
         bookmarked: props.items.bookmarked[i],
         link: props.items.link[i],
         originalIndex: i, // Include the original index
@@ -43,9 +45,9 @@ const addToBasket = (index: number) => {
     Header.carts.product.push(props.items.names[index]);
     Header.carts.store.push(props.items.store[index]);
     Header.carts.price.push(
-        props.items.discount_price[index] == 0
+        props.items.discount[index] == 0
             ? props.items.price[index].valueOf()
-            : props.items.discount_price[index].valueOf()
+            : props.items.discount[index].valueOf()
     );
     Header.carts.link.push(props.items.link[index]);
 
@@ -98,21 +100,17 @@ const itemExists = computed(() => {
                         </div> -->
 
                         <div style="height: 60px;">
-                            <v-card-text v-if="item.discount_price" class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                {{
-                                    item.discount_price }}</v-card-text>
+                            <v-card-text v-if="Number(item.discount) > 0" class="mb-n9 text-red-darken-2 font-weight-bold">PHP
+                                {{ item.finalPrice }}</v-card-text>
 
                             <v-card-text class="my-auto">
-                                <span :class="item.discount_price ? 'line-through text-grey-darken-1' : ''"
+                                <span :class="item.discount ? 'line-through text-grey-darken-1' : ''"
                                     class="font-weight-bold">
                                     PHP {{ item.price }}
                                 </span>
 
-                                <span v-if="item.discount_price && (item.discount_price as number) != (item.price as number)" class="mx-4 text-black">{{
-                                    Math.round((Number(item.price) -
-                                        Number(item.discount_price)) /
-                                        (item.price as number) * 100) }}% off</span>
-                                <span v-else></span>
+                                <span v-if="Number(item.discount) > 0 && (item.discount as number) != (item.price as number)" class="mx-4 text-black">{{ item.discount }}% off</span>
+                                
 
                             </v-card-text>
                         </div>

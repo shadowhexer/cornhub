@@ -66,7 +66,7 @@ function fileSelection() {
                 const base64Image = reader.result as string;
 
                 // Update the image URL to show it on the card
-                userForms().formPush.imageUrl = fileOuput.value = base64Image;
+                editForms().formPush.imageUrl = fileOuput.value = base64Image;
 
                 // Save to localStorage
                 localStorage.setItem(`uploadedImage_${index}`, base64Image);
@@ -82,7 +82,7 @@ function fileSelection() {
 
 };
 
-function userForms() {
+function editForms() {
     const price = reactive<{ price: string }>({ price: '' });
     const discount = reactive<{ discount: string }>({ discount: '' });
     const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
@@ -91,14 +91,14 @@ function userForms() {
         imageUrl: '' as string,
         name: '' as string,
         price: 0 as number,
-        discount_price: 0 as number,
+        discount: 0 as number,
         description: '' as string,
     }
     );
 
     const submit = (index: number) => {
         formPush.price = parseFloat(price.price);
-        formPush.discount_price = parseFloat(discount.discount);
+        formPush.discount = parseFloat(discount.discount);
 
         if (formPush.imageUrl) Products.products.images[index] = formPush.imageUrl;
         if (formPush.name) Products.products.names[index] = formPush.name;
@@ -106,7 +106,7 @@ function userForms() {
         if (parseFloat(price.price) > 0 && price.price !== null) Products.products.price[index] = formPush.price.valueOf();
 
         if (parseFloat(discount.discount) > 0 && discount.discount !== price.price)
-            Products.products.discount_price[index] = formPush.discount_price.valueOf();
+            Products.products.discount[index] = formPush.discount.valueOf();
 
         if (formPush.description) Products.products.description[index] = formPush.description;
 
@@ -129,10 +129,53 @@ function userForms() {
 
     const toggle = (index: number) => {
         dialog.dialog[index] = !dialog.dialog[index];
-        console.log(dialog.dialog[index]);
     };
 
     return { price, discount, formPush, dialog, submit, deleteProduct, toggle };
 };
 
-export default { fileSelection, userForms, Products, profile }
+
+function addForm() {
+    const price = reactive<{ price: string }>({ price: '' });
+    const discount = reactive<{ discount: string }>({ discount: '' });
+    const dialog = reactive<{ dialog: boolean }>({ dialog: false });
+    const index = Products.products.images.length + 1;
+
+    const formPush = reactive({
+        imageUrl: '' as string,
+        name: '' as string,
+        price: NaN as number,
+        discount: NaN as number,
+        description: '' as string,
+    }
+    );
+
+    const submit = () => {
+        formPush.price = parseFloat(price.price);
+        formPush.discount = parseFloat(discount.discount);
+
+        if (formPush.imageUrl) Products.products.images.push(formPush.imageUrl);
+        if (formPush.name) Products.products.names.push(formPush.name);
+
+        if (parseFloat(price.price) > 0 && price.price !== null) Products.products.price.push(formPush.price.valueOf());
+
+        if (parseFloat(discount.discount) && discount.discount !== price.price)
+            Products.products.discount.push(formPush.discount.valueOf());
+
+        if (formPush.description) Products.products.description.push(formPush.description);
+
+        (document.getElementById('form') as HTMLFormElement).reset();
+
+        fileSelection().fileOuput.value = '';
+
+        toggle();
+    };
+
+    const toggle = () => {
+        dialog.dialog = !dialog.dialog;
+    };
+
+    return { price, discount, index, formPush, dialog, submit, toggle };
+};
+
+export default { fileSelection, editForms, addForm, Products, profile }

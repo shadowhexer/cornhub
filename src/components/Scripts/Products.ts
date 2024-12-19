@@ -1,11 +1,12 @@
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 
 type Products = {
     names: string[],
     images: string[],
     store: string[],
     price: number[],
-    discount_price: number[],
+    discount: number[],
+    finalPrice: number[],
     bookmarked: boolean[],
     link: string[],
     description: string[],
@@ -16,11 +17,29 @@ const products = reactive<Products>({
     images: ['', '', '', '', '', '',],
     store: ['Arisu', 'Haru', 'Haru', 'Chelsea', 'Arisu', 'Chelsea'],
     price: [1500.00, 200.10, 300.05, 350.77, 100.34, 50.00],
-    discount_price: [500, 50, 0, 0, 25, 0],
+    discount: [50, 100, 0, 47, 25, 0],
+    finalPrice: [],
     bookmarked: [false, false, false, false, false, false],
     link: ['/', '', '/', '', '', '/'],
     description: ['', '', '', '', '', '',],
 });
+
+const finalCalc = products.price.map((price, index) => {
+    if (products.discount[index] > 0) {
+        const calc = Number(price)
+            - (Number(price) * (Number(products.discount[index]) / 100));
+        // Ensure the result is rounded to two decimal places
+        return Math.round(calc * 100) / 100;
+    }
+    return price; // Return the original price if no discount
+});
+
+// Filter out any undefined values that might result from items without a discount
+const finalPrices = finalCalc.filter(price => price !== undefined);
+
+// Push the final prices to products.finalPrice
+products.finalPrice = [...products.finalPrice, ...finalPrices];
+
 
 products.images = products.images.map((image, index) => {
     const savedImage = localStorage.getItem(`uploadedImage_${index}`);
