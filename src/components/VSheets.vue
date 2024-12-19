@@ -108,16 +108,17 @@ const itemExists = computed(() => {
                                     PHP {{ item.price }}
                                 </span>
 
-                                <span v-if="item.discount_price" class="mx-4 text-black">{{
+                                <span v-if="item.discount_price && (item.discount_price as number) != (item.price as number)" class="mx-4 text-black">{{
                                     Math.round((Number(item.price) -
                                         Number(item.discount_price)) /
                                         (item.price as number) * 100) }}% off</span>
+                                <span v-else></span>
 
                             </v-card-text>
                         </div>
 
                         <div>
-                            <slot name="edit">
+                            <slot name="edit" :index="i">
                                 <v-btn v-if="!itemExists[i]" text="Add to Basket" variant="flat" base-color="green"
                                     rounded="0" @click.prevent="addToBasket(i)" flat block />
                                 <v-btn v-else text="Added to Basket" variant="outlined" base-color="green" rounded="0"
@@ -125,7 +126,7 @@ const itemExists = computed(() => {
                             </slot>
                         </div>
 
-                        <slot name="dialog" />
+                        <slot name="dialog" :index="i" />
                     </v-card>
                 </v-col>
             </v-row>

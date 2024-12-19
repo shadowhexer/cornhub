@@ -4,7 +4,7 @@ import { mdiMagnify, mdiChevronUp, mdiChevronDown } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import Products from '@/components/Scripts/Products';
-import { computed, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 const isExpanded = ref([false, false, false]);
 // Reactive state for search term
@@ -24,7 +24,12 @@ const sideBarItems = reactive([
         name: 'Category',
         items: ['Staple Products', 'Snacks', 'Cooking Essentials', 'Canned and Preserved', 'Specialty and Organic', 'Agricultural Products', 'Farming Tools', 'Miscellaneous']
     },
-])
+]);
+
+onMounted(() => {
+    document.title = 'Store';
+
+});
 
 </script>
 

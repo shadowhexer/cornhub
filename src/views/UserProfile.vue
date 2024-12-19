@@ -1,35 +1,41 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiUpload, mdiPencil, mdiAccount, mdiMessageProcessing, mdiCalendarAccount, mdiPlus, mdiHeart, mdiClose, mdiDeleteOutline, mdiCheckBold } from '@mdi/js';
-import md5 from 'md5';
-import { sha256 } from '@noble/hashes/sha256';
-import axios from 'axios';
 import NavDrawer from '@/components/NavDrawer.vue';
-import Products from '@/components/Scripts/Products';
 import VSheets from '@/components/VSheets.vue';
+
+import UserForms from '@/components/Scripts/UserProfile'
+const forms = UserForms.userForms();
+const fileSelect = UserForms.fileSelection();
+const products = UserForms.Products;
+const images = UserForms.profile;
+
 import cover from '@/assets/cover.jpg'
 import profilePic from '@/assets/profile.jpg'
 
 const profile = ref<string>('Hexer')
-const email = ref('austinmanlangit@gmail.com');
 const name = ref<string>('Chairman of the Presidium of the Supreme Soviet')
 const userType = ref<string>('Chairman')
-const retrieve = ref([]);
-const dialog = ref<boolean>(false);
 
 onMounted(() => {
     document.title = profile.value + ' - Profile';
 });
 
+onMounted(() => {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const image = localStorage.getItem(`Image_${i}`);
 
+        if (i === 0 || key as string === image) {
+            images.profile.coverPhoto = image as string;
+        }
+        else if (i === 1 || key as string === image) {
+            images.profile.profilePhoto = image as string;
+        }
 
-const getGravatarUrl = (email: string, size: number = 200): string => {
-    const hash = md5(email.trim().toLowerCase());
-    return `https://www.gravatar.com/avatar/${hash}?s=${size}`;
-};
-
-const gravatarUrl = computed(() => getGravatarUrl(email.value, 300));
+    }
+});
 
 </script>
 
@@ -38,12 +44,16 @@ const gravatarUrl = computed(() => getGravatarUrl(email.value, 300));
     <v-main class="d-flex flex-column justify-center mx-16 pa-16">
         <v-card class="d-flex flex-column" min-height="500">
             <v-hover v-slot="{ isHovering, props }">
-                <v-img v-bind="props" :src="cover" height="300" cover aspect-ratio="16/9">
-                    <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center" contained
-                        persistent>
+                <v-img v-bind="props" :src="images.profile.coverPhoto" height="300" cover aspect-ratio="16/9">
+                    <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center"
+                        @click="fileSelect.triggerFileInput" contained persistent no-click-animation>
+
                         <v-card class="d-flex align-center custom-card" hover>
                             <svg-icon type="mdi" class="mx-2 text-white" size="30" :path="mdiUpload"></svg-icon>
                             <span class="text-h5 text-white">Upload Cover Photo</span>
+
+                            <input type="file" accept="image/*" :ref="fileSelect.fileInput" class="d-none"
+                                @change="fileSelect.uploadProfile($event, 0)" />
                         </v-card>
 
                     </v-overlay>
@@ -56,13 +66,19 @@ const gravatarUrl = computed(() => getGravatarUrl(email.value, 300));
                     <v-col cols="2" md="3">
                         <v-hover v-slot="{ isHovering, props }">
                             <v-avatar v-bind="props" size="200" class="mt-n16 ml-16 border-md border-opacity-100">
-                                <v-img rounded="circle" class="" aspect-ratio="1/1" width="100" :src="profilePic" cover>
+                                <v-img rounded="circle" class="" aspect-ratio="1/1" width="100"
+                                    :src="images.profile.profilePhoto" cover>
                                     <v-overlay :model-value="!!isHovering"
-                                        class="d-flex felx-row justify-center align-center" contained persistent>
+                                        class="d-flex felx-row justify-center align-center"
+                                        @click="fileSelect.triggerFileInput" contained persistent no-click-animation>
+
                                         <v-card class="d-flex align-center custom-card" hover>
                                             <svg-icon type="mdi" class="mx-1 text-white" size="20"
                                                 :path="mdiUpload"></svg-icon>
                                             <span class="text-subtitle-2 text-white">Upload Profile Photo</span>
+
+                                            <input type="file" accept="image/*" :ref="fileSelect.fileInput"
+                                                class="d-none" @change="fileSelect.uploadProfile($event, 1)" />
                                         </v-card>
                                     </v-overlay>
                                 </v-img>
@@ -127,7 +143,7 @@ const gravatarUrl = computed(() => getGravatarUrl(email.value, 300));
         <v-spacer style="height: 1.5rem;" />
 
         <v-card class="d-flex flex-column" min-height="100">
-            <VSheets :items="Products.products" :search-item="''" :custom-class="'mx-4'">
+            <VSheets :items="products.products" :search-item="''" :custom-class="'mx-4'">
                 <template #userProfile>
                     <v-btn style="pointer-events: none" icon>
                         <svg-icon type="mdi" :path="mdiHeart" />
@@ -136,53 +152,78 @@ const gravatarUrl = computed(() => getGravatarUrl(email.value, 300));
                     <span class="mt-n3" style="font-size: 0.55rem;">200k</span>
                 </template>
 
-                <template #edit>
+                <template #edit="{ index }">
                     <v-btn text="Edit Product" variant="flat" base-color="green" rounded="0"
-                        @click.prevent="dialog = !dialog" flat block />
+                        @click.prevent="forms.toggle(index)" flat block />
                 </template>
 
-                <template #dialog>
-                    <v-dialog v-model="dialog" :persistent="false">
+                <template #dialog="{ index }">
+                    <v-dialog v-model="forms.dialog.dialog[index]" persistent no-click-animation>
                         <v-card min-height="200" width="500" location="top center">
+
                             <v-hover v-slot="{ isHovering, props }">
-                                <v-img v-bind="props" :src="cover" height="300" cover aspect-ratio="16/9">
+                                <v-img v-bind="props"
+                                    :src="products.products.images[index] || fileSelect.fileOuput.value" height="300"
+                                    cover aspect-ratio="16/9">
                                     <v-overlay :model-value="!!isHovering"
-                                        class="d-flex flex-row justify-center align-center" contained persistent>
-                                        <v-card class="d-flex align-center custom-card" hover>
+                                        class="d-flex flex-row justify-center align-center"
+                                        @click="fileSelect.triggerFileInput" contained persistent>
+                                        <v-card class="d-flex align-center custom-card">
                                             <svg-icon type="mdi" class="mx-2 text-white" size="30"
                                                 :path="mdiUpload"></svg-icon>
-                                            <span class="text-h6 text-white">Upload Cover Photo</span>
+                                            <span class="text-h6 text-white">Upload Photo</span>
+
+                                            <input type="file" accept="image/*" :ref="fileSelect.fileInput"
+                                                class="d-none" @change="fileSelect.onFileSelected($event, index)" />
                                         </v-card>
                                     </v-overlay>
                                 </v-img>
                             </v-hover>
 
-                            <v-spacer style="height: 1.5rem;" />
+                            <v-spacer class="my-5" />
 
-                            <v-form class="d-flex flex-column align-center">
-                                <v-text-field width="450" label="Product Name" variant="outlined" />
+                            <v-form class="d-flex flex-column align-center" ref="submitForm" id="form">
+
+                                <v-text-field v-model="forms.formPush.name"
+                                    :placeholder="products.products.names[index]" width="450" label="Product Name"
+                                    variant="outlined" />
                                 <div class="d-flex flex-row">
-                                    <v-text-field class="mx-3" width="213" label="Price" variant="outlined" />
-                                    <v-text-field class="mx-3" width="213" label="Discount Price" variant="outlined" />
+
+                                    <v-text-field v-model="forms.price.price"
+                                        :placeholder="products.products.price[index].toString()" class="mx-3"
+                                        width="213" label="Price" variant="filled"
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+
+                                    <v-text-field v-model="forms.discount.discount"
+                                        :placeholder="String(products.products.discount_price[index])" class="mx-3"
+                                        width="213" label="Discount Price" variant="filled"
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                                 </div>
+
+                                <v-textarea v-model="forms.formPush.description"
+                                    :placeholder="products.products.description[index]" width="450" density="compact"
+                                    variant="outlined" label="Description" auto-grow></v-textarea>
 
                             </v-form>
 
                             <div class="my-3">
-                                <v-btn :prepend-icon="mdiCheckBold" text="Done" variant="flat" base-color="green" rounded="0"
-                                    @click.prevent="dialog = !dialog" width="400" location="bottom center" flat />
+                                <v-btn :prepend-icon="mdiCheckBold" text="Done" variant="flat" base-color="green"
+                                    rounded="0" @click="forms.submit(index)" width="400" location="bottom center"
+                                    flat />
                             </div>
 
                             <div class="mb-4">
-                                <v-btn :prepend-icon="mdiDeleteOutline" text="Delete" variant="flat" base-color="error" rounded="0"
-                                    @click.prevent="dialog = !dialog" width="400" location="bottom center" flat />
+                                <v-btn :prepend-icon="mdiDeleteOutline" text="Delete" variant="flat" base-color="error"
+                                    rounded="0" @click.prevent="forms.deleteProduct(index)" width="400"
+                                    location="bottom center" flat />
                             </div>
 
                             <div class="mb-4">
-                                <v-btn :prepend-icon="mdiClose" class="text-subtitle-2" text="Close" variant="text" rounded="0"
-                                    @click.prevent="dialog = !dialog" width="100" location="bottom center" :ripple="false" flat />
+                                <v-btn :prepend-icon="mdiClose" class="text-subtitle-2" text="Close" variant="text"
+                                    rounded="0" @click.prevent="forms.toggle(index)" width="100"
+                                    location="bottom center" :ripple="false" flat />
                             </div>
-                            
+
                         </v-card>
                     </v-dialog>
                 </template>
