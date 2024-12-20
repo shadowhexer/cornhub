@@ -137,10 +137,9 @@ const toggle = (index: number) => {
                         </div>
 
                         <slot name="dialog" :index="i" />
-
-                        <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"
-                            :basket="addToBasket" :exist="itemExists" />
                     </v-card>
+                    <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"
+                            :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic" />
                 </v-col>
             </v-row>
         </v-container>
