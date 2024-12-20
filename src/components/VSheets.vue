@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from './Scripts/Header';
-import Product from './Product.vue';
+import Product from './ProductView.vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline } from '@mdi/js';
 import { computed, reactive, ref } from 'vue';
@@ -101,11 +101,6 @@ const toggle = (index: number) => {
                                 </v-card-actions>
                             </div>
 
-                            <!-- <div style="height: 10px;">
-                            <v-card-text class="truncate overflow-hidden text-caption my-n5">{{ item.store
-                                }}</v-card-text>
-                        </div> -->
-
                             <div style="height: 60px;">
                                 <v-card-text v-if="Number(item.discount) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
@@ -125,8 +120,6 @@ const toggle = (index: number) => {
                                 </v-card-text>
                             </div>
                         </v-card>
-
-
 
                         <div>
                             <slot name="edit" :index="i">
