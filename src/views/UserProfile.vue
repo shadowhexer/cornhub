@@ -130,13 +130,6 @@ onMounted(() => {
 
         <v-card class="d-flex flex-column" min-height="100">
             <VSheets :items="products.products" :search-item="''" :custom-class="'mx-4'">
-                <template #userProfile>
-                    <v-btn style="pointer-events: none" icon>
-                        <svg-icon type="mdi" :path="mdiHeart" />
-
-                    </v-btn>
-                    <span class="mt-n3" style="font-size: 0.55rem;">200k</span>
-                </template>
 
                 <template #edit="{ index }">
                     <v-btn text="Edit Product" variant="flat" base-color="green" rounded="0"
