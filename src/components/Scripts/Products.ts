@@ -7,10 +7,15 @@ type Products = {
     price: number[],
     discount: number[],
     finalPrice: number[],
+    category: string[],
     bookmarked: boolean[],
     dateAdded: number[],
     link: string[],
     description: string[],
+}
+
+type Catogories = {
+    category: string[],
 }
 
 const products = reactive<Products>({
@@ -20,11 +25,16 @@ const products = reactive<Products>({
     price: [1500.00, 200.10, 300.05, 350.77, 100.34, 50.00],
     discount: [50, 100, 0, 47, 25, 0],
     finalPrice: [],
+    category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products'],
     bookmarked: [false, false, false, false, false, false],
     dateAdded: [],
     link: ['/', '', '/', '', '', '/'],
     description: ['', '', '', '', '', '',],
 });
+
+const categories = reactive<Catogories>({
+    category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products', 'Farming Tools', 'Miscellaneous'],
+})
 
 const finalCalc = products.price.map((price, index) => {
     if (products.discount[index] > 0) {
@@ -48,4 +58,4 @@ products.images = products.images.map((image, index) => {
     return savedImage as string;
 });
 
-export default { products };
+export default { products, categories };

@@ -16,6 +16,7 @@ const props = defineProps<{
             price: number,
             discount: number,
             description: string,
+            categories: string,
         },
         submit: (index: number) => void,
         deleteProduct: (index: number) => void,
@@ -29,10 +30,12 @@ const props = defineProps<{
             store: string[],
             price: number[],
             discount: number[],
+            category: string[],
             bookmarked: boolean[],
             link: string[],
             description: string[],
         },
+        categories: { category: string[] },
     },
     fileSelect: {
         triggerFileInput: () => void;
@@ -67,18 +70,23 @@ const props = defineProps<{
 
             <v-spacer class="my-5" />
 
-            <v-form class="d-flex flex-column align-center" ref="submitForm" id="form">
+            <v-form class="d-flex flex-column px-5" ref="submitForm" id="form">
 
                 <v-text-field v-model="forms.formPush.name" :placeholder="products.products.names[index]" width="450"
                     label="Product Name" variant="outlined" />
-                <div class="d-flex flex-row">
+
+                <v-combobox v-model="forms.formPush.categories" :placeholder="products.products.category[index]"
+                    auto-select-first="exact" width="215" label="Categories" variant="outlined" validate-on="submit"
+                    :items="products.categories.category" />
+
+                <div class="d-flex flex-row justify-space-between">
 
                     <v-text-field v-model="forms.price.price" :placeholder="products.products.price[index].toString()"
-                        class="mx-3" width="213" label="Price" variant="filled"
+                        width="215" label="Price" variant="filled"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
 
                     <v-text-field v-model="forms.discount.discount" :disabled="check"
-                        :placeholder="String(products.products.discount[index])" class="mx-3" width="213"
+                        :placeholder="String(products.products.discount[index])" class="ml-5" width="215"
                         label="Discount Percentage" variant="filled"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 </div>

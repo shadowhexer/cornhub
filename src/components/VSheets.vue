@@ -13,6 +13,7 @@ const props = defineProps<{
         price: Number[],
         discount: Number[],
         finalPrice: Number[],
+        category: string[],
         bookmarked: boolean[],
         dateAdded: number[],
         description: string[],

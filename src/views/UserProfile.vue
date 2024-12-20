@@ -113,7 +113,7 @@ onMounted(() => {
                                 <span class="text-subtitle-1 mx-1">Add Product</span>
                             </v-card>
 
-                            <div><AddDialog :forms="addForm" :products="products" :file-select="fileSelect" /></div>
+                            <div><AddDialog :forms="addForm" :products="products" :file-select="fileSelect" :categories="products.categories.category" /></div>
 
                             <v-card class="d-flex align-center justify-center mt-2" color="primary" height="40"
                                 width="140" href="/setting" :ripple="false" draggable="false" variant="flat" hover>
@@ -128,7 +128,7 @@ onMounted(() => {
 
         <v-spacer style="height: 1.5rem;" />
 
-        <v-card class="d-flex flex-column" min-height="100">
+        <v-card v-if="products.products.names.length > 0" class="d-flex flex-column" min-height="100">
             <VSheets :items="products.products" :search-item="''" :custom-class="'mx-4'">
 
                 <template #edit="{ index }">

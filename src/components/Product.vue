@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiHeart, mdiHeartOutline, mdiPlusBoxMultipleOutline, mdiForum } from '@mdi/js';
+import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
 
 const props = defineProps<{
     product: {
@@ -11,6 +11,7 @@ const props = defineProps<{
         discount: Number[],
         finalPrice: Number[],
         bookmarked: boolean[],
+        category: string[],
         dateAdded: number[],
         description: string[],
         link: string[],
@@ -88,7 +89,8 @@ const props = defineProps<{
                                 class="text-black"> {{ product.discount[index] }}% off</v-card-text>
                         </v-card>
 
-                        <v-chip class="mx-n15" color="yellow" variant="flat">Staple Products</v-chip>
+                        <v-chip v-if="product.category[index]" class="mx-n15 text-caption" color="yellow"
+                            variant="flat">{{ product.category[index] }}</v-chip>
                     </div>
 
 
@@ -115,9 +117,10 @@ const props = defineProps<{
                                 </button>
                             </div>
 
-                            <v-btn class="text-right ml-12" :ripple="false" variant="flat" color="primary">
-                                <svg-icon type="mdi" :path="mdiPlusBoxMultipleOutline" />
-                                <span class="text-caption">Follow</span>
+                            <v-btn class="text-right ml-10" width="100" :ripple="false" variant="flat" color="primary"
+                                href="/profile">
+                                <svg-icon type="mdi" :path="mdiStoreOutline" />
+                                <span class="text-caption">Visit Shop</span>
                             </v-btn>
 
                         </div>
@@ -157,7 +160,7 @@ const props = defineProps<{
                             :autofocus="false"></v-text-field>
                     </v-card>
 
-                    <div class="d-flex flex-row justify-space-around text-center">
+                    <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
                         <v-btn v-if="!exist[index]" width="150" height="50" variant="flat" base-color="yellow"
                             @click.prevent="basket(index)" :ripple="false">
                             <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
@@ -191,10 +194,23 @@ const props = defineProps<{
             </div>
 
             <div class="d-flex flex-row">
-                <v-card class="my-5" variant="elevated" width="650" :elevation="2" min-height="200">
+                <v-card class="my-5 pa-1" variant="elevated" width="650" :elevation="2" min-height="200">
                     <v-card-text>Description</v-card-text>
-                    <v-divider class="mx-5" opacity="0.3" />
-                    <v-card-text>{{ product.description[index] }}</v-card-text>
+                    <v-divider class="mx-4" opacity="0.3" />
+                    <v-card-text v-if="product.description[index]">{{ product.description[index] }}</v-card-text>
+                    <v-card-text v-else>LALAL.AI Christmas Sale: Save 50% This Holiday Season!
+                        Jingle all the way to savings
+                        The holiday season is upon us, and LALAL.AI is here to make your Christmas merry and bright!
+                        From December 17 to December 31, 2024, we offer an exclusive Jingle Bell Pack that will fill
+                        your audio projects with festive cheer.
+                        What's in the Jingle Bell Pack?
+                        700 minutes of audio processing for just $40!
+                        That's a whopping 50% off our regular price.
+                        This amount of minute credits is enough for you to create your own karaoke versions of favorite
+                        Christmas holiday hits, extract up to 10 different stems, remove noise from recordings, and then
+                        some!
+                        Don't miss out on this opportunity.
+                        Secure your Jingle Bell Pack before it melts away on December 31!</v-card-text>
                 </v-card>
             </div>
 

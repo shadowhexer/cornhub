@@ -22,7 +22,7 @@ const sideBarItems = reactive([
     },
     {
         name: 'Category',
-        items: ['Staple Products', 'Snacks', 'Cooking Essentials', 'Canned and Preserved', 'Specialty and Organic', 'Agricultural Products', 'Farming Tools', 'Miscellaneous']
+        items: Products.categories.category
     },
 ]);
 

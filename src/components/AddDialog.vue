@@ -17,6 +17,7 @@ const props = defineProps<{
             price: number,
             discount: number,
             description: string,
+            categories: string,
         },
         submit: () => void,
         toggle: () => void,
@@ -27,7 +28,8 @@ const props = defineProps<{
         onFileSelected: (event: Event, index: number) => void;
         fileOuput: Ref<string, string>;
         fileInput: Ref;
-    }
+    },
+    categories: string[],
 }>();
 
 </script>
@@ -37,8 +39,7 @@ const props = defineProps<{
         <v-card min-height="200" width="500" location="top center">
 
             <v-hover v-slot="{ isHovering, props }">
-                <v-img v-bind="props" :src="fileSelect.fileOuput.value" height="300"
-                    cover aspect-ratio="16/9">
+                <v-img v-bind="props" :src="fileSelect.fileOuput.value" height="300" cover aspect-ratio="16/9">
                     <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center"
                         @click="fileSelect.triggerFileInput" contained persistent>
                         <v-card class="d-flex align-center custom-card">
@@ -54,23 +55,25 @@ const props = defineProps<{
 
             <v-spacer class="my-5" />
 
-            <v-form class="d-flex flex-column align-center" ref="submitForm" id="form">
+            <v-form class="d-flex flex-column px-5" ref="submitForm" id="form">
 
-                <v-text-field v-model="forms.formPush.name" width="450"
-                    label="Product Name" variant="outlined" />
-                <div class="d-flex flex-row">
+                <v-text-field v-model="forms.formPush.name" width="450" label="Product Name" variant="outlined" />
 
-                    <v-text-field v-model="forms.price.price"
-                        class="mx-3" width="213" label="Price" variant="filled"
+                <v-combobox v-model="forms.formPush.categories" auto-select-first="exact" width="215" label="Categories"
+                    variant="outlined" validate-on="submit" :items="categories" />
+
+                <div class="d-flex flex-row justify-space-between">
+
+                    <v-text-field v-model="forms.price.price" width="215" label="Price" variant="filled"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
 
-                    <v-text-field v-model="forms.discount.discount" :disabled="check" class="mx-3" width="213"
+                    <v-text-field v-model="forms.discount.discount" :disabled="check" class="ml-5" width="215"
                         label="Discount Percentage" variant="filled"
                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                 </div>
 
-                <v-textarea v-model="forms.formPush.description"
-                    width="450" density="compact" variant="outlined" label="Description" auto-grow></v-textarea>
+                <v-textarea v-model="forms.formPush.description" width="450" density="compact" variant="outlined"
+                    label="Description" auto-grow></v-textarea>
 
             </v-form>
 

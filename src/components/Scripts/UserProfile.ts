@@ -93,6 +93,7 @@ function editForms() {
         price: 0 as number,
         discount: 0 as number,
         description: '' as string,
+        categories: '' as string,
     }
     );
 
@@ -109,6 +110,8 @@ function editForms() {
             Products.products.discount[index] = formPush.discount.valueOf();
 
         if (formPush.description) Products.products.description[index] = formPush.description;
+
+        if (formPush.categories) Products.products.category[index] = formPush.categories;
 
         (document.getElementById('form') as HTMLFormElement).reset();
 
@@ -148,6 +151,7 @@ function addForm() {
         price: NaN as number,
         discount: NaN as number,
         description: '' as string,
+        categories: '' as string,
     }
     );
 
@@ -164,6 +168,8 @@ function addForm() {
             Products.products.discount.push(formPush.discount.valueOf());
 
         if (formPush.description) Products.products.description.push(formPush.description);
+
+        if(formPush.categories) Products.products.category.push(formPush.categories);
 
         Products.products.dateAdded.push(date.getDate());
 
