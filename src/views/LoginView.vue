@@ -6,225 +6,225 @@ const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
 
 // Methods to toggle the panel
 const toggleSignUp = () => {
-  isSignUp.value = true
+    isSignUp.value = true
 }
 
 const toggleSignIn = () => {
-  isSignUp.value = false
+    isSignUp.value = false
 }
 </script>
 
 <template>
-  <v-container class="container" :class="{ 'right-panel-active': isSignUp }">
 
-    <!-- Main Form Container -->
-    <v-row class="form-box">
-      <v-col>
-        <!-- Sign-Up Form -->
-        <v-form v-if="isSignUp" class="form-container sign-up-container">
-          <h1>Create Account</h1>
-          <!-- Input fields -->
-          <v-text-field v-model="name" label="Name" :counter="25" required></v-text-field>
-          <v-text-field v-model="email" label="Email" outlined></v-text-field>
-          <v-text-field v-model="password" label="Password" type="password" outlined></v-text-field>
-          <v-btn @click="" class="btn-signup">Sign Up</v-btn>
-        </v-form>
+    <v-container class="position-relative overflow-hidden rounded-lg container" width="768" max-width="100%"
+        min-height="480" :class="{ 'right-panel-active': isSignUp }">
 
-        <!-- Sign-In Form -->
-        <v-form v-else class="form-container sign-in-container">
-          <h1>Sign in</h1>
-          <!-- Input fields -->
-          <v-text-field v-model="email" label="Email" required></v-text-field>
-          <v-text-field v-model="password" label="Password" type="password" outlined></v-text-field>
-          <a href="#" class="forgot-password">Forgot your password?</a>
-          <v-btn @click="" class="btn-signin">Sign In</v-btn>
-        </v-form>
-
-        <!-- Overlay Container for switching panels -->
-        <div class="overlay-container">
-          <div class="overlay">
-            <div class="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login with your personal info</p>
-              <v-btn class="ghost" @click="toggleSignIn">Sign In</v-btn>
-            </div>
-            <div class="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start your journey with us</p>
-              <v-btn class="ghost" @click="toggleSignUp">Sign Up</v-btn>
-            </div>
-          </div>
+        <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-up-container"
+            style="transition: all 0.4s ease-in-out;">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" action="#">
+                <h1>Create Account</h1>
+                <div class="my-5">
+                    <v-btn class="flex items-center" block variant="outlined" @click="google">
+                        Log in with <span class="google-logo text-h6 mx-1">Google</span>
+                    </v-btn>
+                </div>
+                <span class="text-caption">or use your email for registration</span>
+                <input type="text" placeholder="Name" v-model="name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <button class="my-3">Sign Up</button>
+            </v-form>
         </div>
-      </v-col>
-    </v-row>
-  </v-container>
+
+        <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-in-container"
+            style="transition: all 0.4s ease-in-out;">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" action="#">
+                <h1>Sign in</h1>
+                <div class="my-5">
+                    <v-btn class="flex items-center" block variant="outlined" @click="google">
+                        Log in with <span class="google-logo text-h6 mx-1">Google</span>
+                    </v-btn>
+                </div>
+                <span>or use your account</span>
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <a href="#" class="text-green">Forgot your password?</a>
+                <button class="my-3">Sign In</button>
+
+            </v-form>
+        </div>
+
+        <div class="position-absolute top-0 w-50 h-100 overflow-hidden overlay-container">
+            <v-card class="overlay">
+
+                <template #image>
+                    <v-img
+                        src="https://www.shutterstock.com/image-photo/corn-cobs-plantation-field-600nw-2477557971.jpg"
+                        cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)" />
+                </template>
+
+                <div
+                    class="position-absolute d-flex flex-column align-center justify-center text-center pa-10 text-center top-0 h-100 w-50 overlay-panel overlay-left">
+                    <h1 class="font-weight-bold">Hey!</h1>
+                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Looks like you are new here. Are you interested in corn products? Create an account now and start shopping!</p>
+                    <p class="text-subtitle-2" style="line-height: 1rem;">Already have an account? Click the button below and shop now!</p>
+                    <button @click="toggleSignIn" class="ghost my-2" id="signIn">Sign In</button>
+                </div>
+
+
+                <div
+                    class="position-absolute d-flex flex-column align-center justify-center text-center pa-10 text-center top-0 h-100 w-50 overlay-panel overlay-right">
+                    <h1 class="font-weight-bold">Welcome Back!</h1>
+                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Are you planning to buy some corn today? Wait no more! Log in your info and start shopping!</p>
+                    <p class="text-subtitle-2" style="line-height: 1rem;">Don't have an account yet? Click the button below and start a new one!</p>
+                    <button @click="toggleSignUp" class="ghost my-2" id="signUp">Sign Up</button>
+                </div>
+
+            </v-card>
+        </div>
+    </v-container>
+
 </template>
 
 <style scoped>
-.v-btn {
-  border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
-  color: #FFFFFF;
-  align-self: center;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 12px 45px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
+span {
+    font-size: 12px;
 }
 
-.v-btn:active {
-  transform: scale(0.95);
+button {
+    border-radius: 20px;
+    border: 1px solid #ffffff;
+    background-color: #42d20d;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
 }
 
-.v-btn.ghost {
-  background-color: transparent;
-  border-color: #FFFFFF;
+button:active {
+    transform: scale(0.95);
 }
 
-.v-form {
-  background-color: #FFFFFF;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 50px;
-  height: 100%;
-  text-align: center;
+button:focus {
+    outline: none;
 }
 
-.v-text-field input {
-  background-color: #eee;
-  border: none;
-  padding: 12px 15px;
-  margin: 8px 0;
-  width: 100%;
+button.ghost {
+    background-color: transparent;
+    border-color: #FFFFFF;
 }
 
-.v-container {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-    0 10px 10px rgba(0, 0, 0, 0.22);
-  position: relative;
-  overflow: hidden;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
+form {
+    background-color: #FFFFFF;
+    padding: 0 50px;
 }
 
-.form-container {
-  top: 0;
-  height: 100%;
-  transition: all 0.6s ease-in-out;
+input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
 }
 
-.sign-in-container {
-  left: 0;
-  width: 50%;
-  z-index: 2;
+.container {
+    background-color: #fff;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+        0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.sign-in-container,
+.sign-up-container {
+    z-index: 1;
 }
 
 .container.right-panel-active .sign-in-container {
-  transform: translateX(100%);
-}
-
-.sign-up-container {
-  left: 0;
-  width: 50%;
-  opacity: 0;
-  z-index: 1;
+    transform: translateX(100%);
 }
 
 .container.right-panel-active .sign-up-container {
-  transform: translateX(100%);
-  opacity: 1;
-  z-index: 5;
-  animation: show 0.6s;
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
 }
 
 @keyframes show {
 
-  0%, 49.99% {
-    opacity: 0;
-    z-index: 1;
-  }
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
 
-  50%, 100% {
-    opacity: 1;
-    z-index: 5;
-  }
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
 }
 
 .overlay-container {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  transition: transform 0.6s ease-in-out;
-  z-index: 100;
-}
-
-.overlay {
-  background: #FF416C;
-  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-  color: #FFFFFF;
-  position: relative;
-  left: -100%;
-  height: 100%;
-  width: 200%;
-  transform: translateX(0);
-  transition: transform 0.6s ease-in-out;
-}
-
-.overlay-panel {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 40px;
-  text-align: center;
-  top: 0;
-  height: 100%;
-  width: 50%;
-  transform: translateX(0);
-  transition: transform 0.6s ease-in-out;
-}
-
-.overlay-left {
-  transform: translateX(-20%);
-}
-
-.overlay-right {
-  right: 0;
-  transform: translateX(0);
-}
-
-.container.right-panel-active .overlay-left {
-  transform: translateX(0);
+    left: 50%;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
 }
 
 .container.right-panel-active .overlay-container {
-  transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background-size: cover;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
 }
 
 .container.right-panel-active .overlay {
-  transform: translateX(50%);
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
 }
 
 .container.right-panel-active .overlay-left {
-  transform: translateX(0);
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
 }
 
 .container.right-panel-active .overlay-right {
-  transform: translateX(20%);
+    transform: translateX(20%);
+}
+
+.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    border: 1px solid #DDDDDD;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
 }
 </style>
