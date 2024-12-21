@@ -36,6 +36,7 @@ const categories = reactive<Catogories>({
     category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products', 'Farming Tools', 'Miscellaneous'],
 })
 
+// Backend function to calculate the final price of each product
 const finalCalc = products.price.map((price, index) => {
     if (products.discount[index] > 0) {
         const calc = Number(price)
