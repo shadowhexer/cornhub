@@ -89,7 +89,7 @@ const toggle = (index: number) => {
                                 <v-card-actions class="mx-n2 mt-n3">
                                     <v-card-text class=" truncate overflow-hidden" style="line-height: 1.1;">{{
                                         item.names
-                                    }}</v-card-text>
+                                        }}</v-card-text>
                                     <div class="d-flex flex-column align-center">
                                         <v-btn style="pointer-events: none" icon>
                                             <svg-icon type="mdi" :path="mdiHeart" />
@@ -132,8 +132,49 @@ const toggle = (index: number) => {
 
                         <slot name="dialog" :index="i" />
                     </v-card>
+
                     <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"
-                            :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic" />
+                        :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic">
+                        
+                        <template #transaction="{ index }">
+                            <v-card width="200" height="50" class="d-flex flex-row mx-n3" variant="text">
+                                <v-card-text class="text-subtitle-2">Quantity: </v-card-text>
+                                <v-text-field density="compact" variant="underlined" min="0" type="number"
+                                    :autofocus="false"></v-text-field>
+                            </v-card>
+
+
+                            <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
+                                <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat" base-color="yellow"
+                                    @click.prevent="addToBasket(index)" :ripple="false">
+                                    <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
+                                </v-btn>
+
+                                <v-btn v-else class="text-caption text-uppercase" text="Added to Basket" width="150"
+                                    height="50" variant="outlined" base-color="yellow" :ripple="false" @click.prevent />
+
+
+                                <v-btn width="150" height="50" class="d-flex flex-row" variant="flat"
+                                    base-color="success" :ripple="false">
+                                    <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
+
+                                    <div class="d-flex flex-column justify-center">
+                                        <v-card-text v-if="Number(props.items.discount[index]) > 0"
+                                            class="mb-n9 text-white text-caption text-uppercase">PHP
+                                            {{ props.items.finalPrice[index] }}</v-card-text>
+
+                                        <v-card-text>
+                                            <span :class="Number(props.items.discount[index]) > 0 ? 'line-through' : ''"
+                                                class="text-white text-caption text-uppercase font-weight-bold">
+                                                PHP {{ props.items.price[index] }}
+                                            </span>
+                                        </v-card-text>
+                                    </div>
+
+                                </v-btn>
+                            </div>
+                        </template>
+                    </Product>
                 </v-col>
             </v-row>
         </v-container>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
+import { computed } from 'vue';
 
 const props = defineProps<{
     product: {
@@ -18,8 +19,6 @@ const props = defineProps<{
     },
     index: number,
     model: boolean[],
-    basket: any,
-    exist: boolean[],
     profile: string,
 }>();
 
@@ -31,44 +30,13 @@ const props = defineProps<{
 
             <div class="d-flex flex-row justify-space-between ma-3 ">
 
-                <v-card class="custom-card ma-5" variant="outlined" width="250" height="350">
-                    <v-img :src="product.images[index]" width="250" height="350" cover>
+                <v-img :src="product.images[index]" class="ma-5" width="250" height="250" cover>
 
-                        <div v-if="Number(product.discount[index]) > 0">
-                            <v-spacer style="height: 20rem !important;" />
+                    <div v-if="Number(product.discount[index]) > 0">
+                        <v-spacer style="height: 14rem !important;" />
 
-                            <v-card class="d-flex flex-row justify-center" width="350" height="40"
-                                location="right center" variant="flat" :rounded="false" color="yellow">
-
-                                <div class="d-flex flex-column justify-center">
-                                    <v-card-text v-if="Number(product.discount[index]) > 0"
-                                        class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                        {{ product.finalPrice[index] }}</v-card-text>
-
-                                    <v-card-text class="my-auto">
-                                        <span class="line-through text-grey-darken-1 font-weight-bold">
-                                            PHP {{ product.price[index] }}
-                                        </span>
-                                    </v-card-text>
-                                </div>
-
-                                <v-card-text
-                                    v-if="Number(product.discount[index]) > 0 && (product.discount[index] as number) != (product.price[index] as number)"
-                                    class="text-black"> {{ product.discount[index] }}% off</v-card-text>
-                            </v-card>
-                        </div>
-
-                    </v-img>
-
-                </v-card>
-
-                <div class="d-flex flex-column my-5 justify-space-between">
-                    <v-card width="350" max-height="100" variant="text">
-                        <v-card-text class="text-h5 mx-n4">{{ product.names[index] }}</v-card-text>
-                    </v-card>
-
-                    <div class="d-flex flex-row">
-                        <v-card class="d-flex flex-row mx-n4" width="350" height="50" variant="text">
+                        <v-card class="d-flex flex-row justify-center" width="350" height="40" location="right center"
+                            variant="flat" :rounded="false" color="yellow">
 
                             <div class="d-flex flex-column justify-center">
                                 <v-card-text v-if="Number(product.discount[index]) > 0"
@@ -76,9 +44,7 @@ const props = defineProps<{
                                     {{ product.finalPrice[index] }}</v-card-text>
 
                                 <v-card-text class="my-auto">
-                                    <span
-                                        :class="Number(product.discount[index]) > 0 ? 'line-through text-grey-darken-1' : ''"
-                                        class=" font-weight-bold">
+                                    <span class="line-through text-grey-darken-1 font-weight-bold">
                                         PHP {{ product.price[index] }}
                                     </span>
                                 </v-card-text>
@@ -88,8 +54,37 @@ const props = defineProps<{
                                 v-if="Number(product.discount[index]) > 0 && (product.discount[index] as number) != (product.price[index] as number)"
                                 class="text-black"> {{ product.discount[index] }}% off</v-card-text>
                         </v-card>
+                    </div>
 
-                        <v-chip v-if="product.category[index]" class="mx-n15 text-caption" color="yellow"
+                </v-img>
+
+                <div class="d-flex flex-column my-5 justify-space-between">
+                    <div class="my-n5" variant="text" style="width: 20rem; max-height: 10rem;">
+                        <v-card-text class="text-h5 text-wrap mx-n4">{{ product.names[index] }}</v-card-text>
+                    </div>
+
+                    <div class="d-flex flex-row align-end">
+                        <v-card class="d-flex flex-row mx-n4" width="350" height="50" variant="text">
+
+                            <div class="d-flex flex-column justify-center">
+                                <v-card-text v-if="Number(product.discount[index]) > 0"
+                                    class="mb-n9 text-red-darken-2 font-weight-bold">PHP
+                                    {{ product.finalPrice[index] }}</v-card-text>
+
+                                <div class="my-auto mx-4 d-flex flex-row">
+                                    <p :class="Number(product.discount[index]) > 0 ? 'line-through text-grey-darken-1' : ''"
+                                        class=" font-weight-bold">
+                                        PHP {{ product.price[index] }}
+                                    </p>
+                                    <p v-if="Number(product.discount[index]) > 0 && (product.discount[index] as number) != (product.price[index] as number)"
+                                        class="text-black mx-10"> {{ product.discount[index] }}% off</p>
+                                </div>
+                            </div>
+
+
+                        </v-card>
+
+                        <v-chip v-if="product.category[index]" class="mx-n15 my-auto text-caption" color="yellow"
                             variant="flat">{{ product.category[index] }}</v-chip>
                     </div>
 
@@ -130,19 +125,19 @@ const props = defineProps<{
 
                     <v-divider opacity="0.3" class="mx-1" style="width: 23rem !important;" />
 
-                    <div class="d-flex flex-row justify-space-between mx-n3 ">
+                    <div class="d-flex flex-row justify-space-evenly">
 
-                        <v-card width="150" height="50" variant="text">
+                        <div width="150" height="50" variant="text" class="ml-n16">
                             <v-card-text class="text-subtitle-2 text-grey">Date added: {{ product.dateAdded[index]
                                 }}</v-card-text>
-                        </v-card>
+                        </div>
 
-                        <v-card width="150" height="50" variant="text">
+                        <div width="150" height="50" variant="text">
                             <v-card-text class="text-subtitle-2 text-grey">Stocks: 100</v-card-text>
-                        </v-card>
+                        </div>
 
 
-                        <v-card width="100" height="50" variant="text" class="d-flex flex-row align-center">
+                        <div width="100" height="50" variant="text" class="d-flex flex-row align-center">
 
                             <v-btn icon variant="text" size="30"
                                 @click.prevent="product.bookmarked[index] = !product.bookmarked[index]" :ripple="false">
@@ -151,50 +146,16 @@ const props = defineProps<{
                             </v-btn>
                             <span class="text-subtitle-2">{{ index }}</span>
 
-                        </v-card>
+                        </div>
                     </div>
 
-                    <v-card width="200" height="50" class="d-flex flex-row mx-n3" variant="text">
-                        <v-card-text class="text-subtitle-2">Quantity: </v-card-text>
-                        <v-text-field density="compact" variant="underlined" min="0" type="number"
-                            :autofocus="false"></v-text-field>
-                    </v-card>
-
-                    <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
-                        <v-btn v-if="!exist[index]" width="150" height="50" variant="flat" base-color="yellow"
-                            @click.prevent="basket(index)" :ripple="false">
-                            <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
-                        </v-btn>
-
-                        <v-btn v-else class="text-caption text-uppercase" text="Added to Basket" width="150" height="50"
-                            variant="outlined" base-color="yellow" :ripple="false" @click.prevent />
-
-
-                        <v-btn width="150" height="50" class="d-flex flex-row" variant="flat" base-color="success"
-                            :ripple="false">
-                            <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
-
-                            <div class="d-flex flex-column justify-center">
-                                <v-card-text v-if="Number(product.discount[index]) > 0"
-                                    class="mb-n9 text-white text-caption text-uppercase">PHP
-                                    {{ product.finalPrice[index] }}</v-card-text>
-
-                                <v-card-text>
-                                    <span :class="Number(product.discount[index]) > 0 ? 'line-through' : ''"
-                                        class="text-white text-caption text-uppercase font-weight-bold">
-                                        PHP {{ product.price[index] }}
-                                    </span>
-                                </v-card-text>
-                            </div>
-
-                        </v-btn>
-                    </div>
+                    <slot name="transaction" :index="index" />
                 </div>
 
             </div>
 
             <div class="d-flex flex-row">
-                <v-card class="my-5 pa-1" variant="elevated" width="650" :elevation="2" min-height="200">
+                <v-card class="mb-5 pa-1" variant="elevated" width="650" :elevation="2" min-height="200">
                     <v-card-text>Description</v-card-text>
                     <v-divider class="mx-4" opacity="0.3" />
                     <v-card-text v-if="product.description[index]">{{ product.description[index] }}</v-card-text>
