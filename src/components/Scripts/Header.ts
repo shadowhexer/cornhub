@@ -6,11 +6,17 @@ import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi
 // Define types for the reactive objects
 type Cart = {
     title: string;
-    images: string[]; // Assuming it's an array of image URLs (strings)
-    product: string[];
-    store: string[];
-    price: number[];
-    link: string[];
+    names: string[],
+    images: string[],
+    store: string[],
+    price: number[],
+    discount: number[],
+    finalPrice: number[],
+    category: string[],
+    bookmarked: boolean[],
+    dateAdded: number[],
+    link: string[],
+    description: string[],
 };
 
 type Message = {
@@ -48,11 +54,17 @@ const date2 = new Date('2024-11-03T10:00:00')
 
 const carts = reactive<Cart>({
     title: 'Cart',
+    names: [],
     images: [],
-    product: [],
     store: [],
     price: [],
+    discount: [],
+    finalPrice: [],
+    category: [],
+    bookmarked: [],
+    dateAdded: [],
     link: [],
+    description: [],
 });
 
 const messages = reactive<Message>({

@@ -46,7 +46,7 @@ const images = UserForms.profile;
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link, extra: Header.carts.price }"
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.names, link: Header.carts.link, extra: Header.carts.price }"
                         :type="'cart'">
 
                         <template #icons>

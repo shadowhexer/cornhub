@@ -5,13 +5,17 @@ import NavDrawer from '@/components/NavDrawer.vue';
 import Header from '@/components/Scripts/Header';
 import Products from '@/components/Scripts/Products';
 import ProductView from '@/components/ProductView.vue';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 const product = Products.products;
 
+const i = ref<number>(0); // Create a ref variable to store the index of the Product component
 const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
+
 const toggle = (index: number) => {
     dialog.dialog[index] = !dialog.dialog[index];
+
+    i.value = index; // Assign the index to the ref variable every time the dialog is toggled
 };
 
 </script>
@@ -36,7 +40,7 @@ const toggle = (index: number) => {
                         </v-card-text>
                     </v-card>
 
-                    <v-card v-for="(store, s) in product.store" :key="s" width="800" class="my-2" :rounded="false"
+                    <v-card v-for="(store, s) in Header.carts.store" :key="s" width="800" class="my-2" :rounded="false"
                         variant="flat">
 
                         <v-list-item-title class="mx-4 my-1 d-flex flex-row align-center">
@@ -50,7 +54,7 @@ const toggle = (index: number) => {
                         <v-divider />
 
                         <v-list-item-title class="mx-4 my-10 d-flex flex-row align-center"
-                            v-for="(item, i) in product.names" :key="i">
+                            v-for="(item, i) in Header.carts.names" :key="i">
 
                             <v-row class="align-start">
 
@@ -71,8 +75,6 @@ const toggle = (index: number) => {
                                                 }}</p>
                                         </button>
 
-                                        <ProductView :product="product" :index="i" :model="dialog.dialog"
-                                            :profile="Header.menu.profilePic" />
 
                                         <p class="text-caption text-grey-darken-1">3 stocks left</p>
 
@@ -132,6 +134,9 @@ const toggle = (index: number) => {
                 :text="`Check out (${product.names.length}) Products`" color="yellow" />
         </v-col>
     </v-row>
+
+    <!-- Product dialog card component -->
+    <ProductView :product="product" :index="i" :model="dialog.dialog" :profile="Header.menu.profilePic" />
 </template>
 <style scoped>
 .line-through {

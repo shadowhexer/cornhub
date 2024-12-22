@@ -10,9 +10,9 @@ const props = defineProps<{
         names: string[],
         images: string[],
         store: string[],
-        price: Number[],
-        discount: Number[],
-        finalPrice: Number[],
+        price: number[],
+        discount: number[],
+        finalPrice: number[],
         category: string[],
         bookmarked: boolean[],
         dateAdded: number[],
@@ -38,7 +38,10 @@ const filteredItems = computed(() => {
         price: props.items.price[i],
         discount: props.items.discount[i],
         finalPrice: props.items.finalPrice[i],
+        category: props.items.category[i],
         bookmarked: props.items.bookmarked[i],
+        dateAdded: props.items.dateAdded[i],
+        description: props.items.description[i],
         link: props.items.link[i],
         originalIndex: i, // Include the original index
     }));
@@ -46,20 +49,22 @@ const filteredItems = computed(() => {
 
 const addToBasket = (index: number) => {
     Header.carts.images.push(props.items.images[index]);
-    Header.carts.product.push(props.items.names[index]);
+    Header.carts.names.push(props.items.names[index]);
     Header.carts.store.push(props.items.store[index]);
-    Header.carts.price.push(
-        props.items.discount[index] == 0
-            ? props.items.price[index].valueOf()
-            : props.items.discount[index].valueOf()
-    );
+    Header.carts.price.push(props.items.price[index]);
+    Header.carts.discount.push(props.items.discount[index]);
+    Header.carts.finalPrice.push(props.items.finalPrice[index]);
+    Header.carts.category.push(props.items.category[index]);
+    Header.carts.bookmarked.push(props.items.bookmarked[index]);
+    Header.carts.dateAdded.push(props.items.dateAdded[index]);
+    Header.carts.description.push(props.items.description[index]);
     Header.carts.link.push(props.items.link[index]);
 
 };
 
 const itemExists = computed(() => {
     return props.items.names.map((item, index) => {
-        return Header.carts.product.some(
+        return Header.carts.names.some(
             (product, i) =>
                 product === item &&
                 Header.carts.store[i] === props.items.store[index]
