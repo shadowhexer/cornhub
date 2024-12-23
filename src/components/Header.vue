@@ -8,15 +8,18 @@ import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 
 const { markIndividual, markAll } = markAsRead();
-const images = UserForms.profile;
-
-const isLogin = ref(false);
 
 </script>
 
 <template>
     <section id="header">
-        <v-app-bar :flat="true" color="amber-accent-4" density="compact" sticky app>
+        <v-app-bar :flat="true" color="amber-accent-4" density="compact" ima sticky app>
+
+            <template #image>
+                <v-img src="/src/assets/Header.jpg" height="100%" width="100%"
+                    cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" />
+            </template>
+
             <v-row class="d-flex align-center">
 
                 <!-- Logo -->
@@ -96,7 +99,7 @@ const isLogin = ref(false);
 
                 <!-- Profile Menu -->
 
-                <v-col v-if="isLogin === true" col="1" class="ma-n12">
+                <v-col v-if="Header.isLogin.value === true" col="1" class="ma-n12">
                     <ProfileMenu :menu="Header.menu">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
@@ -105,7 +108,7 @@ const isLogin = ref(false);
                 </v-col>
 
                 <v-col v-else col="1" class="ma-n12">
-                    <v-btn color="white" href="http://127.0.0.1:8000/login" text="Sign in" />
+                    <v-btn class="mx-n2" color="white" href="http://127.0.0.1:8000/login" text="Sign in" />
                 </v-col>
 
             </v-row>

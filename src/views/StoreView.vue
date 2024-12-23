@@ -111,7 +111,6 @@ onMounted(() => {
 
                     <v-main class="d-flex flex-column my-5" width="1000">
                         <VSheets :items="Products.products" :search-item="searchItem" :custom-class="'mx-3'" />
-                        <v-pagination v-model="page" length="1" rounded="circle" />
                     </v-main>
 
                 </v-layout>

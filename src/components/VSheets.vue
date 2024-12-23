@@ -76,6 +76,10 @@ const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
 const toggle = (index: number) => {
     dialog.dialog[index] = !dialog.dialog[index];
 };
+
+const login = () => {
+    window.open('http://127.0.0.1:8000/login', '_blank', 'noopener,noreferrer');
+}
 </script>
 
 <template>
@@ -128,9 +132,9 @@ const toggle = (index: number) => {
 
                         <div>
                             <slot name="edit" :index="i">
-                                <v-btn v-if="!itemExists[i]" text="Add to Basket" variant="flat" base-color="green"
+                                <v-btn v-if="!itemExists[i] && Header.isLogin.value === true" text="Add to Basket" variant="flat" base-color="green"
                                     rounded="0" @click.prevent="addToBasket(i)" flat block />
-                                <v-btn v-else text="Added to Basket" variant="outlined" base-color="green" rounded="0"
+                                <v-btn v-else-if="itemExists[i] && Header.isLogin.value === true" text="Added to Basket" variant="outlined" base-color="green" rounded="0"
                                     @click.prevent flat block />
                             </slot>
                         </div>
@@ -151,7 +155,7 @@ const toggle = (index: number) => {
 
                             <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
                                 <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat" base-color="yellow"
-                                    @click.prevent="addToBasket(index)" :ripple="false">
+                                    @click.prevent="Header.isLogin.value === true ? addToBasket(index) : login()" :ripple="false">
                                     <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
                                 </v-btn>
 
@@ -160,7 +164,9 @@ const toggle = (index: number) => {
 
 
                                 <v-btn width="150" height="50" class="d-flex flex-row" variant="flat"
-                                    base-color="success" :ripple="false">
+                                    base-color="success" :ripple="false" 
+                                    @click.prevent="Header.isLogin.value === true ? '' : login()"
+                                    >
                                     <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
 
                                     <div class="d-flex flex-column justify-center">

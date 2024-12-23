@@ -8,6 +8,7 @@
 };
 
 :root {
+  --app-background: url('./bg.jpg') !important;
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;

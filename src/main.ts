@@ -15,7 +15,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg' // required
 
 const cornTheme = {
     colors: {
-        background: '#FFF8E1'
+        background: '#FFE57F'
     }
 }
 

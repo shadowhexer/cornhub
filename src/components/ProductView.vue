@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
+import Header from './Scripts/Header';
 import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
 import { computed } from 'vue';
 

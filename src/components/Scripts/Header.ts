@@ -48,6 +48,7 @@ type Menu = {
 };
 
 const images = UserForms.profile;
+const isLogin = ref(false);
 
 const dates = new Date('2024-12-03T10:00:00');
 const date2 = new Date('2024-11-03T10:00:00')
@@ -138,4 +139,4 @@ export function markAsRead() {
 }
 
 
-export default { carts, messages, notif, menu, ProfilePic };
+export default { carts, messages, notif, menu, ProfilePic, isLogin };
