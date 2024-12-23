@@ -1,27 +1,60 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import API from '@/services/api';
+import router from '@/router';
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
 const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
-
 // Methods to toggle the panel
-const toggleSignUp = () => {
-    isSignUp.value = true
+const toggleSignUp = () => isSignUp.value = true
+const toggleSignIn = () => isSignUp.value = false
+
+const loginForm = ref({
+    email: '',
+    password: ''
+});
+
+const createForm = ref({
+    name: '',
+    email: '',
+    password: '',
+})
+
+const handleLogin = async () => {
+  try {
+    const response = await API.post('/login', loginForm)
+    router.push('/')
+    console.log(response.data)
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-const toggleSignIn = () => {
-    isSignUp.value = false
+const handleRegister = async () => {
+  try {
+    const response = await API.post('/register', createForm)
+    if (response.data.status === 'success') {
+      createForm.value.password = '';
+      toggleSignIn();
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+const google = () => {
+    window.location.href = '/auth/google/redirect'
+};
 </script>
 
 <template>
 
-    <v-container class="position-relative overflow-hidden rounded-lg container" width="768" max-width="100%"
+<v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
         min-height="480" :class="{ 'right-panel-active': isSignUp }">
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-up-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100" action="#">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleRegister">
                 <h1>Create Account</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -29,16 +62,16 @@ const toggleSignIn = () => {
                     </v-btn>
                 </div>
                 <span class="text-caption">or use your email for registration</span>
-                <input type="text" placeholder="Name" v-model="name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="text" placeholder="Name" v-model="createForm.name" />
+                <input type="email" placeholder="Email" v-model="createForm.email" />
+                <input type="password" placeholder="Password" v-model="createForm.password" />
                 <button class="my-3">Sign Up</button>
             </v-form>
         </div>
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-in-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100" action="#">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleLogin">
                 <h1>Sign in</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -46,8 +79,8 @@ const toggleSignIn = () => {
                     </v-btn>
                 </div>
                 <span>or use your account</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="email" placeholder="Email" v-model="loginForm.email" />
+                <input type="password" placeholder="Password" v-model="loginForm.password" />
                 <a href="#" class="text-green">Forgot your password?</a>
                 <button class="my-3">Sign In</button>
 
@@ -66,8 +99,12 @@ const toggleSignIn = () => {
                 <div
                     class="position-absolute d-flex flex-column align-center justify-center text-center pa-10 text-center top-0 h-100 w-50 overlay-panel overlay-left">
                     <h1 class="font-weight-bold">Hey!</h1>
-                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Looks like you are new here. Are you interested in corn products? Create an account now and start shopping!</p>
-                    <p class="text-subtitle-2" style="line-height: 1rem;">Already have an account? Click the button below and shop now!</p>
+                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Looks like you are new here. Are you
+                        interested in corn
+                        products? Create an account now and start shopping!</p>
+                    <p class="text-subtitle-2" style="line-height: 1rem;">Already have an account? Click the button
+                        below and shop now!
+                    </p>
                     <button @click="toggleSignIn" class="ghost my-2" id="signIn">Sign In</button>
                 </div>
 
@@ -75,8 +112,12 @@ const toggleSignIn = () => {
                 <div
                     class="position-absolute d-flex flex-column align-center justify-center text-center pa-10 text-center top-0 h-100 w-50 overlay-panel overlay-right">
                     <h1 class="font-weight-bold">Welcome Back!</h1>
-                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Are you planning to buy some corn today? Wait no more! Log in your info and start shopping!</p>
-                    <p class="text-subtitle-2" style="line-height: 1rem;">Don't have an account yet? Click the button below and start a new one!</p>
+                    <p class="text-subtitle-1 my-3" style="line-height: 1rem;">Are you planning to buy some corn today?
+                        Wait no more!
+                        Log in your info and start shopping!</p>
+                    <p class="text-subtitle-2" style="line-height: 1rem;">Don't have an account yet? Click the button
+                        below and start a
+                        new one!</p>
                     <button @click="toggleSignUp" class="ghost my-2" id="signUp">Sign Up</button>
                 </div>
 
