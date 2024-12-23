@@ -10,6 +10,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  server: {
+    port: 5174,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -23,4 +26,5 @@ export default defineConfig({
     }
   },
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.svg', '@/assets/*.png'], // include your image formats here
+
 })

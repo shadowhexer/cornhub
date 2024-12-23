@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import API from '@/services/api';
 import Header, { markAsRead } from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
+import { onMounted } from 'vue';
 
 const { markIndividual, markAll } = markAsRead();
 
@@ -100,7 +101,7 @@ const { markIndividual, markAll } = markAsRead();
                 <!-- Profile Menu -->
 
                 <v-col v-if="Header.isLogin.value === true" col="1" class="ma-n12">
-                    <ProfileMenu :menu="Header.menu">
+                    <ProfileMenu :menu="Header.menu" :status="Header.isLogin" :axios="API">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
                         </template>

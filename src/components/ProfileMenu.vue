@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Ref } from 'vue';
 
-defineProps<{
+
+const props = defineProps<{
     menu: {
         profilePic: string,
         name: string,
@@ -9,7 +11,17 @@ defineProps<{
         text: string[],
         link: string[],
     }
+    status: Ref<boolean>,
+    axios: any,
 }>()
+
+const logout = () => {
+    props.axios.post('/logout').then((response: { data: { status: string; }; }) => {
+        if(response.data.status === 'success') {
+            props.status.value = false;
+        }
+    });
+}
 </script>
 
 <template>
@@ -50,7 +62,12 @@ defineProps<{
                     <template #prepend>
                         <slot :icon="menu.icon" :index="l" />
                     </template>
-                    <v-list-item-title v-text="list"></v-list-item-title>
+                    <v-list-item-title v-text="list" />
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-title>
+                        <v-list-item-title @click="logout()">Logout</v-list-item-title>
+                    </v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-card>

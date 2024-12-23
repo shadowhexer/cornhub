@@ -2,6 +2,7 @@ import { reactive, ref } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
 import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi/js';
+import API from '@/services/api'
 
 // Define types for the reactive objects
 type Cart = {
@@ -51,7 +52,13 @@ const images = UserForms.profile;
 const isLogin = ref(false);
 
 const dates = new Date('2024-12-03T10:00:00');
-const date2 = new Date('2024-11-03T10:00:00')
+const date2 = new Date('2024-11-03T10:00:00');
+
+API.get('/verify').then((response: { data: { logged_in: any; }; }) => {
+    if(response.data.logged_in === true) {
+        isLogin.value = true;
+    }
+});
 
 const carts = reactive<Cart>({
     title: 'Cart',
@@ -92,8 +99,8 @@ const menu = reactive<Menu>({
     name: 'Hexer',
     type: 'admin',
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],
-    text: ['Bookmarks', 'Setting', 'Give Feedback', 'Logout'],
-    link: ['/bookmarks', '/setting', '/']
+    text: ['Bookmarks', 'Setting', 'Give Feedback'],
+    link: ['/bookmarks', '/setting', '/feedback'],
 });
 
 // Functions
