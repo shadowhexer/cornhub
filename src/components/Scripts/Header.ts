@@ -49,17 +49,19 @@ type Menu = {
 };
 
 const images = UserForms.profile;
+
 const isLogin = ref(false);
 
 const dates = new Date('2024-12-03T10:00:00');
 const date2 = new Date('2024-11-03T10:00:00');
 
-API.get('/verify').then((response: { data: { logged_in: any; }; }) => {
-    if(response.data.logged_in === true) {
-        isLogin.value = true;
-    }
-});
-
+API.get("/sanctum/csrf-cookie").then(response => {
+    API.get('/verify').then((response: { data: { logged_in: any; }; }) => {
+        if(response.data.logged_in === true) {
+            isLogin.value = true;
+        }
+    });
+})
 const carts = reactive<Cart>({
     title: 'Cart',
     names: [],
