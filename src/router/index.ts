@@ -9,6 +9,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: 'OnlyCorn' },
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue'),
+    meta: { title: 'Login' },
+  },
+  {
     path: '/notification',
     name: 'notification',
     component: () => import('../views/NotificationView.vue'),
