@@ -15,5 +15,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  css: {
+    preprocessorOptions: {
+      css: {
+        additionalData: `@import "@/assets/base.css";`
+      }
+    }
+  },
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.svg', '@/assets/*.png'], // include your image formats here
 })

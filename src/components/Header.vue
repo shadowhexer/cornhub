@@ -10,6 +10,8 @@ import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 const { markIndividual, markAll } = markAsRead();
 const images = UserForms.profile;
 
+const isLogin = ref(false);
+
 </script>
 
 <template>
@@ -20,11 +22,9 @@ const images = UserForms.profile;
                 <!-- Logo -->
 
                 <v-col col="1">
-                    <v-btn icon variant="text" color="white" size="default" href="/">
-                        <v-avatar size="large">
-                            <v-img :src="images.profile.profilePhoto" aspect-ratio="1/1" cover />
-                        </v-avatar>
-                    </v-btn>
+                    <a variant="text" color="white" size="default" href="/" :ripple="false">
+                        <span class="text-h4 text-white logo-text">OnlyCorn</span>
+                    </a>
                 </v-col>
 
                 <!-- Search bar -->
@@ -53,11 +53,6 @@ const images = UserForms.profile;
                             <svg-icon type="mdi" :path="mdiBasket" />
                         </template>
 
-                        <!-- <template #check>
-                            <v-container fluid>
-                                <v-checkbox color="success" @click.stop hide-details></v-checkbox>
-                            </v-container>
-                        </template> -->
                     </VMenus>
                 </v-col>
 
@@ -101,12 +96,16 @@ const images = UserForms.profile;
 
                 <!-- Profile Menu -->
 
-                <v-col col="1" class="ma-n12">
+                <v-col v-if="isLogin === true" col="1" class="ma-n12">
                     <ProfileMenu :menu="Header.menu">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
                         </template>
                     </ProfileMenu>
+                </v-col>
+
+                <v-col v-else col="1" class="ma-n12">
+                    <v-btn color="white" href="http://127.0.0.1:8000/login" text="Sign in" />
                 </v-col>
 
             </v-row>
@@ -129,6 +128,9 @@ a {
     margin: 0 !important;
 }
 
+.logo-text {
+    font-family: 'Gardenia' !important;
+}
 
 .logo:hover {
     filter: contrast(250%);

@@ -1,5 +1,11 @@
 /* color palette from <https://github.com/vuejs/theme> */
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@font-face {
+  font-family: 'Gardenia';
+  src: url('../assets/Gardenia-ExtraBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+};
 
 :root {
   --vt-c-white: #ffffff;
@@ -81,6 +87,7 @@ body {
     'Josefin Sans'
     'Droid Sans',
     'Helvetica Neue',
+    'Gardenia',
     sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
