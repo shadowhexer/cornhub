@@ -11,6 +11,7 @@ export default defineConfig({
     vueDevTools(),
   ],
   server: {
+    host: 'store.onlycorn.com',
     port: 5174,
   },
   resolve: {

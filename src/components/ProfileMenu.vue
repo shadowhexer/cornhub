@@ -11,14 +11,17 @@ const props = defineProps<{
         text: string[],
         link: string[],
     }
-    status: Ref<boolean>,
+    status: {
+        logged_in: boolean,
+        user: any,
+    },
     axios: any,
 }>()
 
-const logout = () => {
-    props.axios.post('/logout').then((response: { data: { status: string; }; }) => {
-        if(response.data.status === 'success') {
-            props.status.value = false;
+const logout = async () => {
+    await props.axios.post('/api/logout').then((response: { data: { status: string; }; }) => {
+        if (response.data.status === 'success') {
+            props.status.logged_in = false;
         }
     });
 }
@@ -64,9 +67,10 @@ const logout = () => {
                     </template>
                     <v-list-item-title v-text="list" />
                 </v-list-item>
+
                 <v-list-item>
-                    <v-list-item-title>
-                        <v-list-item-title @click="logout()">Logout</v-list-item-title>
+                    <v-list-item-title :prepend-icon="menu.icon[3]">
+                        <v-list-item-title @click="logout()" v-text="'Logout'" />
                     </v-list-item-title>
                 </v-list-item>
             </v-list>

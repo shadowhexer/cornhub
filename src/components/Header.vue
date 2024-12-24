@@ -100,7 +100,7 @@ const { markIndividual, markAll } = markAsRead();
 
                 <!-- Profile Menu -->
 
-                <v-col v-if="Header.isLogin.value === true" col="1" class="ma-n12">
+                <v-col v-if="Header.isLogin.logged_in === true" col="1" class="ma-n12">
                     <ProfileMenu :menu="Header.menu" :status="Header.isLogin" :axios="API">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
@@ -109,7 +109,7 @@ const { markIndividual, markAll } = markAsRead();
                 </v-col>
 
                 <v-col v-else col="1" class="ma-n12">
-                    <v-btn class="mx-n2" color="white" href="http://127.0.0.1:8000/login" text="Sign in" />
+                    <v-btn class="mx-n2" color="white" href="/login" text="Sign in" />
                 </v-col>
 
             </v-row>
