@@ -1,29 +1,46 @@
 <script setup lang="ts">
 import type { Ref } from 'vue';
+import router from '@/router';
 
 
 const props = defineProps<{
     menu: {
-        profilePic: string,
+        profilePic: string | null,
         name: string,
         type: string,
         icon: string[],
         text: string[],
         link: string[],
+        status: boolean,
     }
-    status: {
-        logged_in: boolean,
-        user: any,
-    },
     axios: any,
 }>()
 
 const logout = async () => {
-    await props.axios.post('/api/logout').then((response: { data: { status: string; }; }) => {
+    try {
+        // Step 1: Fetch CSRF token
+        await props.axios.get('/sanctum/csrf-cookie', { withCredentials: true });
+
+        // Step 2: Call logout endpoint
+        const response = await props.axios.post('/logout', {}, { withCredentials: true });
+
         if (response.data.status === 'success') {
+            // Step 3: Update frontend state
             props.status.logged_in = false;
+
+            // Step 4: Redirect to the home page
+            router.push('/');
+        } else {
+            console.error('Unexpected response:', response.data);
         }
-    });
+    } catch (error) {
+        console.error('Logout failed:', error.response?.data || error.message);
+    }
+};
+
+
+const login = () => {
+    window.open('http://api.onlycorn.com:8000/login', '_blank', 'noopener,noreferrer');
 }
 </script>
 
@@ -68,10 +85,11 @@ const logout = async () => {
                     <v-list-item-title v-text="list" />
                 </v-list-item>
 
-                <v-list-item>
-                    <v-list-item-title :prepend-icon="menu.icon[3]">
-                        <v-list-item-title @click="logout()" v-text="'Logout'" />
-                    </v-list-item-title>
+                <v-list-item @click.prevent="logout()">
+                    <template #prepend>
+                        <slot :icon="menu.icon" :index="3" />
+                    </template>
+                    <v-list-item-title v-text="'Logout'" />
                 </v-list-item>
             </v-list>
         </v-card>

@@ -2,7 +2,6 @@ import { reactive, ref } from 'vue';
 import ProfilePic from '@/assets/profile.jpg';
 import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi/js';
-import API from '@/services/api'
 
 // Define types for the reactive objects
 type Cart = {
@@ -40,7 +39,8 @@ type Notification = {
 };
 
 type Menu = {
-    profilePic: any; // Replace `any` with the actual type of ProfilePic
+    status: boolean
+    profilePic: string | null; // Replace `any` with the actual type of ProfilePic
     name: string;
     type: string;
     icon: string[]; // Assuming mdi icons are strings
@@ -48,33 +48,8 @@ type Menu = {
     link: string[];
 };
 
-type Status = {
-    logged_in: boolean;
-    user: string;
-};
-
 const images = UserForms.profile;
-
-const isLogin = reactive<Status>({
-    logged_in: false,
-    user: '',
-});
-let previousState = isLogin.logged_in;
-
-(async function check(){
-    try {
-        const response = await API.get('/api/verify');
-        if(response.data.logged_in === true) {
-            isLogin.logged_in = response.data.logged_in;
-        }
-        previousState = isLogin.logged_in;
-    } catch (error) {
-        console.error('Session verification failed:', error);
-        isLogin.logged_in = false;
-        return;
-    }
-    setTimeout(check, 300000);
-})();
+const isLogin = UserForms.isLogin;
 
 const dates = new Date('2024-12-03T10:00:00');
 const date2 = new Date('2024-11-03T10:00:00');
@@ -114,9 +89,10 @@ const notif = reactive<Notification>({
 });
 
 const menu = reactive<Menu>({
+    status: isLogin.logged_in,
     profilePic: images.profile.profilePhoto,
-    name: 'Hexer',
-    type: 'admin',
+    name: isLogin.user.name,
+    type: isLogin.user.role,
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],
     text: ['Bookmarks', 'Setting', 'Give Feedback'],
     link: ['/bookmarks', '/setting', '/feedback'],
@@ -165,4 +141,4 @@ export function markAsRead() {
 }
 
 
-export default { carts, messages, notif, menu, ProfilePic, isLogin };
+export default { carts, messages, notif, menu, ProfilePic };

@@ -24,7 +24,7 @@ const createForm = reactive({
 const handleLogin = async () => {
     try {
         await API.get('/sanctum/csrf-cookie').then(async () => {
-            const response = await API.post('/api/login', loginForm)
+            const response = await API.post('/login', loginForm)
             if (response.data.status === 'success') {
                 Header.isLogin.logged_in = true;
 
@@ -40,7 +40,7 @@ const handleLogin = async () => {
 
 const handleRegister = async () => {
     try {
-        const response = await API.post('/api/register', createForm)
+        const response = await API.post('/register', createForm)
         if (response.data.status === 'success') {
             createForm.password = '';
             toggleSignIn();
