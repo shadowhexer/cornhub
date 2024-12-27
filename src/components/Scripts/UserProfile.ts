@@ -1,60 +1,17 @@
 import Products from '@/components/Scripts/Products';
-import Default from '@/assets/default.png';
-import { reactive, ref } from 'vue';
-import API from '@/services/api'
+import { onMounted, reactive, ref } from 'vue';
 
 type Profile = {
-    coverPhoto: string | null,
-    profilePhoto: string | null,
-};
-
-type Status = {
-    logged_in: boolean;
-    user: {
-        user_id: number;
-        name: string;
-        email: string;
-        email_verifiedd_at: string;
-        register_date: Date;
-        role: string;
-    };
-};
+    coverPhoto: string,
+    profilePhoto: string,
+}
 
 const profile = reactive({
     profile: {
         coverPhoto: '',
-        profilePhoto: Default,
+        profilePhoto: '',
     } as Profile
 })
-
-const isLogin = reactive<Status>({
-    logged_in: '' as unknown as boolean,
-    user: {
-        user_id: '' as unknown as number,
-        name: '',
-        email: '',
-        email_verifiedd_at: '',
-        register_date: '' as unknown as Date,
-        role: '',
-    },
-});
-
-(async function check(){
-    try {
-        const response = await API.get('/api/verify');
-        if(response.data.logged_in === true) {
-            const { created_at, updated_at, ...userData } = response.data.user;
-            isLogin.logged_in = response.data.logged_in;
-            isLogin.user = userData;
-        }
-
-    } catch (error) {
-        console.error('Session verification failed.');
-        isLogin.logged_in = false;
-        return;
-    }
-    setTimeout(check, 300000);
-})();
 
 
 function fileSelection() {
@@ -242,4 +199,4 @@ for (let i = 0; i < localStorage.length; i++) {
     }
 }
 
-export default { fileSelection, editForms, addForm, Products, profile, isLogin }
+export default { fileSelection, editForms, addForm, Products, profile }

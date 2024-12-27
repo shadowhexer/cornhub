@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import API from '@/services/api';
+import { ref } from 'vue';
 import Header, { markAsRead } from './Scripts/Header';
 import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and declare it on module.d.ts 
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
+import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
-import { onMounted } from 'vue';
 
 const { markIndividual, markAll } = markAsRead();
+const images = UserForms.profile;
 
 </script>
 
 <template>
     <section id="header">
-        <v-app-bar :flat="true" color="amber-accent-4" density="compact" ima sticky app>
-
-            <template #image>
-                <v-img src="/src/assets/Header.jpg" height="100%" width="100%"
-                    cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" />
-            </template>
-
+        <v-app-bar :flat="true" color="amber-accent-4" density="compact" sticky app>
             <v-row class="d-flex align-center">
 
                 <!-- Logo -->
 
                 <v-col col="1">
-                    <a variant="text" color="white" size="default" href="/" :ripple="false">
-                        <span class="text-h4 text-white logo-text">OnlyCorn</span>
-                    </a>
+                    <v-btn icon variant="text" color="white" size="default" href="/">
+                        <v-avatar size="large">
+                            <v-img :src="images.profile.profilePhoto" aspect-ratio="1/1" cover />
+                        </v-avatar>
+                    </v-btn>
                 </v-col>
 
                 <!-- Search bar -->
@@ -49,13 +46,18 @@ const { markIndividual, markAll } = markAsRead();
 
                 <v-col col="1" class="ma-n12">
                     <VMenus :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.names, link: Header.carts.link, extra: Header.carts.price }"
+                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.product, link: Header.carts.link, extra: Header.carts.price }"
                         :type="'cart'">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiBasket" />
                         </template>
 
+                        <!-- <template #check>
+                            <v-container fluid>
+                                <v-checkbox color="success" @click.stop hide-details></v-checkbox>
+                            </v-container>
+                        </template> -->
                     </VMenus>
                 </v-col>
 
@@ -99,16 +101,12 @@ const { markIndividual, markAll } = markAsRead();
 
                 <!-- Profile Menu -->
 
-                <v-col v-show="Header.menu.status === true" col="1" class="ma-n12">
-                    <ProfileMenu :menu="Header.menu" :axios="API">
+                <v-col col="1" class="ma-n12">
+                    <ProfileMenu :menu="Header.menu">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
                         </template>
                     </ProfileMenu>
-                </v-col>
-
-                <v-col v-show="Header.menu.status === false" col="1" class="ma-n12">
-                    <v-btn class="mx-n2" color="white" href="/login" text="Sign in" />
                 </v-col>
 
             </v-row>
@@ -131,9 +129,6 @@ a {
     margin: 0 !important;
 }
 
-.logo-text {
-    font-family: 'Gardenia' !important;
-}
 
 .logo:hover {
     filter: contrast(250%);

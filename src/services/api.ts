@@ -1,18 +1,15 @@
 import axios, { type AxiosInstance } from 'axios';
-import { onMounted } from 'vue';
+
+const getCsrfToken = () => {
+  return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+};
 
 const API: AxiosInstance = axios.create({
-  baseURL: 'http://api.onlycorn.com:8000',
-  withCredentials: true,
-  withXSRFToken: true,
+  baseURL: 'http://127.0.0.1:8000/', // Django backend URL
   headers: {
     'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-    'Accept': 'application/json',
-  },
+    'X-CSRFToken': getCsrfToken() // Include CSRF token if needed
+  }
 });
-
-// Add to your API requests
-// API.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
 export default API;

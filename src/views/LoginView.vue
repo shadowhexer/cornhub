@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import API from '@/services/api';
-import Header from '@/components/Scripts/Header';
 import router from '@/router';
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
@@ -10,45 +9,39 @@ const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
 const toggleSignUp = () => isSignUp.value = true
 const toggleSignIn = () => isSignUp.value = false
 
-const loginForm = reactive({
-    email: '' as string,
-    password: '' as string,
+const loginForm = ref({
+    email: '',
+    password: ''
 });
 
-const createForm = reactive({
-    name: '' as string,
-    email: '' as string,
-    password: '' as string,
+const createForm = ref({
+    name: '',
+    email: '',
+    password: '',
 })
 
 const handleLogin = async () => {
-    try {
-        await API.get('/sanctum/csrf-cookie').then(async () => {
-            const response = await API.post('/login', loginForm)
-            if (response.data.status === 'success') {
-                Header.isLogin.logged_in = true;
-
-                // Redirect to home page after successful login
-                router.push('/')
-            }
-        })
-
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    const response = await API.post('/login', loginForm)
+    router.push('/')
+    console.log(response.data)
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const handleRegister = async () => {
-    try {
-        const response = await API.post('/register', createForm)
-        if (response.data.status === 'success') {
-            createForm.password = '';
-            toggleSignIn();
-        }
-    } catch (error) {
-        console.log(error);
+  try {
+    const response = await API.post('/register', createForm)
+    if (response.data.status === 'success') {
+      createForm.value.password = '';
+      toggleSignIn();
     }
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 const google = () => {
     window.location.href = `http://api.onlycorn.com:8000/auth/google/redirect`;
 };
@@ -56,13 +49,12 @@ const google = () => {
 
 <template>
 
-    <v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
+<v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
         min-height="480" :class="{ 'right-panel-active': isSignUp }">
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-up-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
-                @submit.prevent="handleRegister">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleRegister">
                 <h1>Create Account</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -79,8 +71,7 @@ const google = () => {
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-in-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
-                @submit.prevent="handleLogin">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleLogin">
                 <h1>Sign in</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -100,7 +91,9 @@ const google = () => {
             <v-card class="overlay">
 
                 <template #image>
-                    <v-img src="/src/assets/login.jpg" cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)" />
+                    <v-img
+                        src="https://www.shutterstock.com/image-photo/corn-cobs-plantation-field-600nw-2477557971.jpg"
+                        cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)" />
                 </template>
 
                 <div

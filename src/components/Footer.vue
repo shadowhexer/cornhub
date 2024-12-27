@@ -19,6 +19,6 @@
 </template>
 <style scoped>
 div {
-  height: 50px;
+  height: 100px;
 }
 </style>
