@@ -50,7 +50,7 @@ const handleRegister = async () => {
     }
 }
 const google = () => {
-    window.location.href = '/auth/google/redirect'
+    window.location.href = `http://api.onlycorn.com:8000/auth/google/redirect`;
 };
 </script>
 
