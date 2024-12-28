@@ -2,14 +2,14 @@
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
 
-const props = defineProps<{
+defineProps<{
     product: {
         names: string[],
         images: string[],
         store: string[],
-        price: Number[],
-        discount: Number[],
-        finalPrice: Number[],
+        price: number[],
+        discount: number[],
+        finalPrice: number[],
         bookmarked: boolean[],
         category: string[],
         dateAdded: number[],
