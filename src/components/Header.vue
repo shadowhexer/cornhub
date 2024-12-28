@@ -6,8 +6,10 @@ import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 import UserProfile from './Scripts/UserProfile';
-
-const isLogged_in = UserProfile.isLogin
+import { useAuthStore } from '@/services/Session'
+import { computed } from 'vue';
+const authStore = useAuthStore()
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const { markIndividual, markAll } = markAsRead();
 
@@ -101,15 +103,15 @@ const { markIndividual, markAll } = markAsRead();
 
                 <!-- Profile Menu -->
 
-                <v-col v-show="isLogged_in.logged_in === true" col="1" class="ma-n12">
-                    <ProfileMenu :menu="Header.menu" :axios="API">
+                <v-col v-show="isLoggedIn" col="1" class="ma-n12">
+                    <ProfileMenu :menu="Header.menu">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
                         </template>
                     </ProfileMenu>
                 </v-col>
 
-                <v-col v-show="isLogged_in.logged_in === false" col="1" class="ma-n12">
+                <v-col v-show="!isLoggedIn" col="1" class="ma-n12">
                     <v-btn class="mx-n2" color="white" href="/login" text="Sign in" />
                 </v-col>
 

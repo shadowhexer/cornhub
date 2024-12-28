@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Callback from '@/components/Callback.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -63,6 +64,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'setting',
     component: () => import('../views/SettingView.vue'),
     meta: { title: 'Settings' },
+  },
+  {
+    path: '/auth/callback',
+    name: 'Callback',
+    component: Callback,
   }
 ]
 

@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import type { Ref } from 'vue';
+import { computed, type Ref } from 'vue';
+import API from '@/services/api';
 import router from '@/router';
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/services/Session'
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
 
 
 const props = defineProps<{
@@ -13,23 +18,18 @@ const props = defineProps<{
         link: string[],
         status: any,
     }
-    axios: any,
 }>()
 
 const logout = async () => {
     try {
-        // Step 1: Fetch CSRF token
-        await props.axios.get('/sanctum/csrf-cookie', { withCredentials: true });
 
-        // Step 2: Call logout endpoint
-        const response = await props.axios.post('/logout', {}, { withCredentials: true });
-
+        const response = await API.post('/logout', { withCredentials: true,
+        withXSRFToken: true, // Include the CSRF token
+        })
+        
         if (response.data.status === 'success') {
-            // Step 3: Update frontend state
-            props.menu.status.logged_in = 'false';
-
-            // Step 4: Redirect to the home page
-            router.push('/');
+            authStore.logout() // Clears token and user
+            router.push('/')
         } else {
             console.error('Unexpected response:', response.data);
         }
@@ -64,11 +64,11 @@ const login = () => {
                             <v-avatar :image="menu.profilePic" size="x-large" />
                         </template>
                         <template #title>
-                            <span class="text-h6 font-weight-bold">{{ menu.name }}</span>
+                            <span class="text-h6 font-weight-bold">{{ user.name }}</span>
                         </template>
 
                         <template #subtitle>
-                            {{ menu.type }}
+                            {{ user.role }}
                         </template>
                     </v-list-item>
                 </v-list>
@@ -85,7 +85,7 @@ const login = () => {
                     <v-list-item-title v-text="list" />
                 </v-list-item>
 
-                <v-list-item @click.prevent="logout()">
+                <v-list-item @click="logout">
                     <template #prepend>
                         <slot :icon="menu.icon" :index="3" />
                     </template>

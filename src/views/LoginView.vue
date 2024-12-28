@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import API from '@/services/api';
 import Header from '@/components/Scripts/Header';
 import UserProfile from '@/components/Scripts/UserProfile';
 import router from '@/router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/services/Session'
+import axios from 'axios';
 const authStore = useAuthStore()
 const isLogin = UserProfile.isLogin
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
 const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
@@ -15,12 +17,12 @@ const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
 const toggleSignUp = () => isSignUp.value = true
 const toggleSignIn = () => isSignUp.value = false
 
-const loginForm = ref({
+const loginForm = reactive({
     email: '',
     password: ''
 });
 
-const createForm = ref({
+const createForm = reactive({
     name: '',
     email: '',
     password: '',
@@ -31,12 +33,11 @@ const handleLogin = async () => {
         await API.get('/sanctum/csrf-cookie').then(async () => {
             const response = await API.post('/login', loginForm)
             if (response.data.status === 'success') {
-                if (response.data.status === 'success') {
-                    authStore.setAuth(response.data.token, response.data.user)
-                    isLogin.logged_in = true
-                    isLogin.user = response.data.user
-                    router.push('/')
-                }
+                authStore.setAuth(response.data.token, response.data.user)
+                router.push('/')
+            }
+            else { 
+                alert(response.data.message)
             }
         })
 
@@ -49,37 +50,20 @@ const handleRegister = async () => {
   try {
     const response = await API.post('/register', createForm)
     if (response.data.status === 'success') {
-      createForm.value.password = '';
+      createForm.password = '';
       toggleSignIn();
     }
   } catch (error) {
     console.error(error);
   }
 }
-const google = async () => {
-    const response = await API.get('/auth/google/redirect');
-    
-    if (response.data.redirect_url) {
-        authStore.setAuth(response.data.token, response.data.user)
-        isLogin.logged_in = true
-        isLogin.user = response.data.user
-        if (response.data.redirect_url) {
-            window.location.href = response.data.redirect_url;
 
-        }
-    }
+
+const google = () => {
+    window.location.href = 'http://api.onlycorn.com:8000/auth/google/redirect';
 };
 
-const logout = async () => {
-    await API.get('/sanctum/csrf-cookie').then(async () => {
-        const response = await API.post('/logout/')
-        if (response.data.status === 'success') {
-            authStore.logout() // Clears token and user
-            isLogin.logged_in = false
-            router.push('/')
-        }
-    })
-}
+
 </script>
 
 <template>

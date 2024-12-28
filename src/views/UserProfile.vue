@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiUpload, mdiPencil, mdiAccount, mdiMessageProcessing, mdiCalendarAccount, mdiPlus, mdiHeart } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import EditDialog from '@/components/EditDialog.vue';
 import AddDialog from '@/components/AddDialog.vue';
-
 import UserForms from '@/components/Scripts/UserProfile'
+import { useAuthStore } from '@/services/Session';
+import { storeToRefs } from 'pinia';
 const editForm = UserForms.editForms();
 const addForm = UserForms.addForm();
 const fileSelect = UserForms.fileSelection();
 const products = UserForms.Products;
 const images = UserForms.profile;
 
-const name = ref<string>('Chairman of the Presidium of the Supreme Soviet')
-const userType = ref<string>('Chairman')
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+const isLogin = computed(() => authStore.isAuthenticated)
 
-onMounted(() => {
-    document.title = name.value + ' - Profile';
-});
+const formattedDate = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+}).format(user.register_date);
+
+
+watch(() => user.value?.name, (newName) => {
+  document.title = newName ? `${newName} - Profile` : 'Profile'
+}, { immediate: true })
 
 </script>
 
@@ -28,7 +37,7 @@ onMounted(() => {
     <v-main class="d-flex flex-column justify-center mx-16 py-5 px-16">
         <v-card class="d-flex flex-column" min-height="500">
             <v-hover v-slot="{ isHovering, props }">
-                <v-img v-bind="props" :src="images.profile.coverPhoto" height="300" cover aspect-ratio="16/9">
+                <v-img v-bind="props" :src="String(images.profile.coverPhoto)" height="300" cover aspect-ratio="16/9">
                     <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center"
                         @click="fileSelect.triggerFileInput" contained persistent no-click-animation>
 
@@ -51,7 +60,7 @@ onMounted(() => {
                         <v-hover v-slot="{ isHovering, props }">
                             <v-avatar v-bind="props" size="200" class="mt-n16 ml-16 border-md border-opacity-100">
                                 <v-img rounded="circle" class="" aspect-ratio="1/1" width="100"
-                                    :src="images.profile.profilePhoto" cover>
+                                    :src="String(images.profile.profilePhoto)" cover>
                                     <v-overlay :model-value="!!isHovering"
                                         class="d-flex felx-row justify-center align-center"
                                         @click="fileSelect.triggerFileInput" contained persistent no-click-animation>
@@ -73,9 +82,9 @@ onMounted(() => {
                     <v-col cols="4" class="flex-grow-0 flex-shrink-1 mx-n3">
                         <div class="custom-card d-flex flex-column align-start ml-n10">
                             <v-card class="custom-card ">
-                                <v-card-text class="font-weight-bold text-h4" :class="name.length > 10 ? 'text-h5' : ''"
-                                    style="line-height: 1.1;">{{ name }}</v-card-text>
-                                <v-card-text class="text-subtitle-1 mt-n8">{{ userType }}</v-card-text>
+                                <v-card-text class="font-weight-bold text-h4" :class="user.name.length > 10 ? 'text-h5' : ''"
+                                    style="line-height: 1.1;">{{ user.name }}</v-card-text>
+                                <v-card-text class="text-subtitle-1 mt-n8">{{ user.role }}</v-card-text>
                             </v-card>
                         </div>
                     </v-col>
@@ -86,7 +95,7 @@ onMounted(() => {
                                 <svg-icon class="text-grey-darken-2" type="mdi" :path="mdiCalendarAccount"
                                     size="20"></svg-icon>
                                 <span class="text-subtitle-2 font-weight-bold mx-1 text-grey-darken-2">Join:</span>
-                                <span class="text-subtitle-2 mx-1 text-grey-darken-2">15 December 2002</span>
+                                <span class="text-subtitle-2 mx-1 text-grey-darken-2">{{ formattedDate }}</span>
                             </v-card>
 
                             <v-card class="custom-card d-flex align-center">

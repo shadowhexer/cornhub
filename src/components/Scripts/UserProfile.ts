@@ -1,6 +1,6 @@
 import Products from '@/components/Scripts/Products';
 import Default from '@/assets/default.png';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref, type ComputedRef } from 'vue';
 import API from '@/services/api'
 
 type Profile = {
@@ -9,7 +9,7 @@ type Profile = {
 };
 
 type Status = {
-    logged_in: boolean;
+    logged_in: ComputedRef<boolean>;
     user: {
         user_id: number;
         name: string;
@@ -28,7 +28,7 @@ const profile = reactive({
 })
 
 const isLogin = reactive<Status>({
-    logged_in: '' as unknown as boolean,
+    logged_in: '' as unknown as ComputedRef<boolean>,
     user: {
         user_id: '' as unknown as number,
         name: '',

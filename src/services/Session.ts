@@ -21,24 +21,29 @@ export const API = axios.create({
 })
   
 export const useAuthStore = defineStore('auth', {
-state: (): AuthState => ({
-    token: localStorage.getItem('token'),
-    user: JSON.parse(localStorage.getItem('user') || 'null'),
-}),
-actions: {
-    setAuth(token: string, user: User) {
-    this.token = token;
-    this.user = user;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    state: (): AuthState => ({
+        token: localStorage.getItem('token'),
+        user: JSON.parse(localStorage.getItem('user') || 'null'),
+    }),
+    actions: {
+        setAuth(token: string, user: User) {
+        this.token = token;
+        this.user = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        },
+        
+        logout() {
+        this.token = null;
+        this.user = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        },
     },
-    logout() {
-    this.token = null;
-    this.user = null;
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    },
-},
+    getters: {
+        isAuthenticated: (state) => !!state.token && !!state.user,
+      },
+
 });
 
 // Setup axios interceptors
