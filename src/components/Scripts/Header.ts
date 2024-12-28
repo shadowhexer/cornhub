@@ -39,7 +39,7 @@ type Notification = {
 };
 
 type Menu = {
-    status: boolean
+    status: any
     profilePic: string; // Replace `any` with the actual type of ProfilePic
     name: string;
     type: string;

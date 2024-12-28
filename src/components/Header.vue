@@ -5,7 +5,9 @@ import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
-import { onMounted } from 'vue';
+import UserProfile from './Scripts/UserProfile';
+
+const isLogged_in = UserProfile.isLogin
 
 const { markIndividual, markAll } = markAsRead();
 
@@ -99,7 +101,7 @@ const { markIndividual, markAll } = markAsRead();
 
                 <!-- Profile Menu -->
 
-                <v-col v-show="Header.menu.status === true" col="1" class="ma-n12">
+                <v-col v-show="isLogged_in.logged_in === true" col="1" class="ma-n12">
                     <ProfileMenu :menu="Header.menu" :axios="API">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
@@ -107,7 +109,7 @@ const { markIndividual, markAll } = markAsRead();
                     </ProfileMenu>
                 </v-col>
 
-                <v-col v-show="Header.menu.status === false" col="1" class="ma-n12">
+                <v-col v-show="isLogged_in.logged_in === false" col="1" class="ma-n12">
                     <v-btn class="mx-n2" color="white" href="/login" text="Sign in" />
                 </v-col>
 

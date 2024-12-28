@@ -5,6 +5,21 @@ import { mdiChevronRightCircle } from '@mdi/js';
 import Products from './Scripts/Products';
 import VSheets from './VSheets.vue';
 
+let banners = reactive<string[]>([]);
+
+Promise.all([
+  import('@/assets/banner1.jpg'),
+  import('@/assets/banner2.jpg'),
+  import('@/assets/banner3.png'),
+  import('@/assets/banner4.jpg'),
+])
+  .then(modules => {
+    banners.splice(0, banners.length, ...modules.map(m => m.default));
+  })
+  .catch(error => {
+    console.error('Failed to load images:', error);
+  });
+
 const carousel = reactive({
     images: [
         'https://project-imas.wiki/images/d/de/Arisu_SS_SSR.png',
@@ -33,7 +48,7 @@ const stores = reactive({
     <v-main class="d-flex flex-column my-5 mx-15 px-15">
 
         <v-carousel show-arrows="hover" height="250" class="carousel" @contextmenu.prevent hide-delimiters cycle>
-            <v-carousel-item v-for="(image, index) in carousel.images" :key="index" :src="image" draggable="false"
+            <v-carousel-item v-for="(image, index) in banners" :key="index" :src="image" draggable="false"
                 cover />
         </v-carousel>
 
