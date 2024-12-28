@@ -10,9 +10,9 @@ const props = defineProps<{
         names: string[],
         images: string[],
         store: string[],
-        price: Number[],
-        discount: Number[],
-        finalPrice: Number[],
+        price: number[],
+        discount: number[],
+        finalPrice: number[],
         category: string[],
         bookmarked: boolean[],
         dateAdded: number[],
@@ -38,7 +38,10 @@ const filteredItems = computed(() => {
         price: props.items.price[i],
         discount: props.items.discount[i],
         finalPrice: props.items.finalPrice[i],
+        category: props.items.category[i],
         bookmarked: props.items.bookmarked[i],
+        dateAdded: props.items.dateAdded[i],
+        description: props.items.description[i],
         link: props.items.link[i],
         originalIndex: i, // Include the original index
     }));
@@ -46,20 +49,22 @@ const filteredItems = computed(() => {
 
 const addToBasket = (index: number) => {
     Header.carts.images.push(props.items.images[index]);
-    Header.carts.product.push(props.items.names[index]);
+    Header.carts.names.push(props.items.names[index]);
     Header.carts.store.push(props.items.store[index]);
-    Header.carts.price.push(
-        props.items.discount[index] == 0
-            ? props.items.price[index].valueOf()
-            : props.items.discount[index].valueOf()
-    );
+    Header.carts.price.push(props.items.price[index]);
+    Header.carts.discount.push(props.items.discount[index]);
+    Header.carts.finalPrice.push(props.items.finalPrice[index]);
+    Header.carts.category.push(props.items.category[index]);
+    Header.carts.bookmarked.push(props.items.bookmarked[index]);
+    Header.carts.dateAdded.push(props.items.dateAdded[index]);
+    Header.carts.description.push(props.items.description[index]);
     Header.carts.link.push(props.items.link[index]);
 
 };
 
 const itemExists = computed(() => {
     return props.items.names.map((item, index) => {
-        return Header.carts.product.some(
+        return Header.carts.names.some(
             (product, i) =>
                 product === item &&
                 Header.carts.store[i] === props.items.store[index]
@@ -71,6 +76,10 @@ const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
 const toggle = (index: number) => {
     dialog.dialog[index] = !dialog.dialog[index];
 };
+
+const login = () => {
+    window.open('http://api.onlycorn.com:8000/login', '_blank', 'noopener,noreferrer');
+}
 </script>
 
 <template>
@@ -89,7 +98,7 @@ const toggle = (index: number) => {
                                 <v-card-actions class="mx-n2 mt-n3">
                                     <v-card-text class=" truncate overflow-hidden" style="line-height: 1.1;">{{
                                         item.names
-                                    }}</v-card-text>
+                                        }}</v-card-text>
                                     <div class="d-flex flex-column align-center">
                                         <v-btn style="pointer-events: none" icon>
                                             <svg-icon type="mdi" :path="mdiHeart" />
@@ -123,17 +132,60 @@ const toggle = (index: number) => {
 
                         <div>
                             <slot name="edit" :index="i">
-                                <v-btn v-if="!itemExists[i]" text="Add to Basket" variant="flat" base-color="green"
+                                <v-btn v-if="!itemExists[i] && Header.menu.status === true" text="Add to Basket" variant="flat" base-color="green"
                                     rounded="0" @click.prevent="addToBasket(i)" flat block />
-                                <v-btn v-else text="Added to Basket" variant="outlined" base-color="green" rounded="0"
+                                <v-btn v-else-if="itemExists[i] && Header.menu.status === true" text="Added to Basket" variant="outlined" base-color="green" rounded="0"
                                     @click.prevent flat block />
                             </slot>
                         </div>
 
                         <slot name="dialog" :index="i" />
                     </v-card>
+
                     <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"
-                            :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic" />
+                        :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic">
+                        
+                        <template #transaction="{ index }">
+                            <v-card width="200" height="50" class="d-flex flex-row mx-n3" variant="text">
+                                <v-card-text class="text-subtitle-2">Quantity: </v-card-text>
+                                <v-text-field density="compact" variant="underlined" min="0" type="number"
+                                    :autofocus="false"></v-text-field>
+                            </v-card>
+
+
+                            <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
+                                <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat" base-color="yellow"
+                                    @click.prevent="Header.menu.status === true ? addToBasket(index) : login()" :ripple="false">
+                                    <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
+                                </v-btn>
+
+                                <v-btn v-else class="text-caption text-uppercase" text="Added to Basket" width="150"
+                                    height="50" variant="outlined" base-color="yellow" :ripple="false" @click.prevent />
+
+
+                                <v-btn width="150" height="50" class="d-flex flex-row" variant="flat"
+                                    base-color="success" :ripple="false" 
+                                    @click.prevent="Header.menu.status === true ? '' : login()"
+                                    >
+                                    <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
+
+                                    <div class="d-flex flex-column justify-center">
+                                        <v-card-text v-if="Number(props.items.discount[index]) > 0"
+                                            class="mb-n9 text-white text-caption text-uppercase">PHP
+                                            {{ props.items.finalPrice[index] }}</v-card-text>
+
+                                        <v-card-text>
+                                            <span :class="Number(props.items.discount[index]) > 0 ? 'line-through' : ''"
+                                                class="text-white text-caption text-uppercase font-weight-bold">
+                                                PHP {{ props.items.price[index] }}
+                                            </span>
+                                        </v-card-text>
+                                    </div>
+
+                                </v-btn>
+                            </div>
+                        </template>
+                    </Product>
                 </v-col>
             </v-row>
         </v-container>

@@ -6,11 +6,17 @@ import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi
 // Define types for the reactive objects
 type Cart = {
     title: string;
-    images: string[]; // Assuming it's an array of image URLs (strings)
-    product: string[];
-    store: string[];
-    price: number[];
-    link: string[];
+    names: string[],
+    images: string[],
+    store: string[],
+    price: number[],
+    discount: number[],
+    finalPrice: number[],
+    category: string[],
+    bookmarked: boolean[],
+    dateAdded: number[],
+    link: string[],
+    description: string[],
 };
 
 type Message = {
@@ -33,7 +39,8 @@ type Notification = {
 };
 
 type Menu = {
-    profilePic: any; // Replace `any` with the actual type of ProfilePic
+    status: boolean
+    profilePic: string | null; // Replace `any` with the actual type of ProfilePic
     name: string;
     type: string;
     icon: string[]; // Assuming mdi icons are strings
@@ -42,17 +49,24 @@ type Menu = {
 };
 
 const images = UserForms.profile;
+const isLogin = UserForms.isLogin;
 
 const dates = new Date('2024-12-03T10:00:00');
-const date2 = new Date('2024-11-03T10:00:00')
+const date2 = new Date('2024-11-03T10:00:00');
 
 const carts = reactive<Cart>({
     title: 'Cart',
+    names: [],
     images: [],
-    product: [],
     store: [],
     price: [],
+    discount: [],
+    finalPrice: [],
+    category: [],
+    bookmarked: [],
+    dateAdded: [],
     link: [],
+    description: [],
 });
 
 const messages = reactive<Message>({
@@ -75,12 +89,13 @@ const notif = reactive<Notification>({
 });
 
 const menu = reactive<Menu>({
+    status: isLogin.logged_in,
     profilePic: images.profile.profilePhoto,
-    name: 'Hexer',
-    type: 'admin',
+    name: isLogin.user.name,
+    type: isLogin.user.role,
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],
-    text: ['Bookmarks', 'Setting', 'Give Feedback', 'Logout'],
-    link: ['/bookmarks', '/setting', '/']
+    text: ['Bookmarks', 'Setting', 'Give Feedback'],
+    link: ['/bookmarks', '/setting', '/feedback'],
 });
 
 // Functions

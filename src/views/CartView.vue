@@ -54,7 +54,7 @@ const toggle = (index: number) => {
                         <v-divider />
 
                         <v-list-item-title class="mx-4 my-10 d-flex flex-row align-center"
-                            v-for="(item, i) in Header.carts.names" :key="i">
+                            v-for="(item, i) in Header.carts.product" :key="i">
 
                             <v-row class="align-start">
 

@@ -5,7 +5,7 @@ import API from '@/services/api'
 
 type Profile = {
     coverPhoto: string | null,
-    profilePhoto: string,
+    profilePhoto: string | null,
 };
 
 type Status = {
