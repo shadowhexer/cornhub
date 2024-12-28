@@ -57,7 +57,7 @@ const handleRegister = async () => {
   }
 }
 const google = async () => {
-    const response = await API.get('/auth/google/callback');
+    const response = await API.get('/auth/google/redirect');
     
     if (response.data.redirect_url) {
         authStore.setAuth(response.data.token, response.data.user)
