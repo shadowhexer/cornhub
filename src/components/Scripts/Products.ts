@@ -19,7 +19,7 @@ type Catogories = {
 }
 
 const products = reactive<Products>({
-    names: ['Yellow Corn that goes hard when boiled etc etc etc blah blah blajdsfkhsjdk', 'Blue Seeds', 'Green Corn', 'Red Pops', 'Orange Corn', 'Green Corns',],
+    names: ['Yellow Corn that goes hard when boiled etc etc etc blah blah', 'Blue Seeds', 'Green Corn', 'Red Pops', 'Orange Corn', 'Green Corns',],
     images: ['', '', '', '', '', '',],
     store: ['Arisu Corn Mill', 'Haru Corn Shop', 'Haru Corn Shop', 'Chelsea', 'Arisu Corn Mill', 'Chelsea'],
     price: [1500.00, 200.10, 300.05, 350.77, 100.34, 50.00],

@@ -1,47 +1,15 @@
 <script setup lang="ts">
-import type { Ref } from 'vue';
-import router from '@/router';
 
-
-const props = defineProps<{
+defineProps<{
     menu: {
-        profilePic: string | null,
+        profilePic: string,
         name: string,
         type: string,
         icon: string[],
         text: string[],
         link: string[],
-        status: boolean,
     }
-    axios: any,
 }>()
-
-const logout = async () => {
-    try {
-        // Step 1: Fetch CSRF token
-        await props.axios.get('/sanctum/csrf-cookie', { withCredentials: true });
-
-        // Step 2: Call logout endpoint
-        const response = await props.axios.post('/logout', {}, { withCredentials: true });
-
-        if (response.data.status === 'success') {
-            // Step 3: Update frontend state
-            props.status.logged_in = false;
-
-            // Step 4: Redirect to the home page
-            router.push('/');
-        } else {
-            console.error('Unexpected response:', response.data);
-        }
-    } catch (error) {
-        console.error('Logout failed:', error.response?.data || error.message);
-    }
-};
-
-
-const login = () => {
-    window.open('http://api.onlycorn.com:8000/login', '_blank', 'noopener,noreferrer');
-}
 </script>
 
 <template>
@@ -82,14 +50,7 @@ const login = () => {
                     <template #prepend>
                         <slot :icon="menu.icon" :index="l" />
                     </template>
-                    <v-list-item-title v-text="list" />
-                </v-list-item>
-
-                <v-list-item @click.prevent="logout()">
-                    <template #prepend>
-                        <slot :icon="menu.icon" :index="3" />
-                    </template>
-                    <v-list-item-title v-text="'Logout'" />
+                    <v-list-item-title v-text="list"></v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-card>

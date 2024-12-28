@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import API from '@/services/api';
 import Header from '@/components/Scripts/Header';
 import UserProfile from '@/components/Scripts/UserProfile';
@@ -15,15 +15,15 @@ const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
 const toggleSignUp = () => isSignUp.value = true
 const toggleSignIn = () => isSignUp.value = false
 
-const loginForm = reactive({
-    email: '' as string,
-    password: '' as string,
+const loginForm = ref({
+    email: '',
+    password: ''
 });
 
-const createForm = reactive({
-    name: '' as string,
-    email: '' as string,
-    password: '' as string,
+const createForm = ref({
+    name: '',
+    email: '',
+    password: '',
 })
 
 const handleLogin = async () => {
@@ -46,15 +46,15 @@ const handleLogin = async () => {
 }
 
 const handleRegister = async () => {
-    try {
-        const response = await API.post('/register', createForm)
-        if (response.data.status === 'success') {
-            createForm.password = '';
-            toggleSignIn();
-        }
-    } catch (error) {
-        console.log(error);
+  try {
+    const response = await API.post('/register', createForm)
+    if (response.data.status === 'success') {
+      createForm.value.password = '';
+      toggleSignIn();
     }
+  } catch (error) {
+    console.error(error);
+  }
 }
 const google = async () => {
     const response = await API.get('/auth/google/callback');
@@ -84,13 +84,12 @@ const logout = async () => {
 
 <template>
 
-    <v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
+<v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
         min-height="480" :class="{ 'right-panel-active': isSignUp }">
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-up-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
-                @submit.prevent="handleRegister">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleRegister">
                 <h1>Create Account</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -107,8 +106,7 @@ const logout = async () => {
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-in-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
-                @submit.prevent="handleLogin">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleLogin">
                 <h1>Sign in</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -128,7 +126,9 @@ const logout = async () => {
             <v-card class="overlay">
 
                 <template #image>
-                    <v-img src="/src/assets/login.jpg" cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)" />
+                    <v-img
+                        src="https://www.shutterstock.com/image-photo/corn-cobs-plantation-field-600nw-2477557971.jpg"
+                        cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)" />
                 </template>
 
                 <div

@@ -19,7 +19,7 @@ import { useAuthStore } from './services/Session'
 
 const cornTheme = {
     colors: {
-        background: '#FFE57F'
+        background: '#FFF8E1'
     }
 }
 
