@@ -40,7 +40,7 @@ type Notification = {
 
 type Menu = {
     status: boolean
-    profilePic: string | null; // Replace `any` with the actual type of ProfilePic
+    profilePic: string; // Replace `any` with the actual type of ProfilePic
     name: string;
     type: string;
     icon: string[]; // Assuming mdi icons are strings
@@ -90,7 +90,7 @@ const notif = reactive<Notification>({
 
 const menu = reactive<Menu>({
     status: isLogin.logged_in,
-    profilePic: images.profile.profilePhoto,
+    profilePic: images.profile.profilePhoto as string,
     name: isLogin.user.name,
     type: isLogin.user.role,
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],

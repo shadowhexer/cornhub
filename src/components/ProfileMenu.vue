@@ -5,13 +5,13 @@ import router from '@/router';
 
 const props = defineProps<{
     menu: {
-        profilePic: string | null,
+        profilePic: string,
         name: string,
         type: string,
         icon: string[],
         text: string[],
         link: string[],
-        status: boolean,
+        status: any,
     }
     axios: any,
 }>()
@@ -26,14 +26,14 @@ const logout = async () => {
 
         if (response.data.status === 'success') {
             // Step 3: Update frontend state
-            props.status.logged_in = false;
+            props.menu.status.logged_in = 'false';
 
             // Step 4: Redirect to the home page
             router.push('/');
         } else {
             console.error('Unexpected response:', response.data);
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Logout failed:', error.response?.data || error.message);
     }
 };
