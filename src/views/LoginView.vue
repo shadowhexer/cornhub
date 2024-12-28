@@ -2,7 +2,12 @@
 import { reactive, ref } from 'vue'
 import API from '@/services/api';
 import Header from '@/components/Scripts/Header';
+import UserProfile from '@/components/Scripts/UserProfile';
 import router from '@/router';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/services/Session'
+const authStore = useAuthStore()
+const isLogin = UserProfile.isLogin
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
 const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
@@ -26,10 +31,12 @@ const handleLogin = async () => {
         await API.get('/sanctum/csrf-cookie').then(async () => {
             const response = await API.post('/login', loginForm)
             if (response.data.status === 'success') {
-                Header.isLogin.logged_in = true;
-
-                // Redirect to home page after successful login
-                router.push('/')
+                if (response.data.status === 'success') {
+                    authStore.setAuth(response.data.token, response.data.user)
+                    isLogin.logged_in = true
+                    isLogin.user = response.data.user
+                    router.push('/')
+                }
             }
         })
 
@@ -49,9 +56,30 @@ const handleRegister = async () => {
         console.log(error);
     }
 }
-const google = () => {
-    window.location.href = '/auth/google/redirect'
+const google = async () => {
+    const response = await API.get('/auth/google/callback');
+    
+    if (response.data.redirect_url) {
+        authStore.setAuth(response.data.token, response.data.user)
+        isLogin.logged_in = true
+        isLogin.user = response.data.user
+        if (response.data.redirect_url) {
+            window.location.href = response.data.redirect_url;
+
+        }
+    }
 };
+
+const logout = async () => {
+    await API.get('/sanctum/csrf-cookie').then(async () => {
+        const response = await API.post('/logout/')
+        if (response.data.status === 'success') {
+            authStore.logout() // Clears token and user
+            isLogin.logged_in = false
+            router.push('/')
+        }
+    })
+}
 </script>
 
 <template>

@@ -11,6 +11,10 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg' // required
 
+import { createPinia } from 'pinia'
+import { useAuthStore } from './services/Session'
+
+
 // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 const cornTheme = {
@@ -20,6 +24,7 @@ const cornTheme = {
 }
 
 const app = createApp(App)
+export const pinia = createPinia()
 const vuetify = createVuetify
     ({
         components,
@@ -40,9 +45,4 @@ const vuetify = createVuetify
         },
     });
 
-router.beforeEach((to, from, next) => {
-    document.title = to.meta.title as string || 'Page Not Found -  OnlyCorn';
-    next();
-});
-
-app.use(vuetify).use(router).mount('#app')
+app.use(vuetify).use(router).use(pinia).mount('#app')

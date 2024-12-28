@@ -5,7 +5,13 @@ import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
-import { onMounted } from 'vue';
+
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/services/Session';
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+
+console.log("Console: ", user.value)
 
 const { markIndividual, markAll } = markAsRead();
 

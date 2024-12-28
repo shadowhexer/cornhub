@@ -141,4 +141,4 @@ export function markAsRead() {
 }
 
 
-export default { carts, messages, notif, menu, ProfilePic };
+export default { carts, messages, notif, menu, ProfilePic, isLogin };
