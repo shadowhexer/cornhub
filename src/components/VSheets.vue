@@ -4,6 +4,9 @@ import Product from './ProductView.vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline } from '@mdi/js';
 import { computed, reactive, ref } from 'vue';
+import { useAuthStore } from '@/services/Session';
+const authStore = useAuthStore()
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const props = defineProps<{
     items: {
@@ -132,9 +135,9 @@ const login = () => {
 
                         <div>
                             <slot name="edit" :index="i">
-                                <v-btn v-if="!itemExists[i] && Header.menu.status === true" text="Add to Basket" variant="flat" base-color="green"
+                                <v-btn v-if="!itemExists[i] && isLoggedIn" text="Add to Basket" variant="flat" base-color="green"
                                     rounded="0" @click.prevent="addToBasket(i)" flat block />
-                                <v-btn v-else-if="itemExists[i] && Header.menu.status === true" text="Added to Basket" variant="outlined" base-color="green" rounded="0"
+                                <v-btn v-else-if="itemExists[i] && isLoggedIn" text="Added to Basket" variant="outlined" base-color="green" rounded="0"
                                     @click.prevent flat block />
                             </slot>
                         </div>
@@ -155,7 +158,7 @@ const login = () => {
 
                             <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
                                 <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat" base-color="yellow"
-                                    @click.prevent="Header.menu.status === true ? addToBasket(index) : login()" :ripple="false">
+                                    @click.prevent="isLoggedIn ? addToBasket(index) : login()" :ripple="false">
                                     <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
                                 </v-btn>
 
@@ -165,7 +168,7 @@ const login = () => {
 
                                 <v-btn width="150" height="50" class="d-flex flex-row" variant="flat"
                                     base-color="success" :ripple="false" 
-                                    @click.prevent="Header.menu.status === true ? '' : login()"
+                                    @click.prevent="isLoggedIn ? '' : login()"
                                     >
                                     <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
 

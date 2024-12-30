@@ -6,7 +6,10 @@ interface User {
 id: number;
 name: string;
 email: string;
-// Add other fields as needed
+email_verified_at: string;
+register_date: Date;
+role: string;
+picture: string;
 }
 
 interface AuthState {

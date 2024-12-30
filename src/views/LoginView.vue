@@ -77,7 +77,7 @@ const google = () => {
                 <h1>Create Account</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
-                        Log in with <span class="google-logo text-h6 mx-1">Google</span>
+                        Sign up with <span class="google-logo text-h6 mx-1">Google</span>
                     </v-btn>
                 </div>
                 <span class="text-caption">or use your email for registration</span>

@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiUpload, mdiPencil, mdiAccount, mdiMessageProcessing, mdiCalendarAccount, mdiPlus, mdiHeart } from '@mdi/js';
+import { mdiUpload, mdiPencil, mdiAccount, mdiMessageProcessing, mdiCalendarAccount, mdiPlus } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import EditDialog from '@/components/EditDialog.vue';
 import AddDialog from '@/components/AddDialog.vue';
 import UserForms from '@/components/Scripts/UserProfile'
+import AddProduct from '@/components/AddProduct.vue'
 import { useAuthStore } from '@/services/Session';
 import { storeToRefs } from 'pinia';
 const editForm = UserForms.editForms();
-const addForm = UserForms.addForm();
+
 const fileSelect = UserForms.fileSelection();
 const products = UserForms.Products;
 const images = UserForms.profile;
@@ -19,11 +20,14 @@ const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const isLogin = computed(() => authStore.isAuthenticated)
 
-const formattedDate = new Intl.DateTimeFormat('en-GB', {
-  day: '2-digit',
-  month: 'short',
-  year: 'numeric',
-}).format(user.register_date);
+const registerDate = user.value?.register_date ? new Date(user.value.register_date) : null;
+const formattedDate = registerDate && !isNaN(registerDate.getTime())
+  ? new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(registerDate)
+  : 'Invalid date';
 
 
 watch(() => user.value?.name, (newName) => {
@@ -60,7 +64,7 @@ watch(() => user.value?.name, (newName) => {
                         <v-hover v-slot="{ isHovering, props }">
                             <v-avatar v-bind="props" size="200" class="mt-n16 ml-16 border-md border-opacity-100">
                                 <v-img rounded="circle" class="" aspect-ratio="1/1" width="100"
-                                    :src="String(images.profile.profilePhoto)" cover>
+                                    :src="String(user?.picture) || String(images.profile.profilePhoto)" cover>
                                     <v-overlay :model-value="!!isHovering"
                                         class="d-flex felx-row justify-center align-center"
                                         @click="fileSelect.triggerFileInput" contained persistent no-click-animation>
@@ -82,9 +86,9 @@ watch(() => user.value?.name, (newName) => {
                     <v-col cols="4" class="flex-grow-0 flex-shrink-1 mx-n3">
                         <div class="custom-card d-flex flex-column align-start ml-n10">
                             <v-card class="custom-card ">
-                                <v-card-text class="font-weight-bold text-h4" :class="user.name.length > 10 ? 'text-h5' : ''"
-                                    style="line-height: 1.1;">{{ user.name }}</v-card-text>
-                                <v-card-text class="text-subtitle-1 mt-n8">{{ user.role }}</v-card-text>
+                                <v-card-text class="font-weight-bold text-h4" :class="user?.name.length as number > 10 ? 'text-h5' : ''"
+                                    style="line-height: 1.1;">{{ user?.name }}</v-card-text>
+                                <v-card-text class="text-subtitle-1 mt-n8">{{ user?.role }}</v-card-text>
                             </v-card>
                         </div>
                     </v-col>
@@ -115,21 +119,7 @@ watch(() => user.value?.name, (newName) => {
                     </v-col>
 
                     <v-col cols="1">
-                        <div class="d-flex flex-column">
-                            <v-card class="d-flex align-center justify-center mb-2" color="primary" height="40"
-                                width="140" @click.prevent="addForm.toggle" :ripple="false" draggable="false" variant="outlined">
-                                <svg-icon type="mdi" :path="mdiPlus"></svg-icon>
-                                <span class="text-subtitle-1 mx-1">Add Product</span>
-                            </v-card>
-
-                            <div><AddDialog :forms="addForm" :products="products" :file-select="fileSelect" :categories="products.categories.category" /></div>
-
-                            <v-card class="d-flex align-center justify-center mt-2" color="primary" height="40"
-                                width="140" href="/setting" :ripple="false" draggable="false" variant="flat" hover>
-                                <svg-icon type="mdi" :path="mdiPencil"></svg-icon>
-                                <span class="text-subtitle-1 mx-1">Edit Profile</span>
-                            </v-card>
-                        </div>
+                        <AddProduct :is-login="isLogin" />
                     </v-col>
                 </v-row>
             </div>
@@ -141,7 +131,7 @@ watch(() => user.value?.name, (newName) => {
             <VSheets :items="products.products" :search-item="''" :custom-class="'mx-4'">
 
                 <template #edit="{ index }">
-                    <v-btn text="Edit Product" variant="flat" base-color="green" rounded="0"
+                    <v-btn v-if="isLogin" text="Edit Product" variant="flat" base-color="green" rounded="0"
                         @click.prevent="editForm.toggle(index)" flat block />
                 </template>
 

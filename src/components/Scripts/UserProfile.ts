@@ -10,14 +10,8 @@ type Profile = {
 
 type Status = {
     logged_in: ComputedRef<boolean>;
-    user: {
-        user_id: number;
-        name: string;
-        email: string;
-        email_verifiedd_at: string;
-        register_date: Date;
-        role: string;
-    };
+    name: string;
+    role: string;
 };
 
 const profile = reactive({
@@ -29,32 +23,9 @@ const profile = reactive({
 
 const isLogin = reactive<Status>({
     logged_in: '' as unknown as ComputedRef<boolean>,
-    user: {
-        user_id: '' as unknown as number,
-        name: '',
-        email: '',
-        email_verifiedd_at: '',
-        register_date: '' as unknown as Date,
-        role: '',
-    },
+    name: '' as string,
+    role: '' as string,
 });
-
-(async function check(){
-    try {
-        const response = await API.get('/api/verify');
-        if(response.data.logged_in === true) {
-            const { created_at, updated_at, ...userData } = response.data.user;
-            isLogin.logged_in = response.data.logged_in;
-            isLogin.user = userData;
-        }
-
-    } catch (error) {
-        console.error('Session verification failed.');
-        isLogin.logged_in = false;
-        return;
-    }
-    setTimeout(check, 300000);
-})();
 
 
 function fileSelection() {

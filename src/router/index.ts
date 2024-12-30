@@ -69,6 +69,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/auth/callback',
     name: 'Callback',
     component: Callback,
+    meta: { title: 'Loging in......' },
   }
 ]
 

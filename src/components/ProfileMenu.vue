@@ -11,12 +11,9 @@ const { user } = storeToRefs(authStore)
 const props = defineProps<{
     menu: {
         profilePic: string,
-        name: string,
-        type: string,
         icon: string[],
         text: string[],
         link: string[],
-        status: any,
     }
 }>()
 
@@ -28,7 +25,7 @@ const logout = async () => {
         })
         
         if (response.data.status === 'success') {
-            authStore.logout() // Clears token and user
+            authStore.logout() // Clears token and user?
             router.push('/')
         } else {
             console.error('Unexpected response:', response.data);
@@ -49,7 +46,7 @@ const login = () => {
         <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" variant="text" color="white" size="default">
                 <v-avatar size="large">
-                    <v-img :src="menu.profilePic" aspect-ratio="1/1" cover />
+                    <v-img :src="menu.profilePic || user?.picture" aspect-ratio="1/1" cover />
                 </v-avatar>
             </v-btn>
         </template>
@@ -61,14 +58,14 @@ const login = () => {
                 <v-list>
                     <v-list-item href="/profile">
                         <template #prepend>
-                            <v-avatar :image="menu.profilePic" size="x-large" />
+                            <v-avatar :image="user?.picture" size="x-large" />
                         </template>
                         <template #title>
-                            <span class="text-h6 font-weight-bold">{{ user.name }}</span>
+                            <span class="text-h6 font-weight-bold">{{ user?.name }}</span>
                         </template>
 
                         <template #subtitle>
-                            {{ user.role }}
+                            {{ user?.role }}
                         </template>
                     </v-list-item>
                 </v-list>
@@ -78,7 +75,7 @@ const login = () => {
 
             <v-list lines="one">
                 <v-list-item v-for="(list, l) in menu.text" :key="l" :value="list"
-                    :href="menu.link[l] as string | undefined">
+                    :href="menu.link[l]">
                     <template #prepend>
                         <slot :icon="menu.icon" :index="l" />
                     </template>
