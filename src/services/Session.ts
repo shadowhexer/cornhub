@@ -7,9 +7,10 @@ id: number;
 name: string;
 email: string;
 email_verified_at: string;
-register_date: Date;
+created_at: Date;
 role: string;
-picture: string;
+avatar: string;
+login_status: boolean;
 }
 
 interface AuthState {

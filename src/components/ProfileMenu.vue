@@ -20,21 +20,20 @@ const props = defineProps<{
 const logout = async () => {
     try {
 
-        const response = await API.post('/logout', { withCredentials: true,
-        withXSRFToken: true, // Include the CSRF token
-        })
-        
-        if (response.data.status === 'success') {
-            authStore.logout() // Clears token and user?
-            router.push('/')
-        } else {
-            console.error('Unexpected response:', response.data);
-        }
+        await API.get('/sanctum/csrf-cookie').then(async () => {
+            const response = await API.post('/logout')
+
+            if (response.data.status === 'success') {
+                authStore.logout() // Clears token and user?
+                router.push('/')
+            } else {
+                console.error('Unexpected response:', response.data);
+            }
+        });
     } catch (error: any) {
         console.error('Logout failed:', error.response?.data || error.message);
     }
-};
-
+}
 
 const login = () => {
     window.open('http://api.onlycorn.com:8000/login', '_blank', 'noopener,noreferrer');
@@ -46,7 +45,7 @@ const login = () => {
         <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" variant="text" color="white" size="default">
                 <v-avatar size="large">
-                    <v-img :src="menu.profilePic || user?.picture" aspect-ratio="1/1" cover />
+                    <v-img :src="menu.profilePic || user?.avatar" aspect-ratio="1/1" cover />
                 </v-avatar>
             </v-btn>
         </template>
@@ -58,7 +57,7 @@ const login = () => {
                 <v-list>
                     <v-list-item href="/profile">
                         <template #prepend>
-                            <v-avatar :image="user?.picture" size="x-large" />
+                            <v-avatar :image="user?.avatar" size="x-large" />
                         </template>
                         <template #title>
                             <span class="text-h6 font-weight-bold">{{ user?.name }}</span>

@@ -48,19 +48,26 @@ const handleLogin = async () => {
 
 const handleRegister = async () => {
   try {
-    const response = await API.post('/register', createForm)
-    if (response.data.status === 'success') {
-      createForm.password = '';
-      toggleSignIn();
-    }
+    await API.get('/sanctum/csrf-cookie').then(async () => {
+        const response = await API.post('/register', createForm)
+        if (response.data.status === 'success') {
+        createForm.password = '';
+        toggleSignIn();
+        }
+    });
+   
   } catch (error) {
     console.error(error);
   }
 }
 
 
-const google = () => {
-    window.location.href = 'http://api.onlycorn.com:8000/auth/google/redirect';
+const google = async() => {
+
+    await API.get('/sanctum/csrf-cookie').then( () => {
+        window.location.href = 'http://api.onlycorn.com:8000/auth/google/redirect';
+        });
+    
 };
 
 

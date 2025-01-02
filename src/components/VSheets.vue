@@ -143,6 +143,7 @@ const login = () => {
                         </div>
 
                         <slot name="dialog" :index="i" />
+                        
                     </v-card>
 
                     <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"

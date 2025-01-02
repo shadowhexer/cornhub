@@ -1,4 +1,5 @@
 import { computed, reactive } from "vue";
+import API from '@/services/api'
 
 type Products = {
     names: string[],
@@ -25,12 +26,19 @@ const products = reactive<Products>({
     price: [1500.00, 200.10, 300.05, 350.77, 100.34, 50.00],
     discount: [50, 100, 0, 47, 25, 0],
     finalPrice: [],
-    category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products'],
+    category: [],
     bookmarked: [false, false, false, false, false, false],
     dateAdded: [],
     link: ['/', '', '/', '', '', '/'],
     description: ['', '', '', '', '', '',],
 });
+
+const response = await API.get('/api/categories')
+if(response.status === 200) {
+    for (let i = 0; i < response.data.length; i++) {
+        products.category[i] = response.data[i].name
+    }
+}
 
 const categories = reactive<Catogories>({
     category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products', 'Farming Tools', 'Miscellaneous'],
