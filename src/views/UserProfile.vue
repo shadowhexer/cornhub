@@ -12,6 +12,7 @@ import { storeToRefs } from 'pinia';
 import Products from '@/components/Scripts/Products';
 
 const products = Products.products;
+const profile = UserForms.profile;
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)

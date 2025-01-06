@@ -5,7 +5,6 @@ import SvgIcon from '@jamescoyle/vue-icon'; // create types folder under src and
 import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
-import UserProfile from './Scripts/UserProfile';
 import { useAuthStore } from '@/services/Session'
 import { computed } from 'vue';
 const authStore = useAuthStore()

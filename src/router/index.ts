@@ -1,6 +1,15 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/services/Session';
+import API from '@/services/api';
 import HomeView from '../views/HomeView.vue'
 import Callback from '@/components/Callback.vue'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string;
+  }
+}
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -78,8 +87,42 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), routes
 })
 
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title as string || 'Page Not Found -  OnlyCorn';
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore();
+  const { token, user } = storeToRefs(authStore);
+
+  // Update the document title
+  document.title = to.meta.title || 'Page Not Found - OnlyCorn';
+
+  // Skip verification for the login page
+  if (to.path !== '/login') {
+    try {
+      // Check if the user ID is available
+      if (user.value?.id) {
+        const response = await API.get(`/verify?user=${user.value?.id}`);
+
+        // If the user is not authenticated, log them out and redirect to login
+        if (response.data.login === false) {
+          authStore.logout(); // Clear token and user
+          console.log('User is logged out');
+        }
+        else {
+          console.log('Success');
+        }
+      } else {
+        // If there's no user ID, assume the user is not logged in
+        authStore.logout(); // Clear token and user
+        console.log('No user ID found');
+      }
+    } catch (error) {
+      console.error('Error verifying authentication:', error);
+
+      // Handle the error gracefully (e.g., redirect to login or show a message)
+      authStore.logout(); // Clear token and user
+      console.log('Error verifying authentication');
+    }
+  }
+
   next();
 });
 
