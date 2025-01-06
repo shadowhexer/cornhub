@@ -1,23 +1,11 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
-import Header from './Scripts/Header';
+import Products from '@/components/Scripts/Products';
 import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
-import { computed } from 'vue';
+
+const product = Products.products;
 
 const props = defineProps<{
-    product: {
-        names: string[],
-        images: string[],
-        store: string[],
-        price: Number[],
-        discount: Number[],
-        finalPrice: Number[],
-        bookmarked: boolean[],
-        category: string[],
-        dateAdded: number[],
-        description: string[],
-        link: string[],
-    },
     index: number,
     model: boolean[],
     profile: string,
@@ -42,7 +30,7 @@ const props = defineProps<{
                             <div class="d-flex flex-column justify-center">
                                 <v-card-text v-if="Number(product.discount[index]) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                    {{ product.finalPrice[index] }}</v-card-text>
+                                    {{ Products.finalPrice(product.price[index], product.discount[index]) }}</v-card-text>
 
                                 <v-card-text class="my-auto">
                                     <span class="line-through text-grey-darken-1 font-weight-bold">
@@ -70,7 +58,7 @@ const props = defineProps<{
                             <div class="d-flex flex-column justify-center">
                                 <v-card-text v-if="Number(product.discount[index]) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                    {{ product.finalPrice[index] }}</v-card-text>
+                                    {{ Products.finalPrice(product.price[index], product.discount[index]) }}</v-card-text>
 
                                 <div class="my-auto mx-4 d-flex flex-row">
                                     <p :class="Number(product.discount[index]) > 0 ? 'line-through text-grey-darken-1' : ''"
@@ -128,17 +116,17 @@ const props = defineProps<{
 
                     <div class="d-flex flex-row justify-space-evenly">
 
-                        <div width="150" height="50" variant="text" class="ml-n16">
+                        <!-- <div width="150" height="50" variant="text" class="ml-n16">
                             <v-card-text class="text-subtitle-2 text-grey">Date added: {{ product.dateAdded[index]
                                 }}</v-card-text>
-                        </div>
+                        </div> -->
 
                         <div width="150" height="50" variant="text">
                             <v-card-text class="text-subtitle-2 text-grey">Stocks: 100</v-card-text>
                         </div>
 
 
-                        <div width="100" height="50" variant="text" class="d-flex flex-row align-center">
+                        <!-- <div width="100" height="50" variant="text" class="d-flex flex-row align-center">
 
                             <v-btn icon variant="text" size="30"
                                 @click.prevent="product.bookmarked[index] = !product.bookmarked[index]" :ripple="false">
@@ -147,7 +135,7 @@ const props = defineProps<{
                             </v-btn>
                             <span class="text-subtitle-2">{{ index }}</span>
 
-                        </div>
+                        </div> -->
                     </div>
 
                     <slot name="transaction" :index="index" />

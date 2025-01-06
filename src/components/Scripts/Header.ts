@@ -86,7 +86,7 @@ const notif = reactive<Notification>({
 });
 
 const menu = reactive<Menu>({
-    profilePic: images.profile.profilePhoto as string,
+    profilePic: images.profilePhoto as string,
     icon: [mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout],
     text: ['Bookmarks', 'Setting', 'Give Feedback'],
     link: ['/bookmarks', '/setting', '/feedback'],

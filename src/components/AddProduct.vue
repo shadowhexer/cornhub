@@ -4,9 +4,8 @@ import AddDialog from './AddDialog.vue';
 import UserForms from './Scripts/UserProfile';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiPencil, mdiPlus } from '@mdi/js';
+import Products from './Scripts/Products';
 
-const products = UserForms.Products;
-const profile = UserForms.profile;
 const dialog = reactive<{ dialog: boolean }>({ dialog: false });
 const toggle = () => {
         dialog.dialog = !dialog.dialog;
@@ -28,7 +27,7 @@ const props = defineProps<{
 
         <div>
             <AddDialog :dialog="dialog" :toggle="toggle"
-                :categories="products.categories.category" />
+                :categories="Products.categories.category" />
         </div>
 
         <v-card v-if="isLogin" class="d-flex align-center justify-center mt-2" color="primary" height="40" width="140"

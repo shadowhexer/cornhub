@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { pinia } from '@/main'
 import axios from 'axios'
+import Default from '@/assets/default.png';
 
 interface User {
 id: number;
@@ -10,6 +11,7 @@ email_verified_at: string;
 created_at: Date;
 role: string;
 avatar: string;
+cover_photo: string;
 login_status: boolean;
 }
 
@@ -33,6 +35,9 @@ export const useAuthStore = defineStore('auth', {
         setAuth(token: string, user: User) {
         this.token = token;
         this.user = user;
+        if(this.user.avatar === null) {
+            this.user.avatar = Default;
+        }
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         },

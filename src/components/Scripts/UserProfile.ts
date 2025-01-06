@@ -1,7 +1,6 @@
-import Products from '@/components/Scripts/Products';
 import Default from '@/assets/default.png';
 import { computed, reactive, ref, type ComputedRef } from 'vue';
-import API from '@/services/api'
+import Prof from '@/assets/profile.jpg';
 
 type Profile = {
     coverPhoto: string | null,
@@ -14,11 +13,9 @@ type Status = {
     role: string;
 };
 
-const profile = reactive({
-    profile: {
-        coverPhoto: '',
-        profilePhoto: Default,
-    } as Profile
+const profile = reactive<Profile>({
+    coverPhoto: '',
+    profilePhoto: Default,
 })
 
 const isLogin = reactive<Status>({
@@ -31,11 +28,11 @@ for (let i = 0; i < localStorage.length; i++) {
     const image = localStorage.getItem(`Image_${i}`);
 
     if (i === 0 || key as string === image) {
-        profile.profile.coverPhoto = image as string;
+        profile.coverPhoto = image as string;
     }
     else if (i === 1 || key as string === image) {
-        profile.profile.profilePhoto = image as string;
+        profile.profilePhoto = image as string;
     }
 }
 
-export default { Products, profile, isLogin }
+export default { profile, isLogin }

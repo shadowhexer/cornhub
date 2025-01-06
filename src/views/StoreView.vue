@@ -4,41 +4,12 @@ import { mdiMagnify, mdiChevronUp, mdiChevronDown } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import Products from '@/components/Scripts/Products';
-import API from '@/services/api';
 import { computed, onMounted, reactive, ref } from 'vue';
 
 const isExpanded = ref([false, false, false]);
 // Reactive state for search term
 const searchItem = ref('');
 const page = ref(1)
-
-type Products = {
-    names: string[],
-    images: string[],
-    store: string[],
-    price: number[],
-    discount: number[],
-    finalPrice: number[],
-    category: string[],
-    bookmarked: boolean[],
-    dateAdded: number[],
-    link: string[],
-    description: string[],
-}
-
-const products = reactive<Products>({
-    names: [],
-    images: [],
-    store: ['Arisu Corn Mill', 'Haru Corn Shop', 'Haru Corn Shop', 'Chelsea', 'Arisu Corn Mill', 'Chelsea'],
-    price: [1500.00, 200.10, 300.05, 350.77, 100.34, 50.00],
-    discount: [50, 100, 0, 47, 25, 0],
-    finalPrice: [],
-    category: ['Staple Products', 'Instant Snacks', 'Cooking Essentials', 'Canned/Preserved', 'Specialty/Organic', 'Farming Products'],
-    bookmarked: [false, false, false, false, false, false],
-    dateAdded: [],
-    link: ['/', '', '/', '', '', '/'],
-    description: ['', '', '', '', '', '',],
-});
 
 const sideBarItems = reactive([
     {
@@ -54,15 +25,6 @@ const sideBarItems = reactive([
         items: Products.categories.category
     },
 ]);
-
-const retrieveProducts = async() => {
-    const response = await API.get(`/products`);
-    if(response.data.status === 'success') {
-        return response.data;
-    }
-    return response.data;
-}
-
 
 onMounted(() => {
     document.title = 'Store';
@@ -148,8 +110,8 @@ onMounted(() => {
                     </v-card>
 
                     <v-main class="d-flex flex-column my-5" width="1000">
-                        <VSheets :items="Products.products" :search-item="searchItem" :custom-class="'mx-3'" />
-                        <v-pagination v-model="page" length="1" rounded="circle" />
+                        <VSheets :search-item="searchItem" :custom-class="'mx-3'" />
+                        <!-- <v-pagination v-model="page" length="1" rounded="circle" /> -->
                     </v-main>
 
                 </v-layout>

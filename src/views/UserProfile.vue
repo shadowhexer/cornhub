@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiUpload, mdiPencil, mdiAccount, mdiMessageProcessing, mdiCalendarAccount, mdiPlus } from '@mdi/js';
+import { mdiUpload, mdiAccount, mdiMessageProcessing, mdiCalendarAccount } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import VSheets from '@/components/VSheets.vue';
 import EditDialog from '@/components/EditDialog.vue';
-import UserForms from '@/components/Scripts/UserProfile'
-import AddProduct from '@/components/AddProduct.vue'
+import UserForms from '@/components/Scripts/UserProfile';
+import AddProduct from '@/components/AddProduct.vue';
 import { useAuthStore } from '@/services/Session';
 import { storeToRefs } from 'pinia';
+import Products from '@/components/Scripts/Products';
 
-const products = UserForms.Products;
-const profile = UserForms.profile;
+const products = Products.products;
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const isLogin = computed(() => authStore.isAuthenticated)
+
 
 const registerDate = user.value?.created_at ? new Date(user.value.created_at) : null;
 const formattedDate = registerDate && !isNaN(registerDate.getTime())
@@ -26,23 +27,17 @@ const formattedDate = registerDate && !isNaN(registerDate.getTime())
     }).format(registerDate)
     : 'Invalid date';
 
-
-watch(() => user.value?.name, (newName) => {
-    document.title = newName ? `${newName} - Profile` : 'Profile'
-}, { immediate: true })
-
-function fileSelection() {
+const fileInput = ref<HTMLInputElement | null>(null);
+const fileSelection = reactive({
     // Create a reference to the file input
-    const fileInput = ref<HTMLInputElement | null>(null);
-    const fileOuput = ref<string>('');
 
-    const triggerFileInput = () => {
+    triggerFileInput() {
         if (fileInput.value) {
             fileInput.value.click();
         }
-    };
+    },
 
-    const uploadProfile = (event: Event, index: number) => {
+    onFileSelected(event: Event, index: number){
         const input = event.target as HTMLInputElement;
 
         if (input.files && input.files[0]) {
@@ -56,30 +51,27 @@ function fileSelection() {
             reader.onload = () => {
                 const base64Image = reader.result as string;
 
-                // Update the image URL to show it on the card
-                if (index === 0) {
-                    profile.profile.coverPhoto = base64Image
-                } else { profile.profile.profilePhoto = base64Image }
+                 // Update the image URL to show it on the card
+                 if (index === 0) {
+                    profile.coverPhoto = base64Image
+                } else { profile.profilePhoto = base64Image }
 
                 // Save to localStorage
                 localStorage.setItem(`Image_${index}`, base64Image);
+
             };
             reader.readAsDataURL(file); // Convert to Base64 if needed
         }
-    };
+    },
 
-    return { triggerFileInput, uploadProfile, fileOuput, fileInput }
+});
 
-};
-
-function openDialog() {
-    const dialog = reactive<{ dialog: { [key: number]: boolean } }>({ dialog: {} });
-    const toggle = (index: number) => {
-        dialog.dialog[index] = !dialog.dialog[index];
-    };
-
-    return { dialog, toggle };
-};
+const openDialog = reactive({
+    dialog: {} as { [key: number]: boolean }, // Reactive dialog state
+    toggle(index: number) {
+        this.dialog[index] = !this.dialog[index];
+    },
+});
 
 
 </script>
@@ -89,16 +81,16 @@ function openDialog() {
     <v-main class="d-flex flex-column justify-center mx-16 py-5 px-16">
         <v-card class="d-flex flex-column" min-height="500">
             <v-hover v-slot="{ isHovering, props }">
-                <v-img v-bind="props" :src="String(profile.profile.coverPhoto)" height="300" cover aspect-ratio="16/9">
+                <v-img v-bind="props" :src="String(user?.cover_photo)" height="300" cover aspect-ratio="16/9">
                     <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center"
-                        @click="fileSelection().triggerFileInput" contained persistent no-click-animation>
+                        @click="fileSelection.triggerFileInput" contained persistent no-click-animation>
 
                         <v-card class="d-flex align-center custom-card" hover>
                             <svg-icon type="mdi" class="mx-2 text-white" size="30" :path="mdiUpload"></svg-icon>
                             <span class="text-h5 text-white">Upload Cover Photo</span>
 
-                            <input type="file" accept="image/*" :ref="fileSelection().fileInput" class="d-none"
-                                @change="fileSelection().uploadProfile($event, 0)" />
+                            <input type="file" accept="image/*" ref="fileInput" class="d-none"
+                                @change="fileSelection.onFileSelected($event, 0)" />
                         </v-card>
 
                     </v-overlay>
@@ -112,10 +104,10 @@ function openDialog() {
                         <v-hover v-slot="{ isHovering, props }">
                             <v-avatar v-bind="props" size="200" class="mt-n16 ml-16 border-md border-opacity-100">
                                 <v-img rounded="circle" class="" aspect-ratio="1/1" width="100"
-                                    :src="String(user?.avatar) || String(profile.profile.profilePhoto)" cover>
+                                    :src="String(user?.avatar)" cover>
                                     <v-overlay :model-value="!!isHovering"
                                         class="d-flex felx-row justify-center align-center"
-                                        @click="fileSelection().triggerFileInput" contained persistent
+                                        @click="fileSelection.triggerFileInput" contained persistent
                                         no-click-animation>
 
                                         <v-card class="d-flex align-center custom-card" hover>
@@ -123,8 +115,8 @@ function openDialog() {
                                                 :path="mdiUpload"></svg-icon>
                                             <span class="text-subtitle-2 text-white">Upload Profile Photo</span>
 
-                                            <input type="file" accept="image/*" :ref="fileSelection().fileInput"
-                                                class="d-none" @change="fileSelection().uploadProfile($event, 1)" />
+                                            <input type="file" accept="image/*" ref="fileInput"
+                                                class="d-none" @change="fileSelection.onFileSelected($event, 1)" />
                                         </v-card>
                                     </v-overlay>
                                 </v-img>
@@ -177,16 +169,16 @@ function openDialog() {
 
         <v-spacer style="height: 1.5rem;" />
 
-        <v-card v-if="products.products.names.length > 0" class="d-flex flex-column" min-height="100">
-            <VSheets :items="products.products" :search-item="''" :custom-class="'mx-4'">
+        <v-card v-if="products.names.length > 0" class="d-flex flex-column" min-height="100">
+            <VSheets :search-item="''" :custom-class="'mx-4'">
 
                 <template #edit="{ index }">
                     <v-btn v-if="isLogin" text="Edit Product" variant="flat" base-color="green" rounded="0"
-                        @click.prevent="openDialog().toggle(index)" flat block />
+                        @click.prevent="openDialog.toggle(index)" flat block />
                 </template>
 
-                <template #dialog="{ index }">
-                    <EditDialog :index="index" :products="products" :toggle="openDialog()" />
+                <template #dialog="{ index, id }">
+                    <EditDialog :index="index" :categories="Products.categories" :toggle="openDialog" :id="id" />
                 </template>
             </VSheets>
         </v-card>

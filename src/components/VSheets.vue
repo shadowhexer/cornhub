@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Header from './Scripts/Header';
 import Product from './ProductView.vue';
+import Products from '@/components/Scripts/Products';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline } from '@mdi/js';
 import { computed, reactive, ref } from 'vue';
@@ -8,20 +9,9 @@ import { useAuthStore } from '@/services/Session';
 const authStore = useAuthStore()
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 
+const products = Products.products;
+
 const props = defineProps<{
-    items: {
-        names: string[],
-        images: string[],
-        store: string[],
-        price: number[],
-        discount: number[],
-        finalPrice: number[],
-        category: string[],
-        bookmarked: boolean[],
-        dateAdded: number[],
-        description: string[],
-        link: string[],
-    },
     customClass?: string,
     searchItem: string,
 }>();
@@ -29,48 +19,41 @@ const props = defineProps<{
 // Filter items based on search query
 const filteredItems = computed(() => {
 
-    const filteredIndices = props.items.names
+    const filteredIndices = products.names
         .map((name, index) => ({ name, index }))
         .filter(({ name }) => name.toLowerCase().includes(props.searchItem.toLowerCase()))
         .map(({ index }) => index);
 
     return filteredIndices.map(i => ({
-        names: props.items.names[i],
-        images: props.items.images[i],
-        store: props.items.store[i],
-        price: props.items.price[i],
-        discount: props.items.discount[i],
-        finalPrice: props.items.finalPrice[i],
-        category: props.items.category[i],
-        bookmarked: props.items.bookmarked[i],
-        dateAdded: props.items.dateAdded[i],
-        description: props.items.description[i],
-        link: props.items.link[i],
+        id: products.product_id[i],
+        names: products.names[i],
+        images: products.images[i],
+        store: products.store[i],
+        price: products.price[i],
+        discount: products.discount[i],
+        category: products.category[i],
+        description: products.description[i],
         originalIndex: i, // Include the original index
     }));
 });
 
 const addToBasket = (index: number) => {
-    Header.carts.images.push(props.items.images[index]);
-    Header.carts.names.push(props.items.names[index]);
-    Header.carts.store.push(props.items.store[index]);
-    Header.carts.price.push(props.items.price[index]);
-    Header.carts.discount.push(props.items.discount[index]);
-    Header.carts.finalPrice.push(props.items.finalPrice[index]);
-    Header.carts.category.push(props.items.category[index]);
-    Header.carts.bookmarked.push(props.items.bookmarked[index]);
-    Header.carts.dateAdded.push(props.items.dateAdded[index]);
-    Header.carts.description.push(props.items.description[index]);
-    Header.carts.link.push(props.items.link[index]);
+    Header.carts.images.push(products.images[index]);
+    Header.carts.names.push(products.names[index]);
+    Header.carts.store.push(products.store[index]);
+    Header.carts.price.push(products.price[index]);
+    Header.carts.discount.push(products.discount[index]);
+    Header.carts.category.push(products.category[index]);
+    Header.carts.description.push(products.description[index]);
 
 };
 
 const itemExists = computed(() => {
-    return props.items.names.map((item, index) => {
+    return products.names.map((item, index) => {
         return Header.carts.names.some(
             (product, i) =>
                 product === item &&
-                Header.carts.store[i] === props.items.store[index]
+                Header.carts.store[i] === products.store[index]
         )
     });
 });
@@ -83,6 +66,7 @@ const toggle = (index: number) => {
 const login = () => {
     window.open('http://api.onlycorn.com:8000/login', '_blank', 'noopener,noreferrer');
 }
+
 </script>
 
 <template>
@@ -116,7 +100,7 @@ const login = () => {
                             <div style="height: 60px;">
                                 <v-card-text v-if="Number(item.discount) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                    {{ item.finalPrice }}</v-card-text>
+                                    {{ Products.finalPrice(item.price, item.discount) }}</v-card-text>
 
                                 <v-card-text class="my-auto">
                                     <span :class="item.discount ? 'line-through text-grey-darken-1' : ''"
@@ -142,11 +126,9 @@ const login = () => {
                             </slot>
                         </div>
 
-                        <slot name="dialog" :index="i" />
-                        
                     </v-card>
 
-                    <Product :product="props.items" :index="item.originalIndex" :model="dialog.dialog"
+                    <Product :index="item.originalIndex" :model="dialog.dialog"
                         :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic">
                         
                         <template #transaction="{ index }">
@@ -174,14 +156,14 @@ const login = () => {
                                     <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
 
                                     <div class="d-flex flex-column justify-center">
-                                        <v-card-text v-if="Number(props.items.discount[index]) > 0"
+                                        <v-card-text v-if="Number(products.discount[index]) > 0"
                                             class="mb-n9 text-white text-caption text-uppercase">PHP
-                                            {{ props.items.finalPrice[index] }}</v-card-text>
+                                            {{ Products.finalPrice(products.price[index], products.discount[index]) }}</v-card-text>
 
                                         <v-card-text>
-                                            <span :class="Number(props.items.discount[index]) > 0 ? 'line-through' : ''"
+                                            <span :class="Number(products.discount[index]) > 0 ? 'line-through' : ''"
                                                 class="text-white text-caption text-uppercase font-weight-bold">
-                                                PHP {{ props.items.price[index] }}
+                                                PHP {{ products.price[index] }}
                                             </span>
                                         </v-card-text>
                                     </div>
@@ -190,6 +172,8 @@ const login = () => {
                             </div>
                         </template>
                     </Product>
+                    
+                    <slot name="dialog" :index="i" :id="item.id" />
                 </v-col>
             </v-row>
         </v-container>

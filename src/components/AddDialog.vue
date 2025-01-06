@@ -56,7 +56,7 @@ function fileSelection() {
                 console.error('Error reading file:', error);
             };
 
-            reader.readAsDataURL(file); // Convert to Base64
+            reader.readAsDataURL(file);
         }
     };
     return { triggerFileInput, onFileSelected }
@@ -73,14 +73,14 @@ const imageUrl = ref();
 function addForm() {
     const submit = async () => {
         await API.get('/sanctum/csrf-cookie').then(async () => {
-            const response = await API.post('/api/submit_product', JSON.stringify({
+            const response = await API.post('/api/product/submit', JSON.stringify({
                 name: name.value,
                 price: parseFloat(price.value),
                 discount: parseFloat(discount.value),
                 description: description.value,
                 store: user?.value?.id,
                 category: 1,
-                imageUrl: imageUrl.value,
+                imageUrl: 'onlycorn.com/corn.png',
             }));
 
             if (response.status === 200) {
