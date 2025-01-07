@@ -10,6 +10,7 @@ import AddProduct from '@/components/AddProduct.vue';
 import { useAuthStore } from '@/services/Session';
 import { storeToRefs } from 'pinia';
 import Products from '@/components/Scripts/Products';
+import Default from '@/assets/default.png';
 
 const products = Products.products;
 const profile = UserForms.profile;
@@ -30,8 +31,6 @@ const formattedDate = registerDate && !isNaN(registerDate.getTime())
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const fileSelection = reactive({
-    // Create a reference to the file input
-
     triggerFileInput() {
         if (fileInput.value) {
             fileInput.value.click();
@@ -74,7 +73,6 @@ const openDialog = reactive({
     },
 });
 
-
 </script>
 
 <template>
@@ -82,8 +80,8 @@ const openDialog = reactive({
     <v-main class="d-flex flex-column justify-center mx-16 py-5 px-16">
         <v-card class="d-flex flex-column" min-height="500">
             <v-hover v-slot="{ isHovering, props }">
-                <v-img v-bind="props" :src="String(user?.cover_photo)" height="300" cover aspect-ratio="16/9">
-                    <v-overlay :model-value="!!isHovering" class="d-flex flex-row justify-center align-center"
+                <v-img v-bind="props" :src="String(user?.cover_photo) || ''" height="300" cover aspect-ratio="16/9">
+                    <v-overlay v-if="isLogin" :model-value="!!isHovering || !user?.cover_photo" class="d-flex flex-row justify-center align-center"
                         @click="fileSelection.triggerFileInput" contained persistent no-click-animation>
 
                         <v-card class="d-flex align-center custom-card" hover>
@@ -106,7 +104,7 @@ const openDialog = reactive({
                             <v-avatar v-bind="props" size="200" class="mt-n16 ml-16 border-md border-opacity-100">
                                 <v-img rounded="circle" class="" aspect-ratio="1/1" width="100"
                                     :src="String(user?.avatar)" cover>
-                                    <v-overlay :model-value="!!isHovering"
+                                    <v-overlay v-if="isLogin" :model-value="!!isHovering"
                                         class="d-flex felx-row justify-center align-center"
                                         @click="fileSelection.triggerFileInput" contained persistent
                                         no-click-animation>

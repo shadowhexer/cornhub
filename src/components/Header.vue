@@ -51,7 +51,7 @@ const { markIndividual, markAll } = markAsRead();
                 <!-- Cart -->
 
                 <v-col col="1" class="ma-n12">
-                    <VMenus :offset="[5, 0]"
+                    <VMenus v-if="isLoggedIn" :offset="[5, 0]"
                         :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.names, link: Header.carts.link, extra: Header.carts.price }"
                         :type="'cart'">
 
@@ -65,7 +65,7 @@ const { markIndividual, markAll } = markAsRead();
                 <!-- Messages -->
 
                 <v-col col="1" class="ma-n12">
-                    <VMenus :offset="[5, 0]"
+                    <VMenus v-if="isLoggedIn" :offset="[5, 0]"
                         :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }"
                         :type="'messages'" :mark-individual="markIndividual" :is-read="Header.messages.read">
 
@@ -84,7 +84,7 @@ const { markIndividual, markAll } = markAsRead();
                 <!-- Notification -->
 
                 <v-col col="1" class="ma-n12">
-                    <VMenus :offset="[5, 0]"
+                    <VMenus v-if="isLoggedIn" :offset="[5, 0]"
                         :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }"
                         :type="'notif'" :mark-individual="markIndividual" :is-read="Header.notif.read">
 
@@ -102,7 +102,7 @@ const { markIndividual, markAll } = markAsRead();
 
                 <!-- Profile Menu -->
 
-                <v-col v-show="isLoggedIn" col="1" class="ma-n12">
+                <v-col v-if="isLoggedIn" col="1" class="ma-n12">
                     <ProfileMenu :menu="Header.menu">
                         <template #default="{ index }">
                             <svg-icon type="mdi" :path="Header.menu.icon[index]" class="mx-2" />
@@ -110,7 +110,7 @@ const { markIndividual, markAll } = markAsRead();
                     </ProfileMenu>
                 </v-col>
 
-                <v-col v-show="!isLoggedIn" col="1" class="ma-n12">
+                <v-col v-else col="1" class="ma-n12">
                     <v-btn class="mx-n2" color="white" href="/login" text="Sign in" />
                 </v-col>
 

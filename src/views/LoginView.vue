@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import API from '@/services/api';
-import Header from '@/components/Scripts/Header';
-import UserProfile from '@/components/Scripts/UserProfile';
 import router from '@/router';
-import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/services/Session'
-import axios from 'axios';
 const authStore = useAuthStore()
-const isLogin = UserProfile.isLogin
-const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
 const isSignUp = ref(false)  // Initially set to 'false' to show Sign In
@@ -36,7 +30,7 @@ const handleLogin = async () => {
                 authStore.setAuth(response.data.token, response.data.user)
                 router.push('/')
             }
-            else { 
+            else {
                 alert(response.data.message)
             }
         })
@@ -47,27 +41,27 @@ const handleLogin = async () => {
 }
 
 const handleRegister = async () => {
-  try {
-    await API.get('/sanctum/csrf-cookie').then(async () => {
-        const response = await API.post('/register', createForm)
-        if (response.data.status === 'success') {
-        createForm.password = '';
-        toggleSignIn();
-        }
-    });
-   
-  } catch (error) {
-    console.error(error);
-  }
+    try {
+        await API.get('/sanctum/csrf-cookie').then(async () => {
+            const response = await API.post('/register', createForm)
+            if (response.data.status === 'success') {
+                createForm.password = '';
+                toggleSignIn();
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 
-const google = async() => {
+const google = async () => {
 
-    await API.get('/sanctum/csrf-cookie').then( () => {
+    await API.get('/sanctum/csrf-cookie').then(() => {
         window.location.href = 'http://api.onlycorn.com:8000/auth/google/redirect';
-        });
-    
+    });
+
 };
 
 
@@ -75,12 +69,13 @@ const google = async() => {
 
 <template>
 
-<v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
+    <v-container class="position-relative overflow-hidden rounded-lg container my-16" width="768" max-width="100%"
         min-height="480" :class="{ 'right-panel-active': isSignUp }">
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-up-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleRegister">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
+                @submit.prevent="handleRegister">
                 <h1>Create Account</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
@@ -97,7 +92,8 @@ const google = async() => {
 
         <div class="position-absolute top-0 h-100 left-0 w-50 opacity-100 sign-in-container"
             style="transition: all 0.4s ease-in-out;">
-            <v-form class="d-flex flex-column align-center justify-center text-center h-100" @submit.prevent="handleLogin">
+            <v-form class="d-flex flex-column align-center justify-center text-center h-100"
+                @submit.prevent="handleLogin">
                 <h1>Sign in</h1>
                 <div class="my-5">
                     <v-btn class="flex items-center" block variant="outlined" @click="google">
