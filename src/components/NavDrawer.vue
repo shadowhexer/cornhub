@@ -5,7 +5,7 @@ import { mdiHomeAccount, mdiStorefront, mdiVideo, mdiAccountQuestion, mdiInforma
 
 const items = reactive({
     icon: [mdiHomeAccount, mdiStorefront, mdiVideo, mdiAccountQuestion, mdiInformation],
-    title: ['Home', 'Store', 'Videos', 'FAQ', 'About us'],
+    title: ['Home', 'Market', 'Videos', 'FAQ', 'About us'],
     value: ['myfiles', 'shared', 'starred', 'about'],
     link: ['/', '/products', '/', '/', '/']
 });

@@ -6,6 +6,7 @@ import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHeart, mdiHeartOutline } from '@mdi/js';
 import { computed, reactive, ref } from 'vue';
 import { useAuthStore } from '@/services/Session';
+import API from '@/services/api';
 const authStore = useAuthStore()
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 
@@ -37,30 +38,36 @@ const filteredItems = computed(() => {
     }));
 });
 
-const addToBasket = (index: number) => {
-    Header.carts.images.push(products.images[index]);
-    Header.carts.names.push(products.names[index]);
-    Header.carts.store.push(products.store[index]);
-    Header.carts.price.push(products.price[index]);
-    Header.carts.discount.push(products.discount[index]);
-    Header.carts.category.push(products.category[index]);
-    Header.carts.description.push(products.description[index]);
+const addToBasket = async (index: number) => {
+    await API.get('/sanctum/csrf-cookie').then(async () => {
+        const response = await API.post('/api/cart/add', {
+            product_id: products.product_id[index],
+            quantity: 1,
+        });
 
+        if (response.data.status === 'success') {
+            alert(response.data.status);
+        }
+    })
 };
 
 const itemExists = computed(() => {
     return products.names.map((item, index) => {
-        return Header.carts.names.some(
-            (product, i) =>
-                product === item &&
-                Header.carts.store[i] === products.store[index]
-        )
+        return Header.carts.some((cart) =>
+            cart.products.some(
+                (product) =>
+                    product.product_name === item &&
+                    cart.store_name === products.store[index]
+            )
+        );
     });
 });
-
+const selectedProductId = ref<number | null>(null); // Store the selected product ID
 const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
-const toggle = (index: number) => {
-    dialog.dialog[index] = !dialog.dialog[index];
+
+const toggle = (productId: number) => {
+    selectedProductId.value = productId; // Set the selected product ID
+    dialog.dialog[productId] = !dialog.dialog[productId]; // Toggle the dialog
 };
 
 const login = () => {
@@ -76,7 +83,7 @@ const login = () => {
                 <v-col v-for="(item, i) in filteredItems" :key="i" :class="customClass" cols="12" md="2">
                     <v-card class="mx-auto d-flex flex-column" justify="center" width="200" hover>
 
-                        <v-card class="custom-card" @click.prevent="toggle(i)">
+                        <v-card class="custom-card" @click.prevent="toggle(item.id)">
                             <div style="height: 200px;">
                                 <v-img :src="item.images" aspect-ratio="5/7" height="200" width="200" cover />
                             </div>
@@ -85,7 +92,7 @@ const login = () => {
                                 <v-card-actions class="mx-n2 mt-n3">
                                     <v-card-text class=" truncate overflow-hidden" style="line-height: 1.1;">{{
                                         item.names
-                                        }}</v-card-text>
+                                    }}</v-card-text>
                                     <div class="d-flex flex-column align-center">
                                         <v-btn style="pointer-events: none" icon>
                                             <svg-icon type="mdi" :path="mdiHeart" />
@@ -118,19 +125,14 @@ const login = () => {
                         </v-card>
 
                         <div>
-                            <slot name="edit" :index="i">
-                                <v-btn v-if="!itemExists[i] && isLoggedIn" text="Add to Basket" variant="flat" base-color="green"
-                                    rounded="0" @click.prevent="addToBasket(i)" flat block />
-                                <v-btn v-else-if="itemExists[i] && isLoggedIn" text="Added to Basket" variant="outlined" base-color="green" rounded="0"
-                                    @click.prevent flat block />
-                            </slot>
+                            <slot name="edit" :index="i" />
                         </div>
 
                     </v-card>
 
-                    <Product :index="item.originalIndex" :model="dialog.dialog"
-                        :basket="addToBasket" :exist="itemExists" :profile="Header.menu.profilePic">
-                        
+                    <Product :index="selectedProductId ?? 0" :model="dialog.dialog" :basket="addToBasket"
+                        :exist="itemExists" :profile="Header.menu.profilePic">
+
                         <template #transaction="{ index }">
                             <v-card width="200" height="50" class="d-flex flex-row mx-n3" variant="text">
                                 <v-card-text class="text-subtitle-2">Quantity: </v-card-text>
@@ -140,8 +142,9 @@ const login = () => {
 
 
                             <div class="d-flex flex-row justify-space-evenly ml-n5 text-center">
-                                <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat" base-color="yellow"
-                                    @click.prevent="isLoggedIn ? addToBasket(index) : login()" :ripple="false">
+                                <v-btn v-if="!itemExists[index]" width="150" height="50" variant="flat"
+                                    base-color="yellow" @click.prevent="isLoggedIn ? addToBasket(index) : login()"
+                                    :ripple="false">
                                     <v-card-text class="text-caption text-uppercase">Add to Basket</v-card-text>
                                 </v-btn>
 
@@ -150,15 +153,14 @@ const login = () => {
 
 
                                 <v-btn width="150" height="50" class="d-flex flex-row" variant="flat"
-                                    base-color="success" :ripple="false" 
-                                    @click.prevent="isLoggedIn ? '' : login()"
-                                    >
+                                    base-color="success" :ripple="false" @click.prevent="isLoggedIn ? '' : login()">
                                     <v-card-text class="text-caption text-uppercase mr-n6">Buy for </v-card-text>
 
                                     <div class="d-flex flex-column justify-center">
                                         <v-card-text v-if="Number(products.discount[index]) > 0"
                                             class="mb-n9 text-white text-caption text-uppercase">PHP
-                                            {{ Products.finalPrice(products.price[index], products.discount[index]) }}</v-card-text>
+                                            {{ Products.finalPrice(products.price[index], products.discount[index])
+                                            }}</v-card-text>
 
                                         <v-card-text>
                                             <span :class="Number(products.discount[index]) > 0 ? 'line-through' : ''"
@@ -172,7 +174,7 @@ const login = () => {
                             </div>
                         </template>
                     </Product>
-                    
+
                     <slot name="dialog" :index="i" :id="item.id" />
                 </v-col>
             </v-row>

@@ -4,20 +4,18 @@ import UserForms from '@/components/Scripts/UserProfile'
 import { mdiBookmarkBoxMultiple, mdiCog, mdiMessageAlert, mdiLogout } from '@mdi/js';
 
 // Define types for the reactive objects
-type Cart = {
-    title: string;
-    names: string[],
-    images: string[],
-    store: string[],
-    price: number[],
-    discount: number[],
-    finalPrice: number[],
-    category: string[],
-    bookmarked: boolean[],
-    dateAdded: number[],
-    link: string[],
-    description: string[],
-};
+type Cart = Array<{
+    cart_id: number;
+    store_id: number;
+    store_name: string;
+    products: Array<{
+        product_id: number;
+        product_name: string;
+        quantity: number;
+        price: number;
+        image_url: string;
+    }>;
+}>;
 
 type Message = {
     title: string;
@@ -46,25 +44,11 @@ type Menu = {
 };
 
 const images = UserForms.profile;
-const isLogin = UserForms.isLogin;
 
 const dates = new Date('2024-12-03T10:00:00');
 const date2 = new Date('2024-11-03T10:00:00');
 
-const carts = reactive<Cart>({
-    title: 'Cart',
-    names: [],
-    images: [],
-    store: [],
-    price: [],
-    discount: [],
-    finalPrice: [],
-    category: [],
-    bookmarked: [],
-    dateAdded: [],
-    link: [],
-    description: [],
-});
+const carts = reactive<Cart>([]);
 
 const messages = reactive<Message>({
     title: 'Messages',

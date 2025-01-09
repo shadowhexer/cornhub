@@ -4,13 +4,13 @@ import { computed, } from 'vue';
 const props = defineProps<{
     items: {
         header: string,
-        btnColor: string,
         icon: string[],
         title: string[],
         subtitle?: string[],
         link: string[],
         extra?: number[],
     },
+    btnColor: string,
     type: "cart" | "messages" | "notif";
     markIndividual?: any;
     isRead?: boolean[];
@@ -58,16 +58,9 @@ const badgeContent = computed(() => {
 </script>
 
 <template>
-    <v-btn v-if="type == 'cart'" icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor"
-        size="default" href="/cart">
-        <v-badge :model-value="badgeVisible" :content="badgeContent" color="brown-darken-3" bordered>
-            <slot :name="'icons'" :icon="'head'" />
-        </v-badge>
-    </v-btn>
-
-    <v-menu v-else :close-on-content-click="true">
+    <v-menu :close-on-content-click="true">
         <template v-slot:activator="{ props }">
-            <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="items.btnColor" size="default">
+            <v-btn icon v-bind="props" variant="elevated" :elevation="0" :color="btnColor" size="default">
                 <v-badge :model-value="badgeVisible" :content="badgeContent" color="brown-darken-3" bordered>
                     <slot :name="'icons'" :icon="'head'" />
                 </v-badge>

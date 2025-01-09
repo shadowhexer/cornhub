@@ -2,8 +2,8 @@
 import SvgIcon from '@jamescoyle/vue-icon';
 import Products from '@/components/Scripts/Products';
 import { mdiHeart, mdiHeartOutline, mdiStoreOutline, mdiForum } from '@mdi/js';
-
-const product = Products.products;
+import { computed } from 'vue';
+import Header from './Scripts/Header';
 
 const props = defineProps<{
     index: number,
@@ -11,37 +11,59 @@ const props = defineProps<{
     profile: string,
 }>();
 
+const productsArray = computed(() => {
+    return Products.products.names.map((name, index) => ({
+        product_id: Products.products.product_id[index],
+        product_name: name,
+        price: Products.products.price[index],
+        discount: Products.products.discount[index],
+        image_url: Products.products.images[index],
+        store: Products.products.store[index],
+        category: Products.products.category[index],
+        description: Products.products.description[index],
+        bookmarks: Products.products.bookmarks[index],
+    }));
+});
+
+// Find the product using the productId
+const product = computed(() => {
+    // Search in Products.products
+    const productInProducts = productsArray.value.find((p) => p.product_id === props.index);
+
+    return productInProducts;
+});
+
 </script>
 
 <template>
-    <v-dialog v-model="model[index]">
+    <v-dialog v-model="model[Number(product?.product_id)]">
         <v-card min-height="500" width="700" class="d-flex flex-column align-center" location="top center">
 
             <div class="d-flex flex-row justify-space-between ma-3 ">
 
-                <v-img :src="product.images[index]" class="ma-5" width="250" height="250" cover>
+                <v-img :src="String(product?.image_url)" class="ma-5" width="250" height="250" cover>
 
-                    <div v-if="Number(product.discount[index]) > 0">
+                    <div v-if="product && Number(product.discount) > 0">
                         <v-spacer style="height: 14rem !important;" />
 
                         <v-card class="d-flex flex-row justify-center" width="350" height="40" location="right center"
                             variant="flat" :rounded="false" color="yellow">
 
                             <div class="d-flex flex-column justify-center">
-                                <v-card-text v-if="Number(product.discount[index]) > 0"
+                                <v-card-text v-if="product && Number(product.discount) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                    {{ Products.finalPrice(product.price[index], product.discount[index]) }}</v-card-text>
+                                    {{ Products.finalPrice(product.price, product.discount) }}</v-card-text>
 
                                 <v-card-text class="my-auto">
                                     <span class="line-through text-grey-darken-1 font-weight-bold">
-                                        PHP {{ product.price[index] }}
+                                        PHP {{ Number(product.price) }}
                                     </span>
                                 </v-card-text>
                             </div>
 
                             <v-card-text
-                                v-if="Number(product.discount[index]) > 0 && (product.discount[index] as number) != (product.price[index] as number)"
-                                class="text-black"> {{ product.discount[index] }}% off</v-card-text>
+                                v-if="product && Number(product.discount) > 0 && product && Number(product.discount)"
+                                class="text-black"> {{ Number(product.discount) }}% off</v-card-text>
                         </v-card>
                     </div>
 
@@ -49,32 +71,32 @@ const props = defineProps<{
 
                 <div class="d-flex flex-column my-5 justify-space-between">
                     <div class="my-n5" variant="text" style="width: 20rem; max-height: 10rem;">
-                        <v-card-text class="text-h5 text-wrap mx-n4">{{ product.names[index] }}</v-card-text>
+                        <v-card-text class="text-h5 text-wrap mx-n4">{{ String(product?.product_name) }}</v-card-text>
                     </div>
 
                     <div class="d-flex flex-row align-end">
                         <v-card class="d-flex flex-row mx-n4" width="350" height="50" variant="text">
 
                             <div class="d-flex flex-column justify-center">
-                                <v-card-text v-if="Number(product.discount[index]) > 0"
+                                <v-card-text v-if="product && Number(product.discount) > 0"
                                     class="mb-n9 text-red-darken-2 font-weight-bold">PHP
-                                    {{ Products.finalPrice(product.price[index], product.discount[index]) }}</v-card-text>
+                                    {{ Products.finalPrice(product.price, product.discount) }}</v-card-text>
 
                                 <div class="my-auto mx-4 d-flex flex-row">
-                                    <p :class="Number(product.discount[index]) > 0 ? 'line-through text-grey-darken-1' : ''"
+                                    <p :class="product && Number(product.discount) > 0 ? 'line-through text-grey-darken-1' : ''"
                                         class=" font-weight-bold">
-                                        PHP {{ product.price[index] }}
+                                        PHP {{ Number(product?.price) }}
                                     </p>
-                                    <p v-if="Number(product.discount[index]) > 0 && (product.discount[index] as number) != (product.price[index] as number)"
-                                        class="text-black mx-10"> {{ product.discount[index] }}% off</p>
+                                    <p v-if="Number(product?.discount) > 0 && (Number(product?.discount)) != (Number(product?.price))"
+                                        class="text-black mx-10"> {{ product?.discount }}% off</p>
                                 </div>
                             </div>
 
 
                         </v-card>
 
-                        <v-chip v-if="product.category[index]" class="mx-n15 my-auto text-caption" color="yellow"
-                            variant="flat">{{ product.category[index] }}</v-chip>
+                        <v-chip v-if="product?.category" class="mx-n15 my-auto text-caption" color="yellow"
+                            variant="flat">{{ product?.category }}</v-chip>
                     </div>
 
 
@@ -92,7 +114,7 @@ const props = defineProps<{
                             <div class="d-flex flex-column mt-n3 mr-12">
 
                                 <v-card-text class="text-subtitle-1 font-weight-medium ml-n2">
-                                    {{ product.store[index] }}</v-card-text>
+                                    {{ product?.store }}</v-card-text>
 
                                 <button class="d-flex flex-row mx-2 mt-n5 text-primary"
                                     @click="model[index] = !model[index]">
@@ -147,7 +169,7 @@ const props = defineProps<{
                 <v-card class="mb-5 pa-1" variant="elevated" width="650" :elevation="2" min-height="200">
                     <v-card-text>Description</v-card-text>
                     <v-divider class="mx-4" opacity="0.3" />
-                    <v-card-text v-if="product.description[index]">{{ product.description[index] }}</v-card-text>
+                    <v-card-text v-if="product.description[index]">{{ product?.description }}</v-card-text>
                     <v-card-text v-else>LALAL.AI Christmas Sale: Save 50% This Holiday Season!
                         Jingle all the way to savings
                         The holiday season is upon us, and LALAL.AI is here to make your Christmas merry and bright!

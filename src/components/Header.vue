@@ -6,11 +6,46 @@ import VMenus from './VMenus.vue';
 import ProfileMenu from './ProfileMenu.vue';
 import { mdiBasket, mdiBell, mdiChat, mdiMagnify } from '@mdi/js';
 import { useAuthStore } from '@/services/Session'
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 const authStore = useAuthStore()
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const { markIndividual, markAll } = markAsRead();
+
+onMounted(async () => {
+    if (isLoggedIn.value) { // Ensure `isLoggedIn` is a ref or computed property
+        try {
+            // Fetch CSRF cookie
+            await API.get('/sanctum/csrf-cookie');
+
+            // Fetch cart data
+            const response = await API.get('/api/cart');
+
+            if (response.data) {
+                console.log("Cart: ", response.data);
+
+                // Push each item into the Header.carts arrays
+                response.data.forEach((item: {cart_id: number, store_id: number, store_name: string, products: Array<{product_id: number, product_name: string, quantity: number, price: number, image_url: string}>}) => {
+                    Header.carts.push({
+                        cart_id: item.cart_id,
+                        store_id: item.store_id,
+                        store_name: item.store_name,
+                        products: item.products.map((product) => ({
+                            product_id: product.product_id,
+                            product_name: product.product_name,
+                            quantity: product.quantity,
+                            price: product.price,
+                            image_url: product.image_url,
+                        })),
+                    });
+                });
+            }
+            console.log("Cart: ", Header.carts)
+        } catch (error) {
+            console.error("Error fetching cart data: ", error);
+        }
+    }
+});
 
 </script>
 
@@ -19,8 +54,8 @@ const { markIndividual, markAll } = markAsRead();
         <v-app-bar :flat="true" color="amber-accent-4" density="compact" ima sticky app>
 
             <template #image>
-                <v-img src="/src/assets/Header.jpg" height="100%" width="100%"
-                    cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" />
+                <v-img src="/src/assets/Header.jpg" height="100%" width="100%" cover
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" />
             </template>
 
             <v-row class="d-flex align-center">
@@ -51,23 +86,23 @@ const { markIndividual, markAll } = markAsRead();
                 <!-- Cart -->
 
                 <v-col col="1" class="ma-n12">
-                    <VMenus v-if="isLoggedIn" :offset="[5, 0]"
-                        :items="{ header: Header.carts.title, btnColor: 'green', icon: Header.carts.images, title: Header.carts.store, subtitle: Header.carts.names, link: Header.carts.link, extra: Header.carts.price }"
-                        :type="'cart'">
 
-                        <template #icons>
+                    <v-btn v-if="isLoggedIn" icon variant="elevated" :elevation="0" color="green" size="default" href="/cart">
+                        <v-badge :model-value="Header.carts[0]?.products?.length > 0" :content="Header.carts[0]?.products?.length"
+                            color="brown-darken-3" bordered>
                             <svg-icon type="mdi" :path="mdiBasket" />
-                        </template>
+                        </v-badge>
+                    </v-btn>
 
-                    </VMenus>
                 </v-col>
 
                 <!-- Messages -->
 
                 <v-col col="1" class="ma-n12">
                     <VMenus v-if="isLoggedIn" :offset="[5, 0]"
-                        :items="{ header: Header.messages.title, btnColor: 'blue', icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }"
-                        :type="'messages'" :mark-individual="markIndividual" :is-read="Header.messages.read">
+                        :items="{ header: Header.messages.title, icon: Header.messages.avatar, title: Header.messages.item, subtitle: Header.messages.author, link: Header.messages.link, extra: Header.messages.date as number[] | undefined }"
+                        :type="'messages'" :btn-color="'blue'" :mark-individual="markIndividual"
+                        :is-read="Header.messages.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiChat" />
@@ -85,8 +120,9 @@ const { markIndividual, markAll } = markAsRead();
 
                 <v-col col="1" class="ma-n12">
                     <VMenus v-if="isLoggedIn" :offset="[5, 0]"
-                        :items="{ header: Header.notif.title, btnColor: 'red', icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }"
-                        :type="'notif'" :mark-individual="markIndividual" :is-read="Header.notif.read">
+                        :items="{ header: Header.notif.title, icon: Header.notif.avatar, title: Header.notif.item, link: Header.notif.link, extra: Header.notif.date as number[] | undefined }"
+                        :type="'notif'" :btn-color="'red'" :mark-individual="markIndividual"
+                        :is-read="Header.notif.read">
 
                         <template #icons>
                             <svg-icon type="mdi" :path="mdiBell" />

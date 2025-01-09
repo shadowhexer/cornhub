@@ -4,19 +4,31 @@ import { mdiChevronRight } from '@mdi/js';
 import NavDrawer from '@/components/NavDrawer.vue';
 import Header from '@/components/Scripts/Header';
 import Products from '@/components/Scripts/Products';
+import API from '@/services/api';
 import ProductView from '@/components/ProductView.vue';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 const product = Products.products;
 
-const i = ref<number>(0); // Create a ref variable to store the index of the Product component
+const selectedProductId = ref<number | null>(null); // Store the selected product ID
+
 const dialog = reactive<{ dialog: boolean[] }>({ dialog: [] });
 
-const toggle = (index: number) => {
-    dialog.dialog[index] = !dialog.dialog[index];
-
-    i.value = index; // Assign the index to the ref variable every time the dialog is toggled
+const toggle = (productId: number) => {
+    selectedProductId.value = productId; // Set the selected product ID
+    dialog.dialog[productId] = !dialog.dialog[productId]; // Toggle the dialog
 };
+
+const subTotal = computed(() => {
+    return Header.carts.reduce((total, cart) => {
+        return (
+            total +
+            cart.products.reduce((cartTotal, product) => {
+                return cartTotal + (product.price * product.quantity);
+            }, 0)
+        );
+    }, 0);
+});
 
 </script>
 
@@ -40,13 +52,13 @@ const toggle = (index: number) => {
                         </v-card-text>
                     </v-card>
 
-                    <v-card v-for="(store, s) in Header.carts.store" :key="s" width="800" class="my-2" :rounded="false"
+                    <v-card v-for="(store, s) in Header.carts" :key="s" width="800" class="my-2" :rounded="false"
                         variant="flat">
 
                         <v-list-item-title class="mx-4 my-1 d-flex flex-row align-center">
                             <v-checkbox class="text-button mt-n2 mb-n8" :ripple="false" />
                             <a href="/profile" class="align-center d-flex flex-row">
-                                <span class="text-subtitle-2 text-black">{{ store }}</span>
+                                <span class="text-subtitle-2 text-black">{{ store.store_name }}</span>
                                 <svg-icon class="text-grey-darken-1" type="mdi" :path="mdiChevronRight"
                                     size="25"></svg-icon>
                             </a>
@@ -54,7 +66,7 @@ const toggle = (index: number) => {
                         <v-divider />
 
                         <v-list-item-title class="mx-4 my-10 d-flex flex-row align-center"
-                            v-for="(item, i) in Header.carts.names" :key="i">
+                            v-for="(item, i) in store.products" :key="i">
 
                             <v-row class="align-start">
 
@@ -62,20 +74,18 @@ const toggle = (index: number) => {
                                     <v-checkbox class="text-button mb-n6" :ripple="false" />
                                 </v-col>
 
-                                <v-col cols="2" @click.prevent="toggle(i)">
-                                    <v-img :src="product.images[i]" height="90" width="90" aspect-ratio="1/1" cover />
+                                <v-col cols="2" @click.prevent="toggle(item.product_id)">
+                                    <v-img :src="item.image_url[i]" height="90" width="90" aspect-ratio="1/1" cover />
                                 </v-col>
 
                                 <v-col cols="4" class="">
                                     <div class="mx-n8 d-flex flex-column">
-                                        <button @click.prevent="toggle(i)" variant="text">
+                                        <button @click.prevent="toggle(item.product_id)" variant="text">
                                             <p class="text-subtitle-1 text-wrap text-left text-black"
                                                 style="line-height: 1;">{{
-                                                    item
+                                                    item.product_name
                                                 }}</p>
                                         </button>
-
-
                                         <p class="text-caption text-grey-darken-1">3 stocks left</p>
 
                                     </div>
@@ -84,7 +94,7 @@ const toggle = (index: number) => {
                                 <v-col cols="2" class="mx-5">
                                     <v-card-text v-if="Number(product.discount[i]) > 0"
                                         class="mb-n9 text-red text-subtitle-1 text-uppercase">PHP
-                                        {{ product.finalPrice[i] }}</v-card-text>
+                                        {{ item.price }}</v-card-text>
 
                                     <v-card-text>
                                         <span :class="Number(product.discount[i]) > 0 ? 'line-through text-grey' : ''"
@@ -98,7 +108,7 @@ const toggle = (index: number) => {
 
                                     <v-card width="150" height="50" class="d-flex flex-row " variant="text">
                                         <v-card-text class="text-subtitle-2">Quantity: </v-card-text>
-                                        <v-text-field density="compact" variant="underlined" min="0" type="number"
+                                        <v-text-field density="compact" variant="underlined" :model-value="item.quantity" min="1" type="number"
                                             :autofocus="false"></v-text-field>
                                     </v-card>
 
@@ -119,24 +129,24 @@ const toggle = (index: number) => {
                     Summary</v-card-text>
 
                 <v-row>
-                    <v-col cols="8">
+                    <v-col cols="7">
                         <v-list-item
-                            v-for="(list, l) in [`Subtotal (${product.names.length} of items): `, 'Shipping Fee: ', 'Total: ']"
+                            v-for="(list, l) in [`Subtotal (${Header.carts.reduce((total, cart) => total + cart.products.length, 0)} items): `, 'Shipping Fee: ', 'Total: ']"
                             :key="l" :title="list" class="text-left" />
                     </v-col>
                     <v-col>
-                        <v-list-item v-for="(items, i) in [800, 200, 1000]" :key="i" :title="`PHP ${items}`"
+                        <v-list-item v-for="(items, i) in [subTotal, 0, subTotal]" :key="i" :title="`PHP ${items}`"
                             class="text-right" />
                     </v-col>
                 </v-row>
             </v-card>
             <v-btn class="border-sm" rounded="t-0" width="400" variant="flat"
-                :text="`Check out (${product.names.length}) Products`" color="yellow" />
+                :text="`Check out (${Header.carts.reduce((total, cart) => total + cart.products.length, 0)}) Products`" color="yellow" />
         </v-col>
     </v-row>
 
     <!-- Product dialog card component -->
-    <ProductView :product="product" :index="i" :model="dialog.dialog" :profile="Header.menu.profilePic" />
+    <ProductView :index="selectedProductId ?? 0" :model="dialog.dialog" :profile="Header.menu.profilePic" />
 </template>
 <style scoped>
 .line-through {
