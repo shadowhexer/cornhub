@@ -12,6 +12,8 @@ const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const { markIndividual, markAll } = markAsRead();
 
+const cartBadge = computed(() => Header.carts.reduce((total: number, cart: { products?: any[] }) => total + (cart.products?.length || 0), 0));
+
 onMounted(async () => {
     if (isLoggedIn.value) { // Ensure `isLoggedIn` is a ref or computed property
         try {
@@ -88,8 +90,12 @@ onMounted(async () => {
                 <v-col col="1" class="ma-n12">
 
                     <v-btn v-if="isLoggedIn" icon variant="elevated" :elevation="0" color="green" size="default" href="/cart">
-                        <v-badge :model-value="Header.carts[0]?.products?.length > 0" :content="Header.carts[0]?.products?.length"
-                            color="brown-darken-3" bordered>
+                        <v-badge 
+                            :model-value="cartBadge > 0" 
+                            :content="cartBadge"
+                            color="brown-darken-3" 
+                            bordered
+                        >
                             <svg-icon type="mdi" :path="mdiBasket" />
                         </v-badge>
                     </v-btn>

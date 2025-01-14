@@ -6,7 +6,7 @@ import Header from '@/components/Scripts/Header';
 import Products from '@/components/Scripts/Products';
 import API from '@/services/api';
 import ProductView from '@/components/ProductView.vue';
-import { computed, reactive, ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 const product = Products.products;
 
