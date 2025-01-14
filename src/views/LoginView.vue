@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import API from '@/services/api';
-import router from '@/router';
 import { useAuthStore } from '@/services/Session'
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore()
 
 // Reactive state to track whether we are in the Sign Up or Sign In panel
@@ -28,7 +31,9 @@ const handleLogin = async () => {
             const response = await API.post('/login', loginForm)
             if (response.data.status === 'success') {
                 authStore.setAuth(response.data.token, response.data.user)
-                router.push('/')
+
+                // Redirect the user to the originally requested path or the home page
+                router.push(route.query.redirect as string || '/');
             }
             else {
                 alert(response.data.message)

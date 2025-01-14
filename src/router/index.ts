@@ -94,35 +94,40 @@ router.beforeEach(async (to, from, next) => {
   // Update the document title
   document.title = to.meta.title || 'Page Not Found - OnlyCorn';
 
-  // Skip verification for the login page
-  if (to.path !== '/login') {
-    try {
-      // Check if the user ID is available
-      if (user.value?.id) {
-        const response = await API.get(`/verify?user=${user.value?.id}`);
+  // Define routes that do not require authentication
+  const publicRoutes = ['/', '/login', '/products'];
 
-        // If the user is not authenticated, log them out and redirect to login
-        if (response.data.login === false) {
-          authStore.logout(); // Clear token and user
-          console.log('User is logged out');
-        }
-        else {
-          console.log('Success');
-        }
-      } else {
-        // If there's no user ID, assume the user is not logged in
+  if (!publicRoutes.includes(to.path)) {
+    try {
+      // Check if the user is authenticated
+      if (!token.value || !user.value?.id) {
+        // If the user is not authenticated, redirect to the login page
+        next({ path: '/login', query: { redirect: to.fullPath } });
+        return;
+      }
+
+      // Verify the user's authentication status with the server
+      const response = await API.get(`/verify?user=${user.value?.id}`);
+
+      // If the user is not authenticated, log them out and redirect to login
+      if (response.data.login === false) {
         authStore.logout(); // Clear token and user
-        console.log('No user ID found');
+        next({ path: '/login', query: { redirect: to.fullPath } });
+        return;
+      } else {
+        console.log('User is authenticated');
       }
     } catch (error) {
       console.error('Error verifying authentication:', error);
 
       // Handle the error gracefully (e.g., redirect to login or show a message)
       authStore.logout(); // Clear token and user
-      console.log('Error verifying authentication');
+      next({ path: '/login', query: { redirect: to.fullPath } });
+      return;
     }
   }
 
+  // If everything is fine, proceed to the requested route
   next();
 });
 
