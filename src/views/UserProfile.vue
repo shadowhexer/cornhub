@@ -10,7 +10,6 @@ import AddProduct from '@/components/AddProduct.vue';
 import { useAuthStore } from '@/services/Session';
 import { storeToRefs } from 'pinia';
 import Products from '@/components/Scripts/Products';
-import Default from '@/assets/default.png';
 
 const products = Products.products;
 const profile = UserForms.profile;
