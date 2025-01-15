@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import API from '@/services/api';
 import { useAuthStore } from '@/services/Session'
 import { useRoute, useRouter } from 'vue-router';
